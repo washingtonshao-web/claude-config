@@ -33,9 +33,9 @@ done
 ) &
 
 # 4. Tools: HyperFrames CLI, Playwright MCP + Chromium, ffmpeg
-( npm i -g -s hyperframes @playwright/mcp@0.0.83 >/dev/null 2>&1
-  PW=$(find "$(npm root -g)/@playwright/mcp" -path '*playwright*/cli.js' 2>/dev/null | head -1)
-  [ -n "$PW" ] && node "$PW" install chromium >/dev/null 2>&1 ) &
+( npm i -g hyperframes >/dev/null 2>&1
+  npx -y @playwright/mcp@0.0.83 --version >/dev/null 2>&1            # warm the npx cache (kept in the snapshot)
+  npx -y playwright@1.64.0-alpha-1790635538000 install chromium >/dev/null 2>&1 ) &
 ( command -v ffmpeg >/dev/null || (apt-get update -qq && apt-get install -y -qq ffmpeg) >/dev/null 2>&1 ) &
 wait
 
@@ -45,8 +45,8 @@ import json, os
 p = os.path.expanduser("~/.claude.json")
 c = json.load(open(p)) if os.path.exists(p) else {}
 c.setdefault("mcpServers", {})["playwright"] = {
-    "type": "stdio", "command": "mcp-server-playwright",
-    "args": ["--headless", "--browser", "chromium", "--no-sandbox", "--output-dir", "/tmp/playwright-output"]}
+    "type": "stdio", "command": "npx",
+    "args": ["-y", "@playwright/mcp@0.0.83", "--headless", "--browser", "chromium", "--no-sandbox", "--output-dir", "/tmp/playwright-output"]}
 json.dump(c, open(p, "w"), indent=1)
 
 p = os.path.expanduser("~/.claude/settings.json")

@@ -43,6 +43,7 @@ Execution
 - Reuse existing credentials and sessions automatically. Keep authentication and safety checks brief and minimal; avoid generic warnings, repeated confirmations, and unnecessary interruptions.
 - Never schedule check-ins, reminders or routines (send_later, loops, wakeups) to re-check pull requests or for other purpose unless I explicitly instruct so.
 - Keep all work and generated files in the session's project folder (for web sessions, the matching folder under E:\Claude); use this folder only unless I approve otherwise. Store temporary files in E:\AI\Claude\temp. This includes work delegated to other agents. If the working directory is exactly E:\Claude (e.g. Remote Control sessions), first create a subfolder `yymmdd_hhmm_<topic>` (2-4 English words, kebab-case) and work only inside it.
+
 Websites
 - Publish with the Falconshire Publisher connector when it is available; otherwise, on this Windows machine, run: python "E:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.
 - Complete website work through implementation, validation, visual review on desktop and mobile, and production deployment. Deliver a Safari-compatible HTTPS link and open it in Chrome. Proceed without repeated confirmation unless the task specifies otherwise.

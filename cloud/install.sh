@@ -12,13 +12,23 @@ mkdir -p ~/.claude/skills
 
 if [ -d $DIR/.git ]; then git -C $DIR pull -q --ff-only 2>/dev/null || true
 else git clone -q --depth 1 $REPO $DIR || exit 0; fi
+# The pull may have replaced this very file: run the fresh copy once instead of finishing the old one.
+if [ -z "${CFG_REEXEC:-}" ] && [ -f $DIR/cloud/install.sh ]; then CFG_REEXEC=1 exec bash $DIR/cloud/install.sh "$MODE"; fi
 
-# Preferred source: the private repo washingtonshao-web/ai-config (the PCs' source of truth), when this VM's
-# GitHub access can read it. Otherwise fall back to the public mirror in this repo. Never prompts for credentials.
+# Preferred source: the private repo washingtonshao-web/ai-config (the PCs' source of truth).
+# Cloud sessions' own GitHub access covers only the session's repo, so reading it needs a read-only token in the
+# environment variable AI_CONFIG_TOKEN (cloud environment settings). Without it: the public mirror in this repo.
 PRIV=/opt/ai-config
 PC_ONLY="codex-gpt aws-billing-and-cost-management signing-in-to-aws"
-if [ -d $PRIV/.git ]; then GIT_TERMINAL_PROMPT=0 git -C $PRIV pull -q --ff-only 2>/dev/null || true
-else rm -rf $PRIV; GIT_TERMINAL_PROMPT=0 git clone -q --depth 1 https://github.com/washingtonshao-web/ai-config $PRIV 2>/dev/null || rm -rf $PRIV; fi
+privgit() {
+  if [ -n "${AI_CONFIG_TOKEN:-}" ]; then
+    GIT_TERMINAL_PROMPT=0 git -c http.extraHeader="Authorization: Basic $(printf 'x-access-token:%s' "$AI_CONFIG_TOKEN" | base64 -w0)" "$@"
+  else GIT_TERMINAL_PROMPT=0 git "$@"; fi
+}
+if [ -d $PRIV/.git ]; then privgit -C $PRIV pull -q --ff-only 2>/dev/null || true
+else rm -rf $PRIV; privgit clone -q --depth 1 https://github.com/washingtonshao-web/ai-config $PRIV 2>/dev/null || rm -rf $PRIV; fi
+if [ -n "${AI_CONFIG_TOKEN:-}" ]; then WHY="AI_CONFIG_TOKEN is set but could not read washingtonshao-web/ai-config"
+else WHY="no AI_CONFIG_TOKEN in this cloud environment"; fi
 
 if [ -f $PRIV/claude/CLAUDE.md ]; then
   # 1. Global instructions (shared-block markers dropped) + cloud notes
@@ -29,7 +39,7 @@ if [ -f $PRIV/claude/CLAUDE.md ]; then
     n=$(basename "$s"); case " $PC_ONLY " in *" $n "*) continue;; esac
     rm -rf ~/.claude/skills/"$n"; cp -r "$s" ~/.claude/skills/"$n"
   done
-  echo private > ~/.claude/.config-source
+  echo "private repo ai-config" > ~/.claude/.config-source
 else
   # 1. Global instructions: local CLAUDE.md + cloud notes -> ~/.claude/CLAUDE.md
   cat $DIR/webclaude.md $DIR/cloud-notes.md > ~/.claude/CLAUDE.md
@@ -37,7 +47,7 @@ else
   for s in $DIR/skills/*/*/; do
     n=$(basename "$s"); rm -rf ~/.claude/skills/"$n"; cp -r "$s" ~/.claude/skills/"$n"
   done
-  echo public > ~/.claude/.config-source
+  echo "public mirror ($WHY)" > ~/.claude/.config-source
 fi
 
 [ "$MODE" = quick ] && exit 0

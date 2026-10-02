@@ -24,13 +24,13 @@ One place for Yang's Claude setup outside the home PC. Claude Code **cloud sessi
 
 | Path | Role |
 |---|---|
-| `webclaude.md` | The local `~/.claude/CLAUDE.md`, pushed by the PC hook `~/.claude/hooks/sync-webclaude.ps1` |
+| `webclaude.md` | The local `~/.claude/CLAUDE.md` (shared-block markers stripped), pushed by the PCs' daily config sync |
 | `cloud-notes.md` | Cloud-only notes appended to it |
 | `skills/<group>/<skill>/` | Skills owned or kept by Yang, synced from the PC |
 | `kit/` | Website design kit (`v1.css`, `v1.js`, `apply_kit.py`) |
 | `cloud-setup.sh` → `cloud/install.sh` | Environment setup: CLAUDE.md, skills, HyperFrames CLI, Playwright MCP, ffmpeg, refresh hook |
 
-Flow: PC session start/end → hook pushes changed CLAUDE.md / skills / kit here → cloud environment setup (cached ~7 days) installs all → every new cloud session's SessionStart hook pulls this repo and refreshes CLAUDE.md and skills for the next session.
+Flow: the daily PC config sync (04:00, source of truth in a private repo) pushes changed CLAUDE.md / skills / kit here → cloud environment setup (cached ~7 days) installs all → every new cloud session's SessionStart hook pulls this repo and refreshes CLAUDE.md and skills for the next session.
 
 Cloud environment setup script (environments "Full" and "Default"):
 

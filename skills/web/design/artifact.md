@@ -5,7 +5,7 @@ Two cases share these rules: a page published with the Artifact tool, and a sing
 ## Order of work
 1. For a published Artifact, load artifact-design first. It sets the page contract: a 2–4 word `<title>`, tokens on `:root`, dark mode under `prefers-color-scheme` and `:root[data-theme]`, an explicit `body` background, scripts only from the allowed CDNs, stylesheets only from Google Fonts, everything else inline.
 2. Build on the kit. It already meets the token and dark-mode parts of that contract: `--k-*` on `:root`, both dark-mode selectors, and the theme toggle sets `data-theme` on `<html>`.
-3. Write the page with `<link rel="stylesheet" href="kit/v1.css">` and `<script src="kit/v1.js"></script>`, `<body class="k">`, then run `python "E:\Claude\sites\_kit\apply_kit.py" page.html` to inline the kit (about 28 KB). Never hand an Artifact a relative `kit/` link: it will not load.
+3. Write the page with `<link rel="stylesheet" href="kit/v1.css">` and `<script src="kit/v1.js"></script>`, `<body class="k">` (pages with data also link `kit/styles/editorial.css` after it, per `charts.md`), then run `python "E:\Claude\sites\_kit\apply_kit.py" page.html` to inline the kit (about 28 KB). Never hand an Artifact a relative `kit/` link: it will not load.
 4. Run `review.md` on the local file before publishing.
 
 ## Pick the shape from the job

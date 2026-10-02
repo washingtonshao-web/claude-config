@@ -1,6 +1,6 @@
-/* Falconshire kit style skin: economist
-   Link it after kit/v1.css as kit/styles/economist.css; apply_kit.py inlines both.
-   Single light theme like the print charts it follows: white page, red brand rule,
+/* Falconshire kit style skin: editorial (Economist-inspired house style, 2026-10)
+   Link it after kit/v1.css as kit/styles/editorial.css; apply_kit.py inlines both.
+   Single light theme like print data journalism: white page, falcon-copper brand rule,
    serif headlines, condensed sans for chart text, blue/cyan/green/yellow series,
    hairline grids. Optional fonts (fall back cleanly where Google Fonts is blocked):
    https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&display=swap
@@ -14,7 +14,7 @@
   --k-s1: #006ba2; --k-s2: #3ebcd2; --k-s3: #379a8b; --k-s4: #ebb434; --k-s5: #b4ba39; --k-s6: #9a607f; --k-s7: #d1b07c; --k-s8: #758d99;
   --k-seq-1: #dcebf4; --k-seq-2: #a6cde4; --k-seq-3: #5aa2cd; --k-seq-4: #006ba2; --k-seq-5: #003e5e;
   --k-grid: #d3dde3; --k-axis: #0d0d0d;
-  --k-brand: #e3120b;
+  --k-brand: #b4531f;
   --k-chart-font: "Roboto Condensed", "Noto Sans SC", "PingFang SC", "Microsoft YaHei UI", sans-serif;
   --k-font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei UI", system-ui, sans-serif;
   --k-serif: "Noto Serif SC", "Songti SC", Georgia, serif;

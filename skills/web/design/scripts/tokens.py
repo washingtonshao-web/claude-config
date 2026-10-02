@@ -2,7 +2,7 @@
 """Print the kit's design tokens as JSON for Python charts and Office files.
 
 Usage:
-    python tokens.py [--style kit|economist|<skin>] [--theme light|dark]
+    python tokens.py [--style kit|editorial|<skin>] [--theme light|dark]
 
 Reads E:\\Claude\\sites\\_kit\\v1.css (and kit/styles/<skin>.css on top), so colors are never
 copied by hand. Output keys: tokens (all --k-* values), series (8 categorical colors in order),
@@ -45,7 +45,7 @@ def main() -> None:
     series = [t[f"k-s{i}"] for i in range(1, 9) if f"k-s{i}" in t]
     seq = [t[f"k-seq-{i}"] for i in range(1, 6) if f"k-seq-{i}" in t]
     font = ["Microsoft YaHei UI", "PingFang SC", "Noto Sans SC", "DejaVu Sans"]
-    if a.style == "economist":
+    if a.style == "editorial":
         font = ["Roboto Condensed"] + font
     mpl = {
         "font.family": "sans-serif",
@@ -73,7 +73,7 @@ def main() -> None:
         "savefig.dpi": 200,
         "savefig.bbox": "tight",
     }
-    if a.style == "economist":
+    if a.style == "editorial":
         mpl["ytick.labelright"] = True
         mpl["ytick.labelleft"] = False
     print(json.dumps({"style": a.style, "theme": a.theme, "tokens": t, "series": series, "seq": seq,

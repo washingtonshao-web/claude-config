@@ -50,6 +50,20 @@ else
   echo "public mirror ($WHY)" > ~/.claude/.config-source
 fi
 
+# 2b. Workflows (deep-research.js ...) and selected settings (workflowSizeGuideline), from the same source as above
+WF=$DIR/workflows; [ -d $PRIV/claude/workflows ] && WF=$PRIV/claude/workflows
+if [ -d "$WF" ]; then mkdir -p ~/.claude/workflows && cp -r "$WF"/. ~/.claude/workflows/; fi
+if [ -f $DIR/cloud/settings.json ]; then
+  python3 - "$DIR/cloud/settings.json" <<'PY' || true
+import json, os, sys
+p = os.path.expanduser("~/.claude/settings.json")
+s = json.load(open(p)) if os.path.exists(p) else {}
+s.update(json.load(open(sys.argv[1])))
+os.makedirs(os.path.dirname(p), exist_ok=True)
+json.dump(s, open(p, "w"), indent=1)
+PY
+fi
+
 [ "$MODE" = quick ] && exit 0
 
 # 3. HyperFrames skills from upstream (same source as the PC: heygen-com/hyperframes)

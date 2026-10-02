@@ -45,7 +45,5 @@ Show something within about 2 seconds. Load large data after the page appears, n
 Set a numeric goal. Have an independent Opus 5.5 (high effort) subagent review each stage. Keep going until the goal is met.
 
 ## Visual review (required before delivery)
-Inspect the rendered result separately from functionality. Take real screenshots with Playwright and system Chrome (Python `playwright` is installed; `p.chromium.launch(channel="chrome")`) rather than relying on the browser pane, which cannot capture while hidden:
-- 1440×900 desktop and 390×844 mobile (`is_mobile=True`, `device_scale_factor=2`), each in light and dark (`color_scheme`).
-- In the script, assert no horizontal overflow (`scrollWidth == clientWidth`) and no page errors.
+Inspect the rendered result separately from functionality. Run `python ~/.claude/skills/website-design/shots.py <url|file> <outdir>`: desktop 1440 + mobile 390, light + dark; reports overflow, broken images, HTTP/JS errors (`--full` for full page). Don't use the browser pane; it can't capture while hidden.
 - Look at the images for layout, typography, spacing, alignment, color, contrast, image quality, clipping and overlap. Fix visible problems and re-shoot the affected views before publishing.

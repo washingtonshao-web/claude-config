@@ -13,13 +13,32 @@ mkdir -p ~/.claude/skills
 if [ -d $DIR/.git ]; then git -C $DIR pull -q --ff-only 2>/dev/null || true
 else git clone -q --depth 1 $REPO $DIR || exit 0; fi
 
-# 1. Global instructions: local CLAUDE.md + cloud notes -> ~/.claude/CLAUDE.md
-cat $DIR/webclaude.md $DIR/cloud-notes.md > ~/.claude/CLAUDE.md
+# Preferred source: the private repo washingtonshao-web/ai-config (the PCs' source of truth), when this VM's
+# GitHub access can read it. Otherwise fall back to the public mirror in this repo. Never prompts for credentials.
+PRIV=/opt/ai-config
+PC_ONLY="codex-gpt aws-billing-and-cost-management signing-in-to-aws"
+if [ -d $PRIV/.git ]; then GIT_TERMINAL_PROMPT=0 git -C $PRIV pull -q --ff-only 2>/dev/null || true
+else rm -rf $PRIV; GIT_TERMINAL_PROMPT=0 git clone -q --depth 1 https://github.com/washingtonshao-web/ai-config $PRIV 2>/dev/null || rm -rf $PRIV; fi
 
-# 2. Own skills: category folders in the repo, installed flat (~/.claude/skills/<name>/SKILL.md)
-for s in $DIR/skills/*/*/; do
-  n=$(basename "$s"); rm -rf ~/.claude/skills/"$n"; cp -r "$s" ~/.claude/skills/"$n"
-done
+if [ -f $PRIV/claude/CLAUDE.md ]; then
+  # 1. Global instructions (shared-block markers dropped) + cloud notes
+  sed -E '/^<!-- \/?shared:[A-Za-z0-9_-]+ -->\r?$/d' $PRIV/claude/CLAUDE.md > ~/.claude/CLAUDE.md
+  cat $DIR/cloud-notes.md >> ~/.claude/CLAUDE.md
+  # 2. All Claude skills from the private repo, except PC-only ones
+  for s in $PRIV/skills/claude/*/; do
+    n=$(basename "$s"); case " $PC_ONLY " in *" $n "*) continue;; esac
+    rm -rf ~/.claude/skills/"$n"; cp -r "$s" ~/.claude/skills/"$n"
+  done
+  echo private > ~/.claude/.config-source
+else
+  # 1. Global instructions: local CLAUDE.md + cloud notes -> ~/.claude/CLAUDE.md
+  cat $DIR/webclaude.md $DIR/cloud-notes.md > ~/.claude/CLAUDE.md
+  # 2. Own skills: category folders in the repo, installed flat (~/.claude/skills/<name>/SKILL.md)
+  for s in $DIR/skills/*/*/; do
+    n=$(basename "$s"); rm -rf ~/.claude/skills/"$n"; cp -r "$s" ~/.claude/skills/"$n"
+  done
+  echo public > ~/.claude/.config-source
+fi
 
 [ "$MODE" = quick ] && exit 0
 

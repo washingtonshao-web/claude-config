@@ -9,7 +9,9 @@ Pages reference the kit with
     <script src="kit/v1.js"></script>
 and this script swaps those tags for inline <style data-kit="v1"> / <script data-kit="v1">
 blocks, so every page is one self-contained HTML file (works with publish.py, the
-Falconshire Publisher connector, the Bunny mirror and offline). Re-running refreshes
+Falconshire Publisher connector, the Bunny mirror and offline). Style skins linked as
+    <link rel="stylesheet" href="kit/styles/<name>.css">
+are inlined the same way as <style data-kit-style="<name>">. Re-running refreshes
 previously inlined blocks to the current kit. --copy also places the raw kit files in
 out/kit/ so they are served alongside the page.
 """
@@ -30,6 +32,13 @@ LINK_RE = re.compile(r'<link\b[^>]*href=["\'][^"\']*kit/%s\.css["\'][^>]*>' % VE
 SCRIPT_RE = re.compile(r'<script\b[^>]*src=["\'][^"\']*kit/%s\.js["\'][^>]*>\s*</script>' % VERSION, re.I)
 STYLE_BLOCK_RE = re.compile(r'<style data-kit="%s">.*?</style>' % VERSION, re.S)
 SCRIPT_BLOCK_RE = re.compile(r'<script data-kit="%s">.*?</script>' % VERSION, re.S)
+SKIN_LINK_RE = re.compile(r'<link\b[^>]*href=["\'][^"\']*kit/styles/([\w-]+)\.css["\'][^>]*>', re.I)
+SKIN_BLOCK_RE = re.compile(r'<style data-kit-style="([\w-]+)">.*?</style>', re.S)
+
+
+def skin(name: str) -> str:
+    css = (KIT_DIR / "styles" / f"{name}.css").read_text(encoding="utf-8")
+    return f'<style data-kit-style="{name}">\n{css}</style>'
 
 
 def inline(html: str) -> tuple[str, int]:
@@ -38,6 +47,9 @@ def inline(html: str) -> tuple[str, int]:
     total = 0
     for pattern, block in ((LINK_RE, style), (STYLE_BLOCK_RE, style), (SCRIPT_RE, script), (SCRIPT_BLOCK_RE, script)):
         html, n = pattern.subn(lambda _m, b=block: b, html)
+        total += n
+    for pattern in (SKIN_LINK_RE, SKIN_BLOCK_RE):
+        html, n = pattern.subn(lambda m: skin(m.group(1)), html)
         total += n
     return html, total
 
@@ -67,6 +79,8 @@ def main() -> None:
         dest.mkdir(parents=True, exist_ok=True)
         for name in (f"{VERSION}.css", f"{VERSION}.js"):
             shutil.copy2(KIT_DIR / name, dest / name)
+        if (KIT_DIR / "styles").is_dir():
+            shutil.copytree(KIT_DIR / "styles", dest / "styles", dirs_exist_ok=True)
         touched.append(f"copied kit files to {dest}")
     print("kit applied: " + (", ".join(touched) if touched else "no kit references found"))
 

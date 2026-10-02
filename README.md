@@ -7,7 +7,7 @@ One place for Yang's Claude setup outside the home PC. Claude Code **cloud sessi
 | Group | Skills | Where they come from | Cloud | Home PC |
 |---|---|---|---|---|
 | Documents | docx, pdf, pptx, xlsx, skill-creator, docs | claude.ai account (Customize → Skills) | ✅ | ✅ |
-| Web | website-design (+ `kit/`) | this repo, `skills/web/` | ✅ | ✅ |
+| Web | design (+ `kit/`) | this repo, `skills/web/` | ✅ | ✅ |
 | Video | hyperframes ×8, media-use, general-video, slideshow, product-launch-video | upstream `heygen-com/hyperframes` | ✅ | ✅ |
 | Games | threejs ×9 | this repo, `skills/games/` | ✅ (asset generation needs Gemini / Tripo / ElevenLabs keys) | ✅ |
 | PC only | codex-gpt, flow-video, aws-billing, signing-in-to-aws | home PC | ❌ | ✅ |

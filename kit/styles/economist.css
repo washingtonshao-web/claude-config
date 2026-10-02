@@ -1,0 +1,92 @@
+/* Falconshire kit style skin: economist
+   Link it after kit/v1.css as kit/styles/economist.css; apply_kit.py inlines both.
+   Single light theme like the print charts it follows: white page, red brand rule,
+   serif headlines, condensed sans for chart text, blue/cyan/green/yellow series,
+   hairline grids. Optional fonts (fall back cleanly where Google Fonts is blocked):
+   https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&display=swap
+   Source: car-export atlas, 2026-10. */
+:root, :root[data-theme="dark"] {
+  --k-page: #ffffff; --k-surface: #ffffff; --k-surface-2: #f1f4f6;
+  --k-ink: #0d0d0d; --k-ink-2: #333333; --k-muted: #595959;
+  --k-line: #d7dee3; --k-line-strong: #b7c6cf;
+  --k-accent: #006ba2; --k-accent-soft: #e4eff6; --k-accent-ink: #ffffff;
+  --k-good: #2e7d32; --k-good-soft: #e8f3e9; --k-warn: #b36b00; --k-warn-soft: #fbf1e1; --k-bad: #e3120b; --k-bad-soft: #fde8e7;
+  --k-s1: #006ba2; --k-s2: #3ebcd2; --k-s3: #379a8b; --k-s4: #ebb434; --k-s5: #b4ba39; --k-s6: #9a607f; --k-s7: #d1b07c; --k-s8: #758d99;
+  --k-seq-1: #dcebf4; --k-seq-2: #a6cde4; --k-seq-3: #5aa2cd; --k-seq-4: #006ba2; --k-seq-5: #003e5e;
+  --k-grid: #d3dde3; --k-axis: #0d0d0d;
+  --k-brand: #e3120b;
+  --k-chart-font: "Roboto Condensed", "Noto Sans SC", "PingFang SC", "Microsoft YaHei UI", sans-serif;
+  --k-font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei UI", system-ui, sans-serif;
+  --k-serif: "Noto Serif SC", "Songti SC", Georgia, serif;
+  --k-shadow: none; --k-shadow-lg: 0 8px 30px rgba(0,0,0,.12);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) {
+  --k-page: #ffffff; --k-surface: #ffffff; --k-surface-2: #f1f4f6; --k-ink: #0d0d0d; --k-ink-2: #333333; --k-muted: #595959;
+  --k-line: #d7dee3; --k-line-strong: #b7c6cf; --k-accent: #006ba2; --k-accent-soft: #e4eff6;
+  --k-s1: #006ba2; --k-s2: #3ebcd2; --k-s3: #379a8b; --k-s4: #ebb434; --k-s5: #b4ba39; --k-s6: #9a607f; --k-s7: #d1b07c; --k-s8: #758d99;
+  --k-seq-1: #dcebf4; --k-seq-2: #a6cde4; --k-seq-3: #5aa2cd; --k-seq-4: #006ba2; --k-seq-5: #003e5e;
+  --k-grid: #d3dde3; --k-axis: #0d0d0d; --k-good: #2e7d32; --k-bad: #e3120b; color-scheme: light; } }
+body.k { background: #ffffff; color: #0d0d0d; }
+[data-k-theme-toggle] { display: none !important; }
+
+/* masthead and headings */
+.k-header { background: #ffffff; border-bottom: 1px solid var(--k-line); box-shadow: none; }
+.k-header::before { content: ""; display: block; height: 4px; background: var(--k-brand); }
+.k-brand__mark { background: var(--k-brand); color: #fff; border-radius: 0; }
+.k-brand__name { font-family: var(--k-serif); font-weight: 900; }
+.k-nav a { color: var(--k-ink-2); }
+.k-nav a:hover { color: var(--k-brand); }
+.k-hero h1, .k-section__head h2 { font-family: var(--k-serif); font-weight: 900; }
+.k-hero__eyebrow, .k-section__num { color: var(--k-brand); font-family: var(--k-chart-font); }
+.k-toc a[aria-current="true"], .k-toc a.is-active { color: var(--k-brand); border-left-color: var(--k-brand); }
+
+/* verdict and KPIs as print boxes */
+.k-verdict { background: #ffffff; border: 0; border-top: 3px solid var(--k-ink); border-bottom: 1px solid var(--k-line); border-radius: 0; box-shadow: none; padding: 16px 0 14px; }
+.k-verdict::before { display: none; }
+.k-verdict__label { color: var(--k-brand); font-family: var(--k-chart-font); letter-spacing: .06em; }
+.k-verdict__text { font-family: var(--k-serif); font-weight: 900; }
+.k-kpis { gap: 0; border-bottom: 1px solid var(--k-line); }
+.k-kpi { background: transparent; border: 0; border-radius: 0; box-shadow: none; border-right: 1px solid #e3e8eb; padding: 14px 14px 12px 0; }
+.k-kpi:last-child { border-right: 0; }
+.k-kpi__value { font-family: var(--k-chart-font); font-weight: 700; color: var(--k-ink); }
+.k-kpi__value .k-kpi__unit { font-weight: 400; color: var(--k-muted); }
+.k-kpi__delta--up { color: var(--k-accent); }
+.k-kpi__delta--down { color: var(--k-brand); }
+
+/* chart frames: red rule + red tab, no card */
+.k-figure { background: transparent; border: 0; border-radius: 0; padding: 18px 0 0; margin: 28px 0; position: relative; border-top: 1px solid var(--k-brand); }
+.k-figure::before { content: ""; position: absolute; left: 0; top: -1px; width: 38px; height: 9px; background: var(--k-brand); }
+.k-figure__title { font-family: var(--k-chart-font); font-weight: 700; font-size: 18px; color: var(--k-ink); margin-bottom: 2px; }
+.k-figure__sub { font-family: var(--k-chart-font); font-size: 14px; color: var(--k-ink-2); }
+.k-figure figcaption, .k-figure__src { font-family: var(--k-chart-font); font-size: 12px; color: var(--k-muted); border-top: 0; }
+.k-chart svg, .k-chart .k-tick, .k-chart .k-dlabel { font-family: var(--k-chart-font); }
+.k-chart .k-grid-line { stroke: var(--k-grid); }
+.k-chart .k-tick { fill: var(--k-muted); font-size: 12.5px; }
+.k-chart .k-dlabel { fill: var(--k-ink); font-size: 12.5px; }
+.k-tooltip { background: var(--k-ink); color: #fff; border-radius: 2px; font-family: var(--k-chart-font); }
+
+/* tables: print rules */
+.k-table-wrap { border: 0; border-radius: 0; box-shadow: none; border-top: 2px solid var(--k-ink); }
+.k-table { font-family: var(--k-chart-font); }
+.k-table thead th { background: #ffffff; color: var(--k-ink); font-weight: 700; border-bottom: 1px solid var(--k-ink); }
+.k-table td, .k-table th { border-bottom: 1px solid #e3e8eb; }
+
+/* chips, cards, callouts, footer */
+.k-chip { border-radius: 2px; font-family: var(--k-chart-font); border-color: var(--k-line-strong); background: #fff; color: var(--k-ink-2); }
+.k-chip[aria-pressed="true"] { background: var(--k-ink); border-color: var(--k-ink); color: #fff; }
+.k-card { border-radius: 0; box-shadow: none; border: 0; border-top: 1px solid var(--k-ink); background: #fff; }
+.k-card:hover { background: #f6f8f9; }
+.k-callout { border-radius: 0; border: 0; border-left: 4px solid #ebb434; background: #fbf6e8; }
+.k-sources li { font-size: 13px; }
+.k-footer { border-top: 4px solid var(--k-brand); background: #fff; }
+
+/* light print map */
+.k-map { background: #ffffff; border: 0; border-radius: 0; border-top: 1px solid var(--k-brand); position: relative; }
+.k-map::before { content: ""; position: absolute; left: 0; top: -1px; width: 38px; height: 9px; background: var(--k-brand); z-index: 2; }
+.k-map .k-btn { background: #fff; color: var(--k-ink); border-color: var(--k-line-strong); border-radius: 2px; }
+.k-drawer { border-radius: 0; }
+
+@media (max-width: 760px) {
+  .k-kpi { border-right: 0; border-bottom: 1px solid #e3e8eb; }
+}

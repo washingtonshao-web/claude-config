@@ -48,7 +48,7 @@ Execution
 Websites
 - Publish with the Falconshire Publisher connector when it is available; otherwise, on this Windows machine, run: python "E:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.
 - Complete website work through implementation, validation, visual review on desktop and mobile, and production deployment. Deliver a Safari-compatible HTTPS link and open it in Chrome. Proceed without repeated confirmation unless the task specifies otherwise.
-- Before designing or reviewing any site, read the website-design skill and follow it.
+- Before making or visually reviewing anything I will look at (sites, local HTML, Artifacts, slides, documents, charts, images), read the design skill and follow it. For Artifacts, artifact-design sets the technical rules and mine set the look.
 
 Presentations
 Default to Microsoft YaHei UI, with bold headings and regular body text. Avoid SimSun unless the requested design calls for it.

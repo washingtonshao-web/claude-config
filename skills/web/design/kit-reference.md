@@ -8,6 +8,7 @@ All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in pag
 - Type: `--k-font --k-serif --k-mono`, sizes `--k-fs-xs sm md lg xl 2xl 3xl 4xl`
 - Space `--k-sp-1…8` (4 8 12 16 24 32 48 72), radius `--k-r-sm md lg`, `--k-max` 1180px, `--k-measure` 40em
 - Dark mode is automatic (OS) plus a toggle: any button with `data-k-theme-toggle`.
+- Style skins: `<link rel="stylesheet" href="kit/styles/economist.css">` after `v1.css` restyles the same components (see `charts.md`); `apply_kit.py` inlines it too. The economist skin adds `--k-brand` (red rule) and `--k-chart-font`, and is light-only.
 
 ## Skeleton
 ```html

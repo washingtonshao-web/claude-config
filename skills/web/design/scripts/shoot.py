@@ -122,7 +122,8 @@ def main() -> None:
     t = a.target
     url = t if t.startswith(("http://", "https://", "file:")) else Path(t).resolve().as_uri()
     stem = Path(t).stem if not t.startswith("http") else t.split("//")[1].split("/")[0]
-    out = Path(a.out) if a.out else Path(r"E:\AI\Claude\temp\shoot") / f"{stem}-{datetime.datetime.now():%m%d-%H%M%S}"
+    temp = Path(r"E:\AI\Claude\temp") if Path("E:\\").exists() else Path(r"D:\AI\Claude\temp")  # PCs without E: use D:
+    out = Path(a.out) if a.out else temp / "shoot" / f"{stem}-{datetime.datetime.now():%m%d-%H%M%S}"
     out.mkdir(parents=True, exist_ok=True)
 
     report, shots, hard = {"url": url, "out": str(out), "views": {}}, {}, False

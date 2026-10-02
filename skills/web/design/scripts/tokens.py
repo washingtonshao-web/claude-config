@@ -16,7 +16,8 @@ import json
 import re
 from pathlib import Path
 
-KIT = Path(r"E:\Claude\sites\_kit")
+KIT = next((p for p in (Path(r"E:\Claude\sites\_kit"), Path(r"D:\Claude\sites\_kit")) if p.exists()),
+           Path(r"E:\Claude\sites\_kit"))  # PCs without an E: drive keep the same layout on D:
 VAR_RE = re.compile(r"--(k-[\w-]+)\s*:\s*([^;]+);")
 
 

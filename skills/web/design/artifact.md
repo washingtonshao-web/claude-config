@@ -19,7 +19,7 @@ Two cases share these rules: a page published with the Artifact tool, and a sing
 
 ## Effort
 - Match design effort to the job: a quick answer page gets kit defaults and one chart; a deliverable for other people gets a hero, full archetype and the full review.
-- Keep it to what the first screen needs: the conclusion and the evidence must be visible without scrolling on a 1440×900 desktop.
+- Keep it to what the first screen needs: the conclusion and the evidence must be visible without scrolling on a 1440×900 desktop and in the iPhone view.
 
 ## Small things that matter
 - Icon parameter on first publish: one plain word (chart, map, report, table).

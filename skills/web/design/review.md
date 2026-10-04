@@ -6,10 +6,11 @@ Inspect the rendered result separately from functionality, before every delivery
 ```
 python "C:\Users\Administrator\.claude\skills\design\scripts\shoot.py" <page.html | URL> [--full] [--views desktop-light,mobile-light]
 ```
-- Default: 1440×900 desktop and 390×844 phone (2×, touch), each light and dark, first screen only. `--full` for whole pages (long pages: review the first screens, then `--full` once at the end).
-- Uses system Chrome through Python Playwright, so it works while the browser pane is hidden.
+- Default: 1440×900 desktop (system Chrome) and iPhone 18 Pro Max (WebKit, Safari's engine; 440×760 visible, 3×, touch), each light and dark, first screen only; plus `small-light` (375×667), measured only and kept off the contact sheet. `--full` for whole pages (long pages: review the first screens, then `--full` once at the end).
+- Python Playwright, so it works while the browser pane is hidden. An Artifact fragment (no doctype) is shot inside the skeleton the Artifact publisher adds.
+- A protected live URL reports `"gated": true` (Falconshire login); shoot the local build instead, which the release verified as identical.
 - Output folder `E:\AI\Claude\temp\shoot\<name>-<time>\`: one PNG per view plus `contact.png` (all views on one sheet).
-- The JSON report is measured, not eyeballed: horizontal overflow, elements past the right edge, page and console errors, failed requests, broken images, low-contrast text (with ratio), phone tap targets under 32px, YaHei-only font stacks. Exit code 1 on a hard failure (overflow, errors, broken images).
+- The JSON report is measured, not eyeballed: horizontal overflow, elements past the right edge, page and console errors, failed requests, broken images, low-contrast text (with ratio), phone tap targets under 44px, phone inputs under 16px, missing viewport meta, YaHei-only font stacks. Exit code 1 on a hard failure (overflow, missing viewport meta, errors, broken images).
 - Views with identical findings are folded ("same findings as …"). A deliberately single-theme style shows the same image in light and dark; that is expected.
 
 ## 2. Look
@@ -24,7 +25,7 @@ Open `contact.png` first (about 1.6k tokens for four views). Open a single view,
 | 4 | Color | One accent; status colors only for status | One stray color | Rainbow or decorative status colors |
 | 5 | Charts | `charts.md` rules met, source lines present | One rule missed | Legend hunting, dual axes, no source |
 | 6 | Spacing and alignment | Consistent rhythm and edges | A few uneven gaps | Visibly misaligned |
-| 7 | Phone | No overflow, readable, targets OK | Minor crowding | Overflow or unreadable |
+| 7 | Phone (iPhone view) | No overflow, conclusion in first screen, targets OK | Minor crowding | Overflow or unreadable |
 | 8 | Dark mode (or chosen single theme) | Both clean | Small contrast slips | Broken or unreadable |
 | 9 | Images | Consistent style, sharp, no layout jump | One weak image | Stretched, blurry or missing |
 | 10 | AI look | None of the "Avoid" list in SKILL.md | One instance | Several |

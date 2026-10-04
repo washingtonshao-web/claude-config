@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Screenshot a page in desktop/mobile x light/dark, run measured checks, build one contact sheet.
+"""Screenshot a page in desktop and iPhone x light/dark (plus a small-phone check), run measured checks, build one contact sheet.
 
 Usage:
-    python shoot.py <page.html | URL> [--out DIR] [--views desktop-light,mobile-dark] [--full] [--wait MS]
+    python shoot.py <page.html | URL> [--out DIR] [--views desktop-light,iphone-dark] [--full] [--wait MS]
 
 Look at contact.png first (about 1.6k tokens for all four views); open a single view only
 to inspect a problem. Checks are measured, not eyeballed: horizontal overflow, elements past
 the right edge, page/console errors, failed requests, broken images, low-contrast text,
-small tap targets on phones, Microsoft YaHei used without a fallback.
+tap targets under 44px and inputs under 16px on phones, Microsoft YaHei used without a fallback.
+Phone views run in WebKit (Safari's engine) at iPhone 18 Pro Max size; "gated" means the URL
+redirected to the Falconshire login, so shoot the local build instead.
 Prints a JSON report; exit code 1 when a hard check fails (overflow, errors, broken images).
 """
 
@@ -16,25 +18,39 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import os
 import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 from playwright.sync_api import sync_playwright
 
+# Some sessions point PLAYWRIGHT_BROWSERS_PATH at an empty temp dir; use the installed browsers instead.
+_pw = os.environ.get("PLAYWRIGHT_BROWSERS_PATH")
+_home = Path(os.environ.get("LOCALAPPDATA", "")) / "ms-playwright"
+if _pw and not any(Path(_pw).glob("webkit-*")) and any(_home.glob("webkit-*")):
+    os.environ["PLAYWRIGHT_BROWSERS_PATH"] = str(_home)
+
+# iphone-*: iPhone 18 Pro Max in Safari (WebKit engine), 440x956 pt screen at 3x, ~440x760 visible
+# below the browser bars, so the screenshot is the real first screen. small-*: 375x667 (iPhone SE,
+# small Android) - measured checks only, kept off the contact sheet.
+IOS_UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 "
+          "(KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1")
+IPHONE = dict(viewport={"width": 440, "height": 760}, screen={"width": 440, "height": 956},
+              device_scale_factor=3, is_mobile=True, has_touch=True, user_agent=IOS_UA)
+SMALL = dict(viewport={"width": 375, "height": 667}, device_scale_factor=2, is_mobile=True, has_touch=True)
 VIEWS = {
-    "desktop-light": dict(viewport={"width": 1440, "height": 900}, color_scheme="light"),
-    "desktop-dark": dict(viewport={"width": 1440, "height": 900}, color_scheme="dark"),
-    "mobile-light": dict(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True,
-                         device_scale_factor=2, color_scheme="light"),
-    "mobile-dark": dict(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True,
-                        device_scale_factor=2, color_scheme="dark"),
+    "desktop-light": ("chromium", dict(viewport={"width": 1440, "height": 900}, color_scheme="light")),
+    "desktop-dark": ("chromium", dict(viewport={"width": 1440, "height": 900}, color_scheme="dark")),
+    "iphone-light": ("webkit", dict(IPHONE, color_scheme="light")),
+    "iphone-dark": ("webkit", dict(IPHONE, color_scheme="dark")),
+    "small-light": ("chromium", dict(SMALL, color_scheme="light")),
 }
 
 CHECKS_JS = r"""
 (isMobile) => {
   const de = document.documentElement, vw = de.clientWidth;
-  const out = {overflowX: de.scrollWidth - vw, pastEdge: [], brokenImages: [], lowContrast: [], lowContrastCount: 0, smallTargets: 0, fontWarning: null};
+  const out = {overflowX: de.scrollWidth - vw, pastEdge: [], brokenImages: [], lowContrast: [], lowContrastCount: 0, smallTargets: 0, smallInputs: 0, fontWarning: null};
   const name = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.classList.length ? '.' + [...el.classList].slice(0, 2).join('.') : '');
   const visible = el => { const r = el.getBoundingClientRect(), s = getComputedStyle(el);
     return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0.05; };
@@ -51,7 +67,7 @@ CHECKS_JS = r"""
     return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
   const bgOf = el => { for (let p = el; p; p = p.parentElement) { const s = getComputedStyle(p);
     if (s.backgroundImage !== 'none') return null; const c = rgb(s.backgroundColor); if ((c[3] ?? 1) > 0.5) return c; }
-    return rgb(getComputedStyle(document.body).backgroundColor); };
+    return [255, 255, 255]; };  // nothing painted: browser default white
   let n = 0;
   for (const el of document.body.querySelectorAll('h1,h2,h3,h4,p,li,td,th,a,span,button,label,figcaption,small,div')) {
     if (n > 600) break;
@@ -66,8 +82,11 @@ CHECKS_JS = r"""
   }
   if (isMobile) for (const el of document.querySelectorAll('a,button,input,select,[role=button]')) {
     if (!visible(el)) continue; const r = el.getBoundingClientRect();
-    if ((r.width < 32 || r.height < 32) && !(el.tagName === 'A' && el.closest('p,li,td,figcaption'))) out.smallTargets++;
+    if ((r.width < 44 || r.height < 44) && !(el.tagName === 'A' && el.closest('p,li,td,figcaption'))) out.smallTargets++;
   }
+  if (isMobile) for (const el of document.querySelectorAll('input,select,textarea'))
+    if (visible(el) && parseFloat(getComputedStyle(el).fontSize) < 16) out.smallInputs++;  // iOS zooms on focus
+  if (isMobile && !document.querySelector('meta[name=viewport]')) out.noViewportMeta = true;  // iPhone lays out at 980px
   const ff = getComputedStyle(document.body).fontFamily;
   if (/^["']?Microsoft YaHei/i.test(ff) && !/PingFang|Noto Sans|sans-serif/i.test(ff)) out.fontWarning = ff;
   return out;
@@ -79,12 +98,12 @@ def contact_sheet(shots: dict[str, Path], dest: Path) -> None:
     tiles = []
     for name, p in shots.items():
         im = Image.open(p).convert("RGB")
-        w = 760 if name.startswith("desktop") else 300
+        w = 760 if name.startswith("desktop") else 330
         h = min(int(im.height * w / im.width), 1100 if name.startswith("desktop") else 650)
         im = im.resize((w, int(im.height * w / im.width))).crop((0, 0, w, h))
         tiles.append((name, im))
     desk = [t for t in tiles if t[0].startswith("desktop")]
-    mob = [t for t in tiles if t[0].startswith("mobile")]
+    mob = [t for t in tiles if t[0].startswith("iphone")]
     gap, label = 16, 22
     row1_h = max((im.height for _, im in desk), default=0)
     row2_h = max((im.height for _, im in mob), default=0)
@@ -114,10 +133,11 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("target")
     ap.add_argument("--out")
-    ap.add_argument("--views", default=",".join(VIEWS))
+    ap.add_argument("--views", default=",".join(VIEWS), help="default: all; e.g. iphone-light,small-light")
     ap.add_argument("--full", action="store_true", help="full-page screenshots instead of the first screen")
     ap.add_argument("--wait", type=int, default=800, help="ms to wait after load for charts and fonts")
     a = ap.parse_args()
+    sys.stdout.reconfigure(encoding="utf-8")
 
     t = a.target
     url = t if t.startswith(("http://", "https://", "file:")) else Path(t).resolve().as_uri()
@@ -125,15 +145,31 @@ def main() -> None:
     temp = Path(r"E:\AI\Claude\temp") if Path("E:\\").exists() else Path(r"D:\AI\Claude\temp")  # PCs without E: use D:
     out = Path(a.out) if a.out else temp / "shoot" / f"{stem}-{datetime.datetime.now():%m%d-%H%M%S}"
     out.mkdir(parents=True, exist_ok=True)
+    src = Path(t)
+    if src.is_file() and not src.read_text(encoding="utf-8", errors="replace")[:600].lstrip().lower().startswith("<!doctype"):
+        # Artifact fragment: shoot it inside the skeleton the Artifact publisher adds.
+        wrapped = src.with_name(f".shoot-{src.stem}.html")
+        wrapped.write_text('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" '
+                           'content="width=device-width, initial-scale=1">' + src.read_text(encoding="utf-8")
+                           + "</html>", encoding="utf-8")
+        url = wrapped.resolve().as_uri()
 
     report, shots, hard = {"url": url, "out": str(out), "views": {}}, {}, False
     with sync_playwright() as p:
-        try:
-            browser = p.chromium.launch(channel="chrome")
-        except Exception:
-            browser = p.chromium.launch()
+        browsers = {}
+
+        def browser_for(engine: str):
+            if engine not in browsers:
+                try:
+                    browsers[engine] = p.webkit.launch() if engine == "webkit" else p.chromium.launch(channel="chrome")
+                except Exception as e:  # WebKit missing: `python -m playwright install webkit`
+                    report.setdefault("notes", []).append(f"{engine} unavailable, used Chromium: {str(e)[:80]}")
+                    browsers[engine] = p.chromium.launch()
+            return browsers[engine]
+
         for name in [v.strip() for v in a.views.split(",") if v.strip()]:
-            ctx = browser.new_context(**VIEWS[name])
+            engine, opts = VIEWS[name]
+            ctx = browser_for(engine).new_context(**opts)
             page = ctx.new_page()
             errors, failed = [], []
             page.on("pageerror", lambda e: errors.append(str(e)[:160]))
@@ -141,21 +177,31 @@ def main() -> None:
             page.on("requestfailed", lambda r: failed.append(r.url[:120]))
             page.on("response", lambda r: r.status >= 400 and failed.append(f"{r.status} {r.url[:110]}"))
             page.goto(url, wait_until="networkidle", timeout=45000)
+            if "/_falcon-auth/" in page.url:
+                report["gated"] = True
+                hard = True
+                ctx.close()
+                break
             page.wait_for_timeout(a.wait)
-            res = page.evaluate(CHECKS_JS, name.startswith("mobile"))
+            res = page.evaluate(CHECKS_JS, not name.startswith("desktop"))
             shot = out / f"{name}.png"
             page.screenshot(path=str(shot), full_page=a.full)
-            shots[name] = shot
+            if not name.startswith("small"):
+                shots[name] = shot
             res.update(errors=errors[:5], failedRequests=failed[:5])
             res = {k: v for k, v in res.items() if v not in ([], 0, None)}
-            res["hardFail"] = bool(res.get("overflowX", 0) > 0 or errors or res.get("brokenImages"))
+            res["hardFail"] = bool(res.get("overflowX", 0) > 0 or res.get("noViewportMeta") or errors or res.get("brokenImages"))
             hard |= res["hardFail"]
             same = next((k for k, v in report["views"].items() if v == res), None)
             report["views"][name] = f"same findings as {same}" if same else res
             ctx.close()
-        browser.close()
-    contact_sheet(shots, out / "contact.png")
-    report["contact"] = str(out / "contact.png")
+        for b in browsers.values():
+            b.close()
+    if src.is_file() and url.endswith(f".shoot-{src.stem}.html"):
+        src.with_name(f".shoot-{src.stem}.html").unlink(missing_ok=True)
+    if shots:
+        contact_sheet(shots, out / "contact.png")
+        report["contact"] = str(out / "contact.png")
     report["pass"] = not hard
     print(json.dumps(report, ensure_ascii=False, indent=1))
     sys.exit(1 if hard else 0)

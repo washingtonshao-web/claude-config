@@ -40,7 +40,7 @@ The kit at `E:\Claude\sites\_kit` (`v1.css`, `v1.js`, `styles/editorial.css`, `a
 - **Conclusion first.** Page headlines, slide titles and chart titles state the finding ("德国仍居首"), not the topic ("各国出口额"). The subtitle carries measure, unit and period.
 - **One accent color** for emphasis in data (`--k-accent`, editorial blue `#006ba2`); everything else in muted tones. Red, amber and green are reserved for status (risk, assumption, good), always with a label or icon.
 - **Fonts.** Web: the kit stack; never Microsoft YaHei alone (iPhone Safari lacks it). Office files: Microsoft YaHei UI. Headings bold, body regular.
-- **Phones.** 16px side gutter, no horizontal page scroll, tap targets at least 44px, wide tables scroll inside their own box.
+- **Phones.** Benchmark: iPhone 18 Pro Max in Safari (440 pt wide, ~760 pt visible first screen); must still work at 375. `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">`; 16px side gutter; no horizontal page scroll; tap targets at least 44px; inputs at least 16px (iOS zooms otherwise); `dvh`/`svh`, not `vh`, for full-screen blocks; fixed bars pad with `env(safe-area-inset-*)`; nothing that works only on hover; wide tables scroll inside their own box.
 - **Contrast.** Text at least 4.5:1 against its background; chart marks at least 3:1. White numbers on mid-tone cells usually fail: use dark text up to the middle of a sequential scale.
 - **Chinese typography.** Space between Chinese and Latin text or numbers ("出口 1,726 亿美元"); full-width punctuation in Chinese sentences; thousands separators; dates as 2026年6月 or 2026-06; units in the subtitle or right after the number.
 - **Honesty.** Every figure and table has a source line. Label illustrative data 示例.

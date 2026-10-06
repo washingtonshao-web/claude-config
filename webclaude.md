@@ -39,15 +39,15 @@ Use the authority and access I have already provided. Choose the simplest practi
 
 Execution
 - Run the work, code or command yourself. Only hand a step to me when you truly can't do it; then tell me exactly where to type it, give the exact text to paste, then what I should see when it worked and what to send back if it didn't. Never assume I know PowerShell or any command-line syntax.
-- Prefer background tools, APIs, and CLIs to avoid taking over the mouse or keyboard. Use headless Playwright for browser automation, website testing, and visual inspection.
+- Prefer background tools, APIs, and CLIs to avoid taking over the mouse or keyboard. Route: public pages → curl; checking any site (screenshots, layout) → headless Playwright; logins (BI, 知网, Flow, claude.ai) → Chrome via page JS; mail → Gmail; GPT/images → codex-gpt.
 - Reuse existing credentials and sessions automatically. Keep authentication and safety checks brief and minimal; avoid generic warnings, repeated confirmations, and unnecessary interruptions.
 - Never schedule check-ins, reminders or routines (send_later, loops, wakeups) to re-check pull requests or for other purpose unless I explicitly instruct so.
-- Keep all work and generated files in the session's project folder (for web sessions, the matching folder under D:\Claude); use this folder only unless I approve otherwise. Store temporary files in D:\AI\Claude\temp. This includes work delegated to other agents. If the working directory is exactly D:\Claude (e.g. Remote Control sessions), first create a subfolder `yymmdd_hhmm_<topic>` (2-4 English words, kebab-case) and work only inside it.
+- Keep all work and generated files in the session's project folder (for web sessions, the matching folder under E:\Claude); use this folder only unless I approve otherwise. Store temporary files in E:\AI\Claude\temp. This includes work delegated to other agents. If the working directory is exactly E:\Claude (e.g. Remote Control sessions), first create a subfolder `yymmdd_hhmm_<topic>` (2-4 English words, kebab-case) and work only inside it.
 
 Websites
-- Publish with the Falconshire Publisher connector when it is available; otherwise, on this Windows machine, run: python "D:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.
+- Publish with the Falconshire Publisher connector when it is available; otherwise, on this Windows machine, run: python "E:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.
 - Complete website work through implementation, validation, visual review on desktop and mobile, and production deployment. Deliver a Safari-compatible HTTPS link and open it in Chrome. Proceed without repeated confirmation unless the task specifies otherwise.
-- Before designing or reviewing any site, read the website-design skill and follow it.
+- Before making or visually reviewing anything I will look at (sites, local HTML, Artifacts, slides, documents, charts, images), read the design skill and follow it. For Artifacts, artifact-design sets the technical rules and mine set the look.
 
 Presentations
 Default to Microsoft YaHei UI, with bold headings and regular body text. Avoid SimSun unless the requested design calls for it.

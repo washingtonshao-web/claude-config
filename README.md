@@ -1,36 +1,28 @@
 # claude-config
 
-One place for Yang's Claude setup outside the home PC. Claude Code **cloud sessions** (claude.ai/code → Cloud) install everything here automatically.
+Bootstrap for Yang's Claude Code **cloud sessions** (claude.ai/code → Cloud), plus the new-PC installer
+(release `setup` → `AI-Config-Setup.cmd`). The source of truth is a private repo; the PCs' daily sync refreshes this one.
 
-## Skills catalog
+## How a cloud session gets its config
 
-| Group | Skills | Where they come from | Cloud | Home PC |
-|---|---|---|---|---|
-| Documents | docx, pdf, pptx, xlsx, skill-creator, docs | claude.ai account (Customize → Skills) | ✅ | ✅ |
-| Web | design (+ `kit/`) | this repo, `skills/web/` | ✅ | ✅ |
-| Video | hyperframes ×8, media-use, general-video, slideshow, product-launch-video | upstream `heygen-com/hyperframes` | ✅ | ✅ |
-| Games | threejs ×9 | this repo, `skills/games/` | ✅ (asset generation needs Gemini / Tripo / ElevenLabs keys) | ✅ |
-| PC only | codex-gpt, flow-video, aws-billing, signing-in-to-aws | home PC | ❌ | ✅ |
+`cloud/install.sh` installs global instructions, skills, workflows and the website kit from the first source that works:
 
-## Tools (MCP / connectors)
-
-| Tool | Cloud | Home PC |
+| # | Source | Needs (cloud environment variable) |
 |---|---|---|
-| Bio Research, Falconshire Publisher, Travel Planner, Claude Docs (claude.ai connectors) | ✅ | ✅ |
-| Playwright (headless Chromium) | ✅ installed by `cloud/install.sh` | ✅ |
-| Claude in Chrome, Flow video, Codex GPT, browser pane | ❌ use Remote Control → **home** | ✅ |
+| 1 | The private repo | `AI_CONFIG_TOKEN` (read-only GitHub token) |
+| 2 | `bundle.enc` here — the same content, encrypted (AES-256-CBC, PBKDF2) | `AI_CONFIG_KEY` |
+| 3 | The readable copy here (`webclaude.md`, `skills/`, `kit/`), while it is still published | — |
+
+It also installs the HyperFrames skills and CLI, Playwright MCP + Chromium and ffmpeg, and adds a SessionStart hook
+that refreshes instructions and skills at the start of every session. `~/.claude/.config-source` says which source was used.
 
 ## Files
 
 | Path | Role |
 |---|---|
-| `webclaude.md` | The local `~/.claude/CLAUDE.md` (shared-block markers stripped), pushed by the PCs' daily config sync |
-| `cloud-notes.md` | Cloud-only notes appended to it |
-| `skills/<group>/<skill>/` | Skills owned or kept by Yang, synced from the PC |
-| `kit/` | Website design kit (`v1.css`, `v1.js`, `apply_kit.py`) |
-| `cloud-setup.sh` → `cloud/install.sh` | Environment setup: CLAUDE.md, skills, HyperFrames CLI, Playwright MCP, ffmpeg, refresh hook |
-
-Flow: the daily PC config sync (04:00, source of truth in a private repo) pushes changed CLAUDE.md / skills / kit here → cloud environment setup (cached ~7 days) installs all → every new cloud session's SessionStart hook pulls this repo and refreshes CLAUDE.md and skills for the next session.
+| `cloud-setup.sh` → `cloud/install.sh` | Environment setup script and refresh hook |
+| `bundle.enc`, `bundle.sha256` | Encrypted config bundle; the hash changes when its content changes |
+| `webclaude.md`, `cloud-notes.md`, `skills/`, `kit/`, `workflows/`, `cloud/settings.json` | Readable copy (being retired) |
 
 Cloud environment setup script (environments "Full" and "Default"):
 

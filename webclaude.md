@@ -65,6 +65,4 @@ Do not create or update global memory unless I explicitly ask. Keep necessary pr
 Connectors
 Keep the Notion and Dropbox connectors off by default. Do not use Notion or Dropbox tools unless I explicitly ask for them in the request; if I do, enable the connector for that session only.
 
-Travel preferences
-- For leisure trips, prioritize relaxation, high-quality accommodation, attractive scenery visible from the room or hotel, and low crowd levels. Avoid attraction-checklist itineraries. Favor longer stays at one hotel, minimal transfers, and spacious, optional daily plans. Use Travel Planner when requested. These preferences are defaults; follow explicit trip-specific instructions.
-- Use the Travel Planner MCP when travel trip planning is requested.
+Use the Travel Planner MCP when travel trip planning is requested.

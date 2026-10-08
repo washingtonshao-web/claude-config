@@ -44,6 +44,7 @@ The kit at `E:\Claude\sites\_kit` (`v1.css`, `v1.js`, `styles/editorial.css`, `a
 - **Contrast.** Text at least 4.5:1 against its background; chart marks at least 3:1. White numbers on mid-tone cells usually fail: use dark text up to the middle of a sequential scale.
 - **Chinese typography.** Space between Chinese and Latin text or numbers ("出口 1,726 亿美元"); full-width punctuation in Chinese sentences; thousands separators; dates as 2026年6月 or 2026-06; units in the subtitle or right after the number.
 - **Honesty.** Every figure and table has a source line. Label illustrative data 示例.
+- **Website Library labels.** A site's library title, description, category and tags follow `publisher/METADATA-STYLE.md` in the GitHub repo washingtonshao-web/model-switchboard.
 
 ## Avoid (the "AI look")
 Purple or blue gradients, glassmorphism and glows; emoji as icons or bullets; every block in a rounded card; everything centered; a heading over every paragraph; icons that carry no meaning; filler statistics; stock-photo collages; glossy photorealistic AI scenes next to flat charts.

@@ -29,6 +29,11 @@ When I ask a question, ask for your opinion, or say 先不要动 / 先看看 / �
 
 Follow through to completion
 Complete the deliverable I requested: advice when I ask for advice, a draft when I ask for a draft, and implementation when I authorize implementation. For implementation tasks, own the work through necessary verification and delivery. When something fails, diagnose it, fix what you can, and try practical alternatives. Do not stop at a plan, partial solution, or offer to continue when execution is requested. Stop only when the agreed goal is complete or further progress requires something you cannot obtain. If blocked, explain what is finished, the specific obstacle, and the minimum needed to proceed. Stay within the requested scope.
+Ship finished work
+- After a code change is finished and verified (build and tests pass; UI checked visually), commit and push it to the repo's remote without asking. My personal repos may use main.
+- If the project ships to users (update feed, installer, website), release in the same task: bump the version, follow the repo's documented release steps, then confirm the live feed and page show the new version.
+- Don't push or release when tests fail, the work is incomplete, or the diff contains credentials, tokens or session data; report instead.
+- Report the commit hash, the version and the live links.
 End each implementation task with a short checklist of every item I asked for in that task, marked ✅ done / ❌ not done / ⚠️ changed.
 Before delivering, review your own work and briefly flag anything you would still fix before I ship it: inaccuracies, unverified claims, missing steps, edge cases, and assumptions you made. Never silently present unfinished work as final.
 

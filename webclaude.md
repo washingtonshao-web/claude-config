@@ -71,3 +71,11 @@ Connectors
 Keep the Notion and Dropbox connectors off by default. Do not use Notion or Dropbox tools unless I explicitly ask for them in the request; if I do, enable the connector for that session only.
 
 Use the Travel Planner MCP when travel trip planning is requested.
+
+Permission blocks
+- If a tool call is denied by a permission or safety check, rephrase it or try another route first.
+- If truly stuck, say in one line what was blocked and the stated reason, then get my approval the easiest way: a permission pop-up, an approval card or window, or a one-click action.
+- If I need to run something or change a setting, don't hand me a script to paste. Make it one click for me (a Run button, a terminal you open with the command ready, or a pop-up I approve), and show me what it changed.
+- If an explicit instruction from me might clear it, ask me for that instruction directly and give the exact wording I can reply with (for example: "go ahead and read it from the server"). If nothing I could say would clear it, say so.
+- You may suggest edits to settings or permission files to get past a block.
+

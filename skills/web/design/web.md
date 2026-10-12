@@ -1,7 +1,7 @@
 # Websites (Falconshire sites)
 
 ## Design kit (use it on every new site)
-- Canonical kit: `E:\Claude\sites\_kit\` (`v1.css`, `v1.js`, `apply_kit.py`). Showcase: https://claude-design-kit.falconshire.com
+- Canonical kit: `E:\Claude\sites\_kit\` (`v1.css`, `v1.js`, `apply_kit.py`). Showcase (local only; the published page was retired 2026-10-13): `E:\Claude\sites\claude-design-kit\out\index.html`
 - In `<head>`: `<link rel="stylesheet" href="kit/v1.css">` and `<script src="kit/v1.js"></script>`; `<body class="k">`. Write only page-specific CSS on top; do not restyle kit tokens per site except `--k-accent` when a brand color is required. Data sites (reports, briefs, atlases) also link `kit/styles/editorial.css` after `v1.css`; dashboards and tools stay on plain kit.
 - Before publishing, run `python "E:\Claude\sites\_kit\apply_kit.py" <site-dir>`. It inlines the kit so the page is one self-contained HTML file (works with publish.py, the Falconshire Publisher connector and the Bunny mirror). Re-running refreshes an old copy to the current kit.
 - Component classes and markup: `kit-reference.md`.

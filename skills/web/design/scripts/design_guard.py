@@ -3,8 +3,9 @@
 
 Fires on Write/Edit of .html/.htm/.css/.svg files, Artifact publishes and publish_static_site. If the session transcript
 shows the design skill was loaded (Skill call, /design, or its SKILL.md read), it stays silent; otherwise it adds a
-one-line reminder to Claude's context. It never blocks the call. Wired into ~/.claude/settings.json on every PC by the
-ai-config sync (`required_hooks` in sync/config.json).
+one-line reminder to Claude's context. It never blocks the call. Wire it in ~/.claude/settings.json:
+  "PreToolUse": [{"matcher": "^(Write|Edit|Artifact)$|__publish_static_site$",
+                  "hooks": [{"type": "command", "command": "python \"$HOME/.claude/skills/design/scripts/design_guard.py\" 2>/dev/null || true", "timeout": 10}]}]
 """
 
 from __future__ import annotations

@@ -7,3 +7,21 @@ Shared basemap and China boundary layers for every Falconshire map (rules: desig
 - Higher zoom: render more tiles with `D:\Claude\260909\tools\relief-hi.py` (AWS Terrain Tiles), as the leaders map does.
 
 `apply_kit.py` copies this folder to `<page dir>/kit/map/` when a page references `kit/map/`.
+
+## Vector basemap (`basemap.js`)
+
+Self-hosted street-level basemap (Protomaps/OSM vector tiles, Asia z0–14, world z0–7) on `https://tiles.falconshire.com`. Chinese labels, kit borders (`borders.json`, South China Sea dashes, `cn_prov_lines` up to z8), Taiwan labelled 台湾; OSM country and disputed lines are never drawn. Light and dark styles.
+
+```html
+<div id="map" style="height:70svh"></div>
+<script src="kit/map/basemap.js"></script>
+<script>
+  K.basemap("#map", { center: [118.79, 32.05], zoom: 11 }).then(function (map) {
+    // style is loaded: add your sources and layers here
+  });
+</script>
+```
+
+Options: `center` [lng, lat], `zoom`, `bounds` [[w, s], [e, n]] (overrides center/zoom), `dark` (`true`/`false`, default follows the kit theme), `interactive` (default true), `controls` (false hides +/−), `maxZoom` (default 16), `options` (extra MapLibre map options). On touch screens one finger scrolls the page (cooperative gestures). Loads MapLibre GL 5.24.0 and PMTiles 4.4.1 from the tiles host once per page; failed range requests are retried once. Attribution (© OpenStreetMap contributors · Protomaps) stays visible in compact form.
+
+To keep place names above your data, insert data layers below the place labels: `map.addLayer(layer, "places_subplace")`. `base` (testing only) serves style, fonts, sprites, geo and libraries from another origin while the tile archives stay on the tiles host.

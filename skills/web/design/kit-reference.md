@@ -9,7 +9,7 @@ All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in pag
 - Space `--k-sp-1…8` (4 8 12 16 24 32 48 72), radius `--k-r-sm md lg`, `--k-max` 1180px, `--k-measure` 40em
 - Dark mode is automatic (OS) plus a toggle: any button with `data-k-theme-toggle`.
 - Style skins: `<link rel="stylesheet" href="kit/styles/editorial.css">` after `v1.css` restyles the same components (house default for data work, see `charts.md`); `apply_kit.py` inlines it too. It adds `--k-brand` (falcon copper rule) and `--k-chart-font`, and is light-only. Fonts are system faces only (bold sans headlines; Georgia only under `lang="en"`).
-- Map assets: `kit/map/tiles/relief/{z}/{x}/{y}.webp` and `kit/map/geo/*.json` (see `maps.md`); `apply_kit.py` copies them next to the page.
+- Map assets: `kit/map/tiles/relief/{z}/{x}/{y}.webp` and `kit/map/geo/*.json` (see `maps.md`); `apply_kit.py` copies them next to the page. Zoomable street/city maps: `kit/map/basemap.js` (`K.basemap(el, opts)` → Promise of a MapLibre map on the self-hosted vector basemap; see `kit/map/README.md`).
 
 ## Skeleton
 ```html

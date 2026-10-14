@@ -11,7 +11,15 @@ Maps draw most of my complaints. Every rule below fixes one of them.
 Live sites sit behind the Falconshire login. To look at one, serve its release from the host over SSH and shoot it:
 `ssh -f -L 18801:127.0.0.1:18801 static-sites-prod 'cd /srv/static-sites/sites/<slug>/current && timeout 900 python3 -m http.server 18801 --bind 127.0.0.1'`, then run `shoot.py http://127.0.0.1:18801/`.
 
+## Map size and layout (decided 2026-10-15)
+- The map is big. On desktop it fills the screen below the header: width = the page width (or the page minus a side panel), height = `calc(100svh - header)`; never a small boxed card. On phones it is full width and at least `70svh` tall.
+- The basemap fills the whole map frame. No letterboxing: no dark or empty strips beside the map image. Fit the region to the frame with `fitBounds` and small padding; frame background = the basemap's own sea/land colour.
+- A side panel is exactly as tall as the map and scrolls inside itself. It never makes the page taller than the map, so scrolling never leaves a blank column beside empty space. Alternative: the panel floats over the map's edge.
+- Long text (method, data notes, catalogues) goes below the map, full width, in normal reading order, never in the column beside the map.
+- Check: at 1440×900 the map covers at least 70% of the first screen, and after scrolling there is no tall empty area anywhere.
+
 ## Basemap
+- Zoomable vector basemap (added 2026-10-15): `https://tiles.falconshire.com/` — Protomaps PMTiles, Asia z0–14 plus a world z0–7 underlay, with the house style, glyphs, sprites and standard China boundaries under `/v1/`, and MapLibre and the pmtiles JS under `/lib/` (load them from there, not a CDN). Use it when people need to zoom past the relief tiles' z5. It is OSM data without a 审图号: fine for internal and password-protected pages, never call it a standard map. Details: `E:\Claude\sites\_hosting\README.md`, "Map tiles site".
 - Default: the shaded-relief tiles in the kit, `E:\Claude\sites\_kit\map\tiles\relief\{z}\{x}\{y}.webp` (Natural Earth style, 512 px, world z0–4, China z5). Reference them as `kit/map/...`; `apply_kit.py` copies them next to the page. Publish map sites with `publish.py`, because the Publisher connector takes one HTML file only.
 - Atlases and explorers: dark-tinted relief panel (page chrome can stay white). Drill-down maps: relief inside the current region, with a 60% white veil outside it.
 - Never use a flat grey silhouette with no terrain or context, or blank white land. Never load runtime tiles from OSM, Mapbox or Google: they are slow or blocked in China. For street level in China, use AMap `style=7` (full basemap; `style=8` is a transparent overlay), `scale=2`, subdomains `wprd01`–`04`.
@@ -39,4 +47,4 @@ Live sites sit behind the Falconshire login. To look at one, serve its release f
 - Lists beside the map: one row per unit, with the key people or values in that row, sorted meaningfully (newest first, or by size) in the same direction in every column.
 
 ## Check
-`shoot.py` on desktop and iPhone, then the click test in `review.md` §2. Also check that boundaries show at every drill level.
+`shoot.py` on desktop and iPhone, then the click test in `review.md` §2. Also check that boundaries show at every drill level, that the map fills its frame with no letterboxing, and that scrolling the page leaves no tall blank area beside the map.

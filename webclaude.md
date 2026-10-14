@@ -42,7 +42,7 @@ Git (several PCs; Claude and Codex share one GitHub account)
 - Repos live on local disk, never inside Dropbox. Large media (files over ~10 MB, downloads, video) stay on the AWS host or go to GitHub Releases, not into git.
 Sites (falconshire.com shows; GitHub keeps source)
 - Site slug = repo name = folder `<workspace>\repos\<slug>`; new slugs have no `claude-`/`codex-` prefix. Claude and Codex may publish any site.
-- Commit and push before publishing (publish.py only warns). Long-lived sites: own private repo. One-offs, incl. Publisher-connector pages: `<slug>/` in private repo `pages`, committed by publish.py.
+- Commit and push before publishing (publish.py only warns). Long-lived sites: own private repo. One-offs, incl. Publisher-connector pages: `<slug>/` in private repo `pages`. After a Publisher-connector publish: `python E:\Claude\sites\pages_commit.py <slug> <file.html> --url <url> --owner codex --agent codex-<model>`.
 End each implementation task with a short checklist of every item I asked for in that task, marked ✅ done / ❌ not done / ⚠️ changed.
 Before delivering, review your own work and briefly flag anything you would still fix before I ship it: inaccuracies, unverified claims, missing steps, edge cases, and assumptions you made. Never silently present unfinished work as final.
 

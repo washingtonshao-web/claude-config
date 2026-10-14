@@ -4,6 +4,7 @@
 Usage:
     python shoot.py <page.html | URL> [--out DIR] [--views desktop-light,iphone-dark] [--full] [--wait MS]
                     [--storage KEY=VALUE ...]   # localStorage set before the page loads (e.g. a site's own PIN unlock)
+                    [--login]                   # live password-protected *.falconshire.com page: reuse the saved login
 
 Look at contact.png first (about 1.6k tokens for all four views); open a single view only
 to inspect a problem. Checks are measured, not eyeballed: horizontal overflow, elements past
@@ -11,7 +12,8 @@ the right edge, page/console errors, failed requests, broken images, low-contras
 tap targets under 44px and inputs under 16px on phones, Microsoft YaHei used without a fallback, and the fonts
 Chromium actually rendered (any SimSun/宋体 fallback is a hard failure; three or more text faces is flagged).
 Phone views run in WebKit (Safari's engine) at iPhone 18 Pro Max size; "gated" means the URL
-redirected to the Falconshire login, so shoot the local build instead.
+redirected to the Falconshire login: rerun with --login (cookies from ~/.claude/playwright-profile; close the
+Playwright browser first), or shoot the local build.
 Prints a JSON report; exit code 1 when a hard check fails (overflow, errors, broken images).
 """
 
@@ -168,6 +170,26 @@ def contact_sheet(shots: dict[str, Path], dest: Path) -> None:
     sheet.save(dest)
 
 
+def login_state(p, report):
+    """Cookies of the Playwright profile that holds the 30-day Falconshire login, for every view's context."""
+    profile, errors = Path.home() / ".claude" / "playwright-profile", []
+    for channel in ("chrome", None):  # the profile's cookies are encrypted for the browser that wrote them
+        try:
+            ctx = p.chromium.launch_persistent_context(str(profile), headless=True, **({"channel": channel} if channel else {}))
+            state = ctx.storage_state()
+            ctx.close()
+        except Exception as e:
+            errors.append(str(e).splitlines()[0][:100])
+            continue
+        if any("falconshire" in c.get("domain", "") for c in state.get("cookies", [])):
+            return state
+        report.setdefault("notes", []).append("--login: the Playwright profile has no Falconshire login; sign in once "
+                                              "(CLAUDE.md, password-protected pages), then rerun")
+        return None
+    report.setdefault("notes", []).append(f"--login: profile not readable ({errors[0]}); close the Playwright browser and rerun")
+    return None
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("target")
@@ -177,6 +199,8 @@ def main() -> None:
     ap.add_argument("--wait", type=int, default=800, help="ms to wait after load for charts and fonts")
     ap.add_argument("--storage", action="append", default=[], metavar="KEY=VALUE",
                     help="localStorage entry written before every load, e.g. a PIN page's own unlock value; repeatable")
+    ap.add_argument("--login", action="store_true",
+                    help="reuse the Falconshire login saved in ~/.claude/playwright-profile (password-protected live pages)")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -208,9 +232,10 @@ def main() -> None:
                     browsers[engine] = p.chromium.launch()
             return browsers[engine]
 
+        state = login_state(p, report) if a.login else None
         for name in [v.strip() for v in a.views.split(",") if v.strip()]:
             engine, opts = VIEWS[name]
-            ctx = browser_for(engine).new_context(**opts)
+            ctx = browser_for(engine).new_context(**opts, **({"storage_state": state} if state else {}))
             if a.storage:
                 pairs = dict(kv.split("=", 1) for kv in a.storage)
                 ctx.add_init_script("try{const p=%s;for(const k in p)localStorage.setItem(k,p[k])}catch(e){}" % json.dumps(pairs))

@@ -7,7 +7,6 @@ Maps draw most of my complaints. Every rule below fixes one of them.
 |---|---|
 | 中国高铁盈利图谱 `claude-china-hsr-atlas-audit-20260907` | Leaflet over a dark relief basemap; bright data lines; white labels with a dark halo; chips, zoom level and reset on the map; ranking list beside it |
 | 杯中山河 `claude-drinks` | World relief; count bubbles; side list on desktop, bottom sheet on phone; search pinned |
-| 领导干部地图 `claude-china-leaders` (source `D:\Claude\260909`, code `out/map.js`) | Canvas drill-down 全国 → 省 → 市 → 区 with boundaries at every level; the header comment records seven rounds of my feedback |
 
 Live sites sit behind the Falconshire login. To look at one, serve its release from the host over SSH and shoot it:
 `ssh -f -L 18801:127.0.0.1:18801 static-sites-prod 'cd /srv/static-sites/sites/<slug>/current && timeout 900 python3 -m http.server 18801 --bind 127.0.0.1'`, then run `shoot.py http://127.0.0.1:18801/`.
@@ -16,7 +15,7 @@ Live sites sit behind the Falconshire login. To look at one, serve its release f
 - Default: the shaded-relief tiles in the kit, `E:\Claude\sites\_kit\map\tiles\relief\{z}\{x}\{y}.webp` (Natural Earth style, 512 px, world z0–4, China z5). Reference them as `kit/map/...`; `apply_kit.py` copies them next to the page. Publish map sites with `publish.py`, because the Publisher connector takes one HTML file only.
 - Atlases and explorers: dark-tinted relief panel (page chrome can stay white). Drill-down maps: relief inside the current region, with a 60% white veil outside it.
 - Never use a flat grey silhouette with no terrain or context, or blank white land. Never load runtime tiles from OSM, Mapbox or Google: they are slow or blocked in China. For street level in China, use AMap `style=7` (full basemap; `style=8` is a transparent overlay), `scale=2`, subdomains `wprd01`–`04`.
-- Higher zoom: render extra tiles (`D:\Claude\260909\tools\relief-hi.py`, AWS Terrain Tiles) instead of stretching z5.
+- Higher zoom: render extra relief tiles from AWS Terrain Tiles (terrarium elevation) instead of stretching z5.
 
 ## Boundaries and labels
 - Show boundaries at every level: country outline, provinces `kit/map/geo/cn_prov_lines.json`, prefectures `cn_pref_lines.json`, districts from the project's own data. On relief: dark semi-transparent lines (outer 1.6 px, inner 0.9 px, the next level thinner), with each shared edge drawn once. Where terrain hides them, add a light casing underneath (1 px wider, white at 40%). Check that every level shows boundaries at its smallest zoom.

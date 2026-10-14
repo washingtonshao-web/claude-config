@@ -1,6 +1,6 @@
 ---
 name: design
-description: My visual design rules for anything I will look at - websites, maps, local HTML pages, Artifacts, slides, Word/PDF/Claude Docs documents, charts and images. Read before building, restyling or visually reviewing any of these.
+description: My visual design rules for anything I will look at - websites, maps, local HTML pages, Artifacts, slides, Word/PDF/HTML documents, charts and images. Read before building, restyling or visually reviewing any of these.
 ---
 
 # Design
@@ -15,7 +15,7 @@ Read this file, then only the reference file for what you are producing:
 | Artifact, or a local single-file HTML page | `artifact.md`, `kit-reference.md` |
 | Any chart (HTML/SVG, matplotlib, pptx, docx) | `charts.md` (plus the dataviz skill for chart method) |
 | Slides (Artifact deck or .pptx) | `slides.md` |
-| Document (Claude Docs, Word or PDF) | `docs.md` |
+| Document (HTML long-read, Word or PDF) | `docs.md` |
 | Hero, cover or illustration images | `images.md` |
 | Visual review before delivery (always) | `review.md` |
 

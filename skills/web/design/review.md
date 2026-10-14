@@ -8,7 +8,7 @@ python "C:\Users\Administrator\.claude\skills\design\scripts\shoot.py" <page.htm
 ```
 - Default views: 1440×900 desktop (system Chrome) and iPhone 18 Pro Max (WebKit, Safari's engine; 440×760 visible, 3×, touch), each light and dark, first screen only. Plus `small-light` (375×667), which is measured but kept off the contact sheet. `--full` shoots whole pages; on long pages review the first screens, then run `--full` once at the end.
 - Uses Python Playwright, so it works while the browser pane is hidden. An Artifact fragment (no doctype) is shot inside the skeleton the Artifact publisher adds.
-- A protected live URL reports `"gated": true` (Falconshire login). Shoot the local build instead, or serve the release over SSH (see `maps.md`).
+- A protected live URL reports `"gated": true` (Falconshire login). Rerun with `--login`, which reuses the login saved in `~\.claude\playwright-profile` (if it says the profile has no login, sign in once as CLAUDE.md describes); otherwise shoot the local build or serve the release over SSH (see `maps.md`).
 - A page with its own PIN or lock screen: pass the value the page itself stores after unlocking with `--storage KEY=VALUE` (repeatable; written to localStorage before load), so the real page is shot instead of the lock card.
 - Output folder: `E:\AI\Claude\temp\shoot\<name>-<time>\`, with one PNG per view plus `contact.png` (all views on one sheet).
 - The JSON report is measured, not eyeballed:
@@ -58,4 +58,4 @@ Items that don't apply (for example interaction on a static document) are marked
   ```
   In the prompt, include the scorecard above, the Restraint and Avoid lists from SKILL.md, the page's purpose, the shoot.py JSON and the click-test lines. Ask for a score per item, the three most important fixes, and nothing else.
 - If Astra is unavailable, use a fresh Opus 5.5 high-effort subagent with the same inputs, and label it 同模型复核.
-- Fix every 0. Fix every 1 on items 3, 5, 8 and 9 (fonts, charts and maps, interaction, restraint), the complaints that keep coming back. Fix other 1s when it's cheap. Re-shoot only the affected views and re-score those items. Report the final score and the reviewer in one line.
+- Fix every 0. Fix every 1 on items 3, 5, 8 and 9 (fonts, charts and maps, interaction, restraint), the complaints that keep coming back. Fix other 1s when it's cheap. Re-shoot only the affected views and re-score those items. Report the final score and the reviewer in one line, and append one row to `review-scores.csv` in the site's folder (create it with this header): `date,view,reviewer,score,max,zeros,top_fix`. The history shows which sites slip and which rules fail most.

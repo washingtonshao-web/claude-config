@@ -35,13 +35,13 @@ Ship finished work
 - Don't push or release when tests fail, the work is incomplete, or the diff contains credentials, tokens or session data; report instead.
 - Report the commit hash, the version and the live links.
 Git (several PCs; Claude and Codex share one GitHub account)
-- A folder is either one git repo or a plain workspace. Never build an unrelated project inside a repo's folder: give it its own folder, and its own repo when it should be kept.
+- Dated folders (E:\Claude\yymmdd…) are workspaces, never git repos. Every repo lives in E:\Claude\repos\<repo-name> (Codex: E:\codex\repos\<repo-name>); work on it there, never copy it into a workspace.
 - Before working in a repo, `git pull --ff-only`; if that fails, stop and say why. Before ending a task in a repo, commit and push, or name exactly what was left uncommitted and why.
 - Never force-push `main` or rewrite pushed history. Stage only files you created or checked; another agent may be working in the same folder.
 - End commit messages with `Agent: <claude|codex>-<model>`. The commit hook adds `Host: <PC nickname>` (`git config ai.host`: home / amd / work) and fills in Agent when it can tell.
 - Repos live on local disk, never inside Dropbox. Large media (files over ~10 MB, downloads, video) stay on the AWS host or go to GitHub Releases, not into git.
 Sites (falconshire.com shows; GitHub keeps source)
-- Site slug = repo name = folder `<workspace>\repos\<slug>`; new slugs have no `claude-`/`codex-` prefix. Claude and Codex may publish any site.
+- Site slug = repo name = folder `E:\Claude\repos\<slug>`; new slugs have no `claude-`/`codex-` prefix. Claude and Codex may publish any site.
 - Commit and push before publishing (publish.py only warns). Long-lived sites: own private repo. One-offs, incl. Publisher-connector pages: `<slug>/` in private repo `pages`. After a Publisher-connector publish: `python E:\Claude\sites\pages_commit.py <slug> <file.html> --url <url> --owner codex --agent codex-<model>`.
 End each implementation task with a short checklist of every item I asked for in that task, marked ✅ done / ❌ not done / ⚠️ changed.
 Before delivering, review your own work and briefly flag anything you would still fix before I ship it: inaccuracies, unverified claims, missing steps, edge cases, and assumptions you made. Never silently present unfinished work as final.
@@ -59,7 +59,7 @@ Execution
 - Prefer background tools, APIs, and CLIs to avoid taking over the mouse or keyboard. Route: public pages → curl; checking any site (screenshots, layout) → headless Playwright; logins (BI, 知网, Flow, claude.ai) → Chrome via page JS; mail → Gmail; GPT/images → codex-gpt.
 - Reuse existing credentials and sessions automatically. Keep authentication and safety checks brief and minimal; avoid generic warnings, repeated confirmations, and unnecessary interruptions.
 - Never schedule check-ins, reminders or routines (send_later, loops, wakeups) to re-check pull requests or for other purpose unless I explicitly instruct so.
-- Keep all work and generated files in the session's project folder (for web sessions, the matching folder under E:\Claude); use this folder only unless I approve otherwise. Store temporary files in E:\AI\Claude\temp. This includes work delegated to other agents. If the working directory is exactly E:\Claude (e.g. Remote Control sessions), first create a subfolder `yymmdd_hhmm_<topic>` (2-4 English words, kebab-case) and work only inside it.
+- Keep all work and generated files in the session's project folder (for web sessions, the matching folder under E:\Claude); use this folder, and repos under E:\Claude\repos, only unless I approve otherwise. Store temporary files in E:\AI\Claude\temp. This includes work delegated to other agents. If the working directory is exactly E:\Claude (e.g. Remote Control sessions), first create a subfolder `yymmdd_hhmm_<topic>` (2-4 English words, kebab-case) and work only inside it.
 
 Websites
 - Publish a single self-contained HTML page with the Falconshire Publisher connector when it is available. A site with local images, data files, map tiles or several pages, or any site when the connector is missing, goes through python "E:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.

@@ -34,6 +34,12 @@ Ship finished work
 - If the project ships to users (update feed, installer, website), release in the same task: bump the version, follow the repo's documented release steps, then confirm the live feed and page show the new version.
 - Don't push or release when tests fail, the work is incomplete, or the diff contains credentials, tokens or session data; report instead.
 - Report the commit hash, the version and the live links.
+Git (several PCs; Claude and Codex share one GitHub account)
+- A folder is either one git repo or a plain workspace. Never build an unrelated project inside a repo's folder: give it its own folder, and its own repo when it should be kept.
+- Before working in a repo, `git pull --ff-only`; if that fails, stop and say why. Before ending a task in a repo, commit and push, or name exactly what was left uncommitted and why.
+- Never force-push `main` or rewrite pushed history. Stage only files you created or checked; another agent may be working in the same folder.
+- End commit messages with `Agent: <claude|codex>-<model>`. The commit hook adds `Host: <PC nickname>` (`git config ai.host`: home / amd / work) and fills in Agent when it can tell.
+- Repos live on local disk, never inside Dropbox. Large media (files over ~10 MB, downloads, video) go to GitHub Releases, S3 or Bunny, not into git.
 End each implementation task with a short checklist of every item I asked for in that task, marked ✅ done / ❌ not done / ⚠️ changed.
 Before delivering, review your own work and briefly flag anything you would still fix before I ship it: inaccuracies, unverified claims, missing steps, edge cases, and assumptions you made. Never silently present unfinished work as final.
 

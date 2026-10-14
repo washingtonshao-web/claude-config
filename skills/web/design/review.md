@@ -9,6 +9,7 @@ python "C:\Users\Administrator\.claude\skills\design\scripts\shoot.py" <page.htm
 - Default views: 1440×900 desktop (system Chrome) and iPhone 18 Pro Max (WebKit, Safari's engine; 440×760 visible, 3×, touch), each light and dark, first screen only. Plus `small-light` (375×667), which is measured but kept off the contact sheet. `--full` shoots whole pages; on long pages review the first screens, then run `--full` once at the end.
 - Uses Python Playwright, so it works while the browser pane is hidden. An Artifact fragment (no doctype) is shot inside the skeleton the Artifact publisher adds.
 - A protected live URL reports `"gated": true` (Falconshire login). Shoot the local build instead, or serve the release over SSH (see `maps.md`).
+- A page with its own PIN or lock screen: pass the value the page itself stores after unlocking with `--storage KEY=VALUE` (repeatable; written to localStorage before load), so the real page is shot instead of the lock card.
 - Output folder: `E:\AI\Claude\temp\shoot\<name>-<time>\`, with one PNG per view plus `contact.png` (all views on one sheet).
 - The JSON report is measured, not eyeballed:
   - horizontal overflow and elements past the right edge;

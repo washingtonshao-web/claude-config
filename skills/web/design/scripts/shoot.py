@@ -3,6 +3,7 @@
 
 Usage:
     python shoot.py <page.html | URL> [--out DIR] [--views desktop-light,iphone-dark] [--full] [--wait MS]
+                    [--storage KEY=VALUE ...]   # localStorage set before the page loads (e.g. a site's own PIN unlock)
 
 Look at contact.png first (about 1.6k tokens for all four views); open a single view only
 to inspect a problem. Checks are measured, not eyeballed: horizontal overflow, elements past
@@ -174,6 +175,8 @@ def main() -> None:
     ap.add_argument("--views", default=",".join(VIEWS), help="default: all; e.g. iphone-light,small-light")
     ap.add_argument("--full", action="store_true", help="full-page screenshots instead of the first screen")
     ap.add_argument("--wait", type=int, default=800, help="ms to wait after load for charts and fonts")
+    ap.add_argument("--storage", action="append", default=[], metavar="KEY=VALUE",
+                    help="localStorage entry written before every load, e.g. a PIN page's own unlock value; repeatable")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -208,6 +211,9 @@ def main() -> None:
         for name in [v.strip() for v in a.views.split(",") if v.strip()]:
             engine, opts = VIEWS[name]
             ctx = browser_for(engine).new_context(**opts)
+            if a.storage:
+                pairs = dict(kv.split("=", 1) for kv in a.storage)
+                ctx.add_init_script("try{const p=%s;for(const k in p)localStorage.setItem(k,p[k])}catch(e){}" % json.dumps(pairs))
             page = ctx.new_page()
             errors, failed = [], []
             page.on("pageerror", lambda e: errors.append(str(e)[:160]))

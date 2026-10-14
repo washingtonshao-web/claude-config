@@ -14,7 +14,6 @@ Chromium actually rendered (any SimSun/宋体 fallback is a hard failure; three 
 Phone views run in WebKit (Safari's engine) at iPhone 18 Pro Max size; "gated" means the URL
 redirected to the Falconshire login: rerun with --login (cookies from ~/.claude/playwright-profile; close the
 Playwright browser first), or shoot the local build.
-AI tells are warnings under "aiTells" (never a hard failure): gradient text, tracked caps, eyebrows, 01/02 labels, side stripes, flat type scale, gray on color, em-dash density, emoji icons, >3 card radii.
 Prints a JSON report; exit code 1 when a hard check fails (overflow, errors, broken images).
 """
 
@@ -95,111 +94,6 @@ CHECKS_JS = r"""
   if (isMobile && !document.querySelector('meta[name=viewport]')) out.noViewportMeta = true;  // iPhone lays out at 980px
   const ff = getComputedStyle(document.body).fontFamily;
   if (/^["']?Microsoft YaHei/i.test(ff) && !/PingFang|Noto Sans|sans-serif/i.test(ff)) out.fontWarning = ff;
-  return out;
-}
-"""
-
-# "AI tells": devices the community design skills flag as the generated look. Warnings only (never hardFail);
-# rule ids are from pbakaus/impeccable (detector), Nutlope/hallmark (slop-test gates), Leonxlnx/taste-skill (tells.md).
-AI_TELLS_JS = r"""
-() => {
-  const out = {};
-  const name = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.classList.length ? '.' + [...el.classList].slice(0, 2).join('.') : '');
-  const visible = el => { const r = el.getBoundingClientRect(), s = getComputedStyle(el);
-    return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0.05; };
-  const rgb = c => { const m = c.match(/[\d.]+/g); return m ? m.map(Number) : [0, 0, 0, 1]; };
-  const spread = c => Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]);
-  const px = v => parseFloat(v) || 0;
-  const snip = el => '"' + el.textContent.trim().replace(/\s+/g, ' ').slice(0, 24) + '"';
-  const own = el => [...el.childNodes].filter(t => t.nodeType === 3).map(t => t.textContent).join('').trim();
-  const CJK = /[\u3400-\u9fff\uf900-\ufaff]/;
-  const texts = [...document.body.querySelectorAll('*')].filter(el => own(el) && !el.closest('svg,script,style,pre,code') && visible(el)).slice(0, 1500);
-
-  // gradient-text (impeccable gradient-text; hallmark gate 2: "No genre allows gradient text")
-  const grad = [...document.body.querySelectorAll('*')].filter(el => { const s = getComputedStyle(el);
-    return /text/.test(s.webkitBackgroundClip || s.backgroundClip || '') && /gradient/.test(s.backgroundImage) && el.textContent.trim() && visible(el); });
-  if (grad.length) out.gradientText = grad.slice(0, 3).map(el => `${name(el)} ${snip(el)}`);
-
-  // tracked caps on short labels: uppercase + letter-spacing >= 0.08em, <= 40 chars (impeccable hero-eyebrow-chip
-  // HERO_EYEBROW_TRACKING_EM = 0.08; taste-skill micro-label: tiny tracked capitals on 16% of top sites vs 57% of weak ones)
-  const caps = texts.filter(el => { const s = getComputedStyle(el), t = el.textContent.trim();
-    const upper = s.textTransform === 'uppercase' || (/[A-Z]{2}/.test(t) && !/[a-z]/.test(t));
-    return upper && t.length <= 40 && px(s.letterSpacing) / px(s.fontSize) >= 0.08; });
-  if (caps.length) out.trackedCaps = caps.slice(0, 4).map(el => `${name(el)} ${(px(getComputedStyle(el).letterSpacing) / px(getComputedStyle(el).fontSize)).toFixed(2)}em `
-    + snip(el) + (CJK.test(el.textContent) ? ' (Chinese: house rule says no tracking)' : ''));
-
-  // eyebrow / kicker: a small short label as its own block above (or beside) a heading.
-  // Label ceiling max(14px, min(16px, 0.45 x heading)), 2-34 chars, heading >= 1.3 x label (impeccable kicker-above-heading,
-  // label_size_ceiling); beside counts too (hallmark gate 54 "tag-left / header-right"). Flag at >= 60% of h2/h3.
-  const labelOf = h => { const hs = px(getComputedStyle(h).fontSize), hr = h.getBoundingClientRect();
-    const c = h.previousElementSibling || (h.parentElement && h.parentElement.firstElementChild === h ? h.parentElement.previousElementSibling : null);
-    if (!c || !visible(c) || /^H[1-6]$/.test(c.tagName) || c.querySelector('h1,h2,h3,h4,h5,h6,img,svg,canvas,table,ul,ol,p')) return null;
-    const t = c.textContent.trim(), fs = px(getComputedStyle(c).fontSize), r = c.getBoundingClientRect();
-    if (t.length < 2 || t.length > (h.tagName === 'H1' ? 60 : 34) || fs > Math.max(14, Math.min(16, hs * 0.45)) || hs < fs * 1.3) return null;
-    const pos = r.bottom <= hr.top + 4 && hr.top - r.bottom <= Math.max(72, hs * 1.1) ? 'above' : (r.right <= hr.left + 4 && r.bottom > hr.top ? 'beside' : null);
-    return pos && {el: c, pos, t};
-  };
-  const heads = [...document.querySelectorAll('h2,h3')].filter(visible), kick = heads.map(labelOf).filter(Boolean);
-  const h1 = [...document.querySelectorAll('h1')].find(visible), heroKick = h1 && labelOf(h1);
-  const most = heads.length >= 2 && kick.length / heads.length >= 0.6;
-  if (most || heroKick) out.eyebrow = most ? {headings: `${kick.length}/${heads.length} h2/h3 have one`,
-    samples: kick.slice(0, 3).map(k => `${k.pos} ${name(k.el)} "${k.t.slice(0, 20)}"`)} : {};
-  if (heroKick) out.eyebrow.hero = `${heroKick.pos} h1: "${heroKick.t.slice(0, 30)}"`;  // impeccable hero-eyebrow-chip
-
-  // numbered section labels 01 / 02 / "01 · Features" - flag only (impeccable numbered-section-labels: >= 2 distinct;
-  // hallmark "Eyebrow on every section"; taste-skill measured index numbering on 38% of top vs 21% of weak sites)
-  const nums = texts.filter(el => !el.closest('td,th,ol,time') && el.textContent.trim().length <= 40 &&
-    (/^[(\[#]?0\d{1,2}[)\].:\/]?$/.test(el.textContent.trim()) || /^0\d\s*[·\/.:|—–-]\s*\S/.test(el.textContent.trim())));
-  const distinct = new Set(nums.map(el => el.textContent.trim().slice(0, 2)));
-  if (distinct.size >= 2) out.numberedLabels = `${nums.length} (${[...distinct].slice(0, 6).join(' ')})`;
-
-  // colored left/right stripe > 1px on a card-like box (impeccable side-tab: stripe >= 2x the other sides; card-like =
-  // stripe + (radius or fill); impeccable exempts square boxes, hallmark gate 5 does not)
-  const SAFE = /^(BLOCKQUOTE|NAV|A|INPUT|TEXTAREA|SELECT|PRE|CODE|SPAN|TH|TD|TR|LI|BUTTON|HR|IMG|SVG)$/;
-  const boxes = [...document.body.querySelectorAll('*')].filter(el => !SAFE.test(el.tagName) && visible(el)).slice(0, 3000);
-  const stripes = [];
-  for (const el of boxes) { const s = getComputedStyle(el), r = el.getBoundingClientRect();
-    if (r.width < 120 || r.height < 32) continue;
-    const fill = rgb(s.backgroundColor)[3] ?? 1, rad = px(s.borderTopRightRadius) + px(s.borderBottomRightRadius) + px(s.borderTopLeftRadius);
-    for (const side of ['Left', 'Right']) { const w = px(s[`border${side}Width`]), other = Math.max(px(s.borderTopWidth), px(s.borderBottomWidth), px(s[`border${side === 'Left' ? 'Right' : 'Left'}Width`]));
-      if (w > 1 && s[`border${side}Style`] !== 'none' && spread(rgb(s[`border${side}Color`])) >= 30 && w >= other * 2 && (rad > 0 || fill > 0.05))
-        stripes.push(`${name(el)} border-${side.toLowerCase()} ${w}px` + (rad >= 4 ? ' rounded' : ' square (impeccable exempts)')); } }
-  if (stripes.length) out.sideStripe = stripes.slice(0, 3);
-
-  // flat type scale: h1 / body < 1.8 (impeccable flat-type-hierarchy uses 1.25 per adjacent step; 1.8 is the house bar)
-  const sizes = {};
-  for (const el of texts) if (/^(P|LI|DD|TD)$/.test(el.tagName)) { const k = px(getComputedStyle(el).fontSize); sizes[k] = (sizes[k] || 0) + el.textContent.length; }
-  const body = +Object.keys(sizes).sort((a, b) => sizes[b] - sizes[a])[0] || px(getComputedStyle(document.body).fontSize);
-  const top = h1 || [...document.querySelectorAll('h2')].find(visible);
-  if (top && px(getComputedStyle(top).fontSize) / body < 1.8) out.flatScale = `${top.tagName.toLowerCase()} ${px(getComputedStyle(top).fontSize)}px / body ${body}px = ${(px(getComputedStyle(top).fontSize) / body).toFixed(2)}`;
-
-  // gray text on a colored ground (impeccable gray-on-color: ink HSL s < 0.2, 0.3 < l < 0.85; ground channel spread >= 40)
-  const bgOf = el => { for (let p = el; p; p = p.parentElement) { const c = rgb(getComputedStyle(p).backgroundColor); if ((c[3] ?? 1) > 0.5) return c; } return [255, 255, 255]; };
-  const gray = texts.filter(el => { const c = rgb(getComputedStyle(el).color); if ((c[3] ?? 1) < 0.5) return false;
-    const mx = Math.max(c[0], c[1], c[2]) / 255, mn = Math.min(c[0], c[1], c[2]) / 255, l = (mx + mn) / 2, sat = mx === mn ? 0 : (mx - mn) / (1 - Math.abs(2 * l - 1));
-    return sat < 0.2 && l > 0.3 && l < 0.85 && spread(bgOf(el)) >= 40; });
-  if (gray.length) out.grayOnColor = gray.slice(0, 3).map(el => `${name(el)} ${getComputedStyle(el).color} on rgb(${bgOf(el).slice(0, 3).join(',')}) ${snip(el)}`);
-
-  // em-dash density: > 1 per 120 non-space chars of body text, at least 3 (impeccable em-dash-overuse is looser: >= 8 and
-  // ~1 per 500; taste-skill lint warns past 4 per page). A Chinese "——" counts once.
-  const copy = (document.querySelector('main') || document.body).innerText, chars = copy.replace(/\s/g, '').length, dashes = (copy.match(/—+|\s--\s/g) || []).length;
-  if (dashes >= 3 && dashes * 120 > chars) out.emDash = `${dashes} in ${chars} chars (1 per ${Math.round(chars / dashes)})`;
-
-  // emoji as icons in headings, buttons and list markers (hallmark gate 30 "Icon tells"; taste-skill emoji, banned)
-  const EMOJI = /\p{Emoji_Presentation}|\p{Extended_Pictographic}\uFE0F/u, emo = [];
-  for (const el of document.querySelectorAll('h1,h2,h3,h4,h5,h6,button,[role=button],summary,li')) { if (!visible(el)) continue;
-    const t = el.tagName === 'LI' ? el.textContent.trim().slice(0, 3) + getComputedStyle(el, '::before').content + getComputedStyle(el, '::marker').content : el.textContent;
-    if (EMOJI.test(t)) emo.push(`${name(el)} ${snip(el)}`); }
-  if (emo.length) out.emojiIcons = `${emo.length}: ` + emo.slice(0, 3).join(', ');
-
-  // more than 3 distinct corner radii on card-like boxes (impeccable is_card_like: border or shadow, plus radius or fill;
-  // taste-skill tells: "Square or fully round, chosen once"); pills and circles are left out
-  const radii = new Set();
-  for (const el of boxes) { const s = getComputedStyle(el), r = el.getBoundingClientRect(), rad = px(s.borderTopLeftRadius);
-    if (r.width < 120 || r.height < 48 || !rad || rad >= Math.min(r.width, r.height) / 2) continue;
-    const edge = px(s.borderTopWidth) + px(s.borderLeftWidth) > 0 || s.boxShadow !== 'none', fill = (rgb(s.backgroundColor)[3] ?? 1) > 0.05;
-    if (edge && (rad || fill)) radii.add(rad); }
-  if (radii.size > 3) out.cardRadii = [...radii].sort((a, b) => a - b).map(v => v + 'px').join(' ');
   return out;
 }
 """
@@ -359,9 +253,6 @@ def main() -> None:
                 break
             page.wait_for_timeout(a.wait)
             res = page.evaluate(CHECKS_JS, not name.startswith("desktop"))
-            tells = page.evaluate(AI_TELLS_JS)
-            if tells:
-                res["aiTells"] = tells  # warnings only: not part of hardFail
             if engine == "chromium":
                 res.update(rendered_fonts(page))
             shot = out / f"{name}.png"

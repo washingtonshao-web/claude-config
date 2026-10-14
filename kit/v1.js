@@ -16,21 +16,43 @@
     });
   }
 
+  // Drawers: browser Back closes them (history entry per open), focus never scrolls the page.
+  // Wide screens: non-modal side panel (no scrim, page stays scrollable and clickable). Phones: bottom sheet with a clear scrim.
+  var wide = matchMedia("(min-width: 900px)");
   function openDrawer(id) {
     var d = document.getElementById(id); if (!d) return;
-    var scrim = document.querySelector(".k-scrim");
+    var already = document.querySelector(".k-drawer[data-open='true']");
+    document.querySelectorAll(".k-drawer[data-open='true']").forEach(function (o) {
+      if (o !== d) { o.setAttribute("data-open", "false"); o.setAttribute("aria-hidden", "true"); }
+    });
     d.setAttribute("data-open", "true"); d.setAttribute("aria-hidden", "false");
-    if (scrim) scrim.setAttribute("data-open", "true");
-    document.body.style.overflow = "hidden";
-    var c = d.querySelector("[data-k-close]"); if (c) c.focus();
+    if (!wide.matches) {
+      var scrim = document.querySelector(".k-scrim");
+      if (scrim) scrim.setAttribute("data-open", "true");
+      document.body.style.overflow = "hidden";
+    }
+    try { (already ? history.replaceState : history.pushState).call(history, { kDrawer: id }, ""); } catch (e) {}
+    var c = d.querySelector("[data-k-close]"); if (c) c.focus({ preventScroll: true });
   }
-  function closeDrawers() {
+  function hideDrawers() {
     document.querySelectorAll(".k-drawer[data-open='true']").forEach(function (d) {
       d.setAttribute("data-open", "false"); d.setAttribute("aria-hidden", "true");
     });
     var scrim = document.querySelector(".k-scrim");
     if (scrim) scrim.setAttribute("data-open", "false");
     document.body.style.overflow = "";
+  }
+  function closeDrawers() {
+    if (history.state && history.state.kDrawer) history.back();  // popstate below hides it
+    else hideDrawers();
+  }
+  window.addEventListener("popstate", function (e) {
+    if (!(e.state && e.state.kDrawer)) hideDrawers();
+    else if (document.getElementById(e.state.kDrawer)) openDrawerNoHistory(e.state.kDrawer);
+  });
+  function openDrawerNoHistory(id) {
+    var d = document.getElementById(id); if (!d) return;
+    d.setAttribute("data-open", "true"); d.setAttribute("aria-hidden", "false");
   }
   window.kit = { openDrawer: openDrawer, closeDrawers: closeDrawers };
 
@@ -59,7 +81,7 @@
       });
     }
   });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDrawers(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && document.querySelector(".k-drawer[data-open='true']")) closeDrawers(); });
 
   function tocSpy() {
     var links = document.querySelectorAll(".k-toc a[href^='#']");

@@ -8,27 +8,27 @@
 - Existing sites: move them onto the kit only when I ask for a redesign or a substantial update.
 
 ## Page archetypes (the first screen decides the type)
-- **Research report**: header → headline block (rubric, serif h1 stating the conclusion, one-line lede, date/meta; no big photo hero, see `images.md`) → `k-verdict` one-sentence conclusion → 3–5 `k-kpi` → the single most important chart. Then numbered `k-section`s, `k-toc` on wide screens, `k-sources` last. Every section carries at least one visual (chart, table, diagram or KPI row); no section is text only.
-- **Map / atlas**: the map fills the first screen. Map rules below.
+- **Research report**: header → headline block (rubric, bold sans h1 stating the conclusion, one-line lede, date/meta; no big photo hero, see `images.md`) → `k-verdict` one-sentence conclusion → `k-kpi` row only for numbers the reader would act on (0–4) → the single most important chart. Then numbered `k-section`s, `k-toc` on wide screens, `k-sources` last. Put the evidence in visuals (chart, table, diagram) where it carries the argument; never add a chart or KPI as decoration.
+- **Map / atlas**: the map fills the first screen, with no stats banner above it. Follow `maps.md`.
 - **Catalog / encyclopedia**: sticky `k-search` + `k-chips` filters → `k-grid k-grid--rows` cards → `k-drawer` detail.
 - **Game**: full-viewport canvas; kit only for menus, HUD text, pause/win/lose overlays.
 
 ## Typography and layout
 - Body 16px on phones and 17px on desktop, line-height 1.75, prose width `--k-measure` (≈40 Chinese characters).
-- Fonts come from the kit (Latin UI font → PingFang SC → Microsoft YaHei UI → Noto Sans SC); editorial adds serif headlines and a condensed chart font.
+- Fonts come from the kit: one system sans stack (Segoe UI / -apple-system → PingFang SC → Microsoft YaHei UI) for body, headlines (bold 700) and charts. Do not add web fonts, serif CJK stacks or a page-specific font-family; site CSS and canvas/SVG text use `var(--k-font)`.
 - Desktop and phone get equal care. Desktop uses the width: side TOC, two charts side by side where they compare; phone is one column with the same order.
 
 ## Images
 Follow `images.md`: big hero only for travel and lifestyle sites; data sites open with the conclusion; illustrations, not photorealistic AI renders.
 
 ## Maps
-Data atlases use the editorial light map (pale land, white borders, copper rule on the frame); a dark stylized base with grid lines and a globe outline only for kit-style explorers. Bubbles show counts by region. Provide +/−/reset buttons with the current zoom level shown, filter chips, a legend, and a one-line hint on how to pan and zoom. Use the kit's `k-map` chrome.
+See `maps.md` (basemap, boundaries, labels, drill-down, click test).
 
 ## Detail views
-A panel that slides in with a photo header, then short labeled fact blocks, with sources last (`k-drawer` + `k-facts` + `k-sources`). On phones, cards become rows with the thumbnail on the left, the drawer becomes a bottom sheet, and search stays pinned at the top.
+A panel that slides in with a photo header, then short labeled fact blocks, with sources last (`k-drawer` + `k-facts` + `k-sources`). No dark scrim (the kit's default is clear). It has Back (browser back closes it) as well as ✕, and opening it never scrolls the page. On phones, cards become rows with the thumbnail on the left, the drawer becomes a bottom sheet, and search stays pinned at the top.
 
 ## Performance
 Show something within about 2 seconds. Load large data after the page appears, not before.
 
 ## Review loop for large jobs
-Set a numeric goal (the `review.md` scorecard works). Have an independent Opus 5.5 (high effort) subagent review each stage. Keep going until the goal is met.
+Set a numeric goal (the `review.md` scorecard works). Each stage gets an independent GPT-6 Astra (high) review: from screenshots for visual stages (`review.md` §5), from the data and text for content stages. If Astra is unavailable, use a fresh Opus 5.5 high-effort agent, labelled 同模型复核. Keep going until the goal is met.

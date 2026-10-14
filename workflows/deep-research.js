@@ -108,7 +108,7 @@ Overall question: ${Q}
 Your sub-question (${s.id}): ${s.question}
 Angle: ${s.angle}${s.sources_hint ? `\nSource hints: ${s.sources_hint}` : ''}
 
-Research thoroughly, preferring WebSearch / WebFetch / PubMed tools over browsers: WebSearch (use mode "extended" for niche, recent or numeric facts), read primary sources with WebFetch, use PubMed / Europe PMC / ClinicalTrials tools for biomedical topics. Prefer primary and recent sources; note the date of every number. Get concrete numbers wherever they exist. Label each finding fact / estimate / inference. Do not write files. Return only the structured result.`
+Research thoroughly, preferring WebSearch / WebFetch / PubMed tools over browsers: WebSearch (use mode "extended" for niche, recent or numeric facts), read primary sources with WebFetch, use PubMed / Europe PMC / ClinicalTrials tools for biomedical topics. For China topics search in Chinese too and prefer official primary sources (gov.cn and ministry/provincial sites, statistical yearbooks, exchange filings via cninfo.com.cn, 中国政府采购网); CNKI (知网) needs the user's signed-in Chrome, so cite it only if another agent already has it open - otherwise note the gap. Prefer primary and recent sources; note the date of every number. Get concrete numbers wherever they exist. Label each finding fact / estimate / inference. Do not write files. Return only the structured result.`
 
 const runResearch = (items, phaseName) => pipeline(items, (s) =>
   agent(researchPrompt(s), { label: `research:${s.id}`, phase: phaseName, schema: FINDINGS }))
@@ -180,6 +180,7 @@ for (let round = 1; round <= 2; round++) {
   const review = await agent(`You are an independent reviewer. You did not write this report. Read ${OUT}/report.md.
 Question it answers: ${Q}. Today: ${DATE}.
 
+First get GPT-6 Astra's independent review: run the codex-gpt command (C=$(ls -t /c/Users/Administrator/AppData/Local/OpenAI/Codex/bin/*/codex.exe|head -1); "$C" exec -m gpt-6-astra -c model_reasoning_effort=high --skip-git-repo-check --ephemeral -s read-only -C <report folder> -o <temp file> "<this checklist + the report path>" </dev/null) and base your issue list on its findings plus your own spot-checks; say in the verdict which model reviewed. If Codex fails, review it yourself and start the verdict with 同模型独立复核.
 Check: does it actually answer the question; are key numbers correct and current (spot-check the 5 most important against their sources with WebSearch/WebFetch); are facts, estimates and inferences labeled honestly; missing major considerations; internal contradictions; unsupported recommendations. Report concrete issues with fixes. Do not edit the file.`, { label: `review-${round}`, phase: 'Review', schema: REVIEW, model: 'opus', effort: 'high' })
   lastReview = review
   rounds = round
@@ -187,7 +188,7 @@ Check: does it actually answer the question; are key numbers correct and current
 
   phase('Fix')
   await agent(`Revise ${OUT}/report.md to address these review findings: ${JSON.stringify(review.issues)}
-Verify any number you change against its source. Keep the structure. At the end of the report, add or update a short "Review" section: reviewer = independent Claude Opus 5.5 (high effort), round ${round}, and the main changes made. Return a one-line summary of changes.`, { label: `fix-${round}`, phase: 'Fix' })
+Verify any number you change against its source. Keep the structure. At the end of the report, add or update a short "Review" section: reviewer = the model named in the review verdict (GPT-6 Astra, or Claude Opus 5.5 as 同模型独立复核), round ${round}, and the main changes made. Return a one-line summary of changes.`, { label: `fix-${round}`, phase: 'Fix' })
 
   if (!review.issues.some(i => i.severity === 'critical')) break
   log(`Round ${round} had critical issues; running a second review.`)
@@ -202,4 +203,5 @@ return {
   review_rounds: rounds,
   review_verdict: lastReview && lastReview.verdict,
   review_issues: lastReview ? lastReview.issues.length : 0,
+  next: 'Main session: turn report.md into the deliverable the user asked for (Artifact or Falconshire page per the design skill, conclusion first, sources kept) and publish it; give the user the link.',
 }

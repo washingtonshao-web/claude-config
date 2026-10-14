@@ -4,21 +4,22 @@ Two cases share these rules: a page published with the Artifact tool, and a sing
 
 ## Order of work
 1. For a published Artifact, load artifact-design first. It sets the page contract: a 2–4 word `<title>`, tokens on `:root`, dark mode under `prefers-color-scheme` and `:root[data-theme]`, an explicit `body` background, scripts only from the allowed CDNs, stylesheets only from Google Fonts, everything else inline.
-2. Build on the kit. It already meets the token and dark-mode parts of that contract: `--k-*` on `:root`, both dark-mode selectors, and the theme toggle sets `data-theme` on `<html>`.
+2. Build on the kit. It already meets the token and dark-mode parts of that contract: `--k-*` on `:root`, both dark-mode selectors, and the theme toggle sets `data-theme` on `<html>`. Editorial pages are deliberately light-only: the editorial skin maps both selectors to the light palette, which satisfies the contract.
 3. Write the page with `<link rel="stylesheet" href="kit/v1.css">` and `<script src="kit/v1.js"></script>`, `<body class="k">` (pages with data also link `kit/styles/editorial.css` after it, per `charts.md`), then run `python "E:\Claude\sites\_kit\apply_kit.py" page.html` to inline the kit (about 28 KB). Never hand an Artifact a relative `kit/` link: it will not load.
 4. Run `review.md` on the local file before publishing.
 
 ## Pick the shape from the job
 | Job | Shape |
 |---|---|
-| Answer or brief (one finding, a few numbers) | Single column, no header nav: h1 conclusion → `k-kpis` → one chart → short notes and sources |
+| Answer or brief (one finding, a few numbers) | Single column, no header nav: h1 conclusion → `k-kpis` only if the numbers drive the answer → one chart where it carries the evidence → short notes and sources |
 | Report | Same as the web research-report archetype (`web.md`), TOC only if there are 5+ sections |
 | Comparison or decision | Verdict first, then a comparison table with the recommended column marked |
 | Tool, calculator or dashboard | Controls on top (or left on desktop), results immediately below; state saves per the artifact-capabilities skill |
 | Diagram or explainer | The diagram fills the first screen; text after it |
+| Map | Follow `maps.md`. Map pages with tiles are multi-file: publish them as a Falconshire site with `publish.py`, not as an Artifact |
 
 ## Effort
-- Match design effort to the job: a quick answer page gets kit defaults and one chart; a deliverable for other people gets a hero, full archetype and the full review.
+- Match design effort to the job: a quick answer page gets kit defaults and one chart; a deliverable for other people gets the full archetype and the full review (Astra scoring, `review.md` §5). No hero image unless it is travel or lifestyle content (`images.md`).
 - Keep it to what the first screen needs: the conclusion and the evidence must be visible without scrolling on a 1440×900 desktop and in the iPhone view.
 
 ## Small things that matter

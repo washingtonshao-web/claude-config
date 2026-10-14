@@ -1,9 +1,9 @@
 /* Falconshire kit style skin: editorial (Economist-inspired house style, 2026-10)
    Link it after kit/v1.css as kit/styles/editorial.css; apply_kit.py inlines both.
    Single light theme like print data journalism: white page, falcon-copper brand rule,
-   serif headlines, condensed sans for chart text, blue/cyan/green/yellow series,
-   hairline grids. Optional fonts (fall back cleanly where Google Fonts is blocked):
-   https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&display=swap
+   bold sans headlines (Georgia serif only on lang="en" pages), one system sans for body and charts,
+   blue/cyan/green/yellow series, hairline grids. No web fonts: system faces render the same on every
+   visit and never fall back to SimSun (2026-10-14).
    Source: car-export atlas, 2026-10. */
 :root, :root[data-theme="dark"] {
   --k-page: #ffffff; --k-surface: #ffffff; --k-surface-2: #f1f4f6;
@@ -15,12 +15,13 @@
   --k-seq-1: #dcebf4; --k-seq-2: #a6cde4; --k-seq-3: #5aa2cd; --k-seq-4: #006ba2; --k-seq-5: #003e5e;
   --k-grid: #d3dde3; --k-axis: #0d0d0d;
   --k-brand: #b4531f;
-  --k-chart-font: "Roboto Condensed", "Noto Sans SC", "PingFang SC", "Microsoft YaHei UI", sans-serif;
-  --k-font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei UI", system-ui, sans-serif;
-  --k-serif: "Noto Serif SC", "Songti SC", Georgia, serif;
+  --k-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --k-chart-font: var(--k-font);
+  --k-serif: var(--k-font);
   --k-shadow: none; --k-shadow-lg: 0 8px 30px rgba(0,0,0,.12);
   color-scheme: light;
 }
+:root:lang(en) { --k-serif: Georgia, "Times New Roman", serif; }
 @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) {
   --k-page: #ffffff; --k-surface: #ffffff; --k-surface-2: #f1f4f6; --k-ink: #0d0d0d; --k-ink-2: #333333; --k-muted: #595959;
   --k-line: #d7dee3; --k-line-strong: #b7c6cf; --k-accent: #006ba2; --k-accent-soft: #e4eff6;
@@ -34,10 +35,10 @@ body.k { background: #ffffff; color: #0d0d0d; }
 .k-header { background: #ffffff; border-bottom: 1px solid var(--k-line); box-shadow: none; }
 .k-header::before { content: ""; display: block; height: 4px; background: var(--k-brand); }
 .k-brand__mark { background: var(--k-brand); color: #fff; border-radius: 0; }
-.k-brand__name { font-family: var(--k-serif); font-weight: 900; }
+.k-brand__name { font-family: var(--k-serif); font-weight: 700; }
 .k-nav a { color: var(--k-ink-2); }
 .k-nav a:hover { color: var(--k-brand); }
-.k-hero h1, .k-section__head h2 { font-family: var(--k-serif); font-weight: 900; }
+.k-hero h1, .k-section__head h2 { font-family: var(--k-serif); font-weight: 700; }
 .k-hero__eyebrow, .k-section__num { color: var(--k-brand); font-family: var(--k-chart-font); }
 .k-toc a[aria-current="true"], .k-toc a.is-active { color: var(--k-brand); border-left-color: var(--k-brand); }
 
@@ -45,7 +46,7 @@ body.k { background: #ffffff; color: #0d0d0d; }
 .k-verdict { background: #ffffff; border: 0; border-top: 3px solid var(--k-ink); border-bottom: 1px solid var(--k-line); border-radius: 0; box-shadow: none; padding: 16px 0 14px; }
 .k-verdict::before { display: none; }
 .k-verdict__label { color: var(--k-brand); font-family: var(--k-chart-font); letter-spacing: .06em; }
-.k-verdict__text { font-family: var(--k-serif); font-weight: 900; }
+.k-verdict__text { font-family: var(--k-serif); font-weight: 700; }
 .k-kpis { gap: 0; border-bottom: 1px solid var(--k-line); }
 .k-kpi { background: transparent; border: 0; border-radius: 0; box-shadow: none; border-right: 1px solid #e3e8eb; padding: 14px 14px 12px 0; }
 .k-kpi:last-child { border-right: 0; }

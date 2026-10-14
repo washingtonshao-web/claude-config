@@ -45,9 +45,7 @@ def main() -> None:
     t = load(a.style, a.theme)
     series = [t[f"k-s{i}"] for i in range(1, 9) if f"k-s{i}" in t]
     seq = [t[f"k-seq-{i}"] for i in range(1, 6) if f"k-seq-{i}" in t]
-    font = ["Microsoft YaHei UI", "PingFang SC", "Noto Sans SC", "DejaVu Sans"]
-    if a.style == "editorial":
-        font = ["Roboto Condensed"] + font
+    font = ["Microsoft YaHei UI", "PingFang SC", "Noto Sans SC", "DejaVu Sans"]  # same faces as the web kit; no web fonts
     mpl = {
         "font.family": "sans-serif",
         "font.sans-serif": font,

@@ -21,15 +21,15 @@ Pick the style for the whole deliverable, not per chart.
 
 | Style | Look | Use for |
 |---|---|---|
-| `editorial` | Economist-inspired house style. White page, light only. Falcon-copper `#b4531f` rule across the top of each chart with a short copper tab at the left; bold short title plus one-line subtitle; value axis on the right; hairline horizontal grid; condensed sans for chart text. Series `#006ba2 #3ebcd2 #379a8b #ebb434 #b4ba39 #9a607f #d1b07c #758d99`; red `#e3120b` only for negatives and risk | Default for all data work |
+| `editorial` | Economist-inspired house style. White page, light only. Falcon-copper `#b4531f` rule across the top of each chart with a short copper tab at the left; bold short title plus one-line subtitle; value axis on the right; hairline horizontal grid; chart text in the kit sans. Series `#006ba2 #3ebcd2 #379a8b #ebb434 #b4ba39 #9a607f #d1b07c #758d99`; red `#e3120b` only for negatives and risk | Default for all data work |
 | `kit` | Kit tokens `--k-s1…--k-s8` in fixed order, `--k-seq-*` for magnitude; 2px lines with end dots, 10% area tint, 4px rounded bars, light and dark | Dashboards, tools, pages that must match older kit sites |
 | `ft` | Light salmon paper, serif headline, tick labels on the grid lines, bold zero line, Oxford blue / orange / teal | Only when I ask for it |
 
 To use `editorial` on a web page, link `kit/styles/editorial.css` after `kit/v1.css` (see `kit-reference.md`); it restyles kit components, so do not read or copy its CSS. Style samples (original four options): https://claude.ai/artifact/DqYnAiTXxrWrsRU6VD1MhN.
 
 ## Fonts in charts
-- Web: `editorial` chart text uses `--k-chart-font` (`"Roboto Condensed", "Noto Sans SC", "PingFang SC", "Microsoft YaHei UI", sans-serif`; Roboto Condensed and Noto from Google Fonts, falling back cleanly where they are blocked).
-- Python and Office: Microsoft YaHei UI for Chinese, colors from `tokens.py`.
+- Web: chart text uses `--k-chart-font`, which is the kit's system sans (Segoe UI / PingFang SC / Microsoft YaHei UI). No web fonts, no condensed or serif faces; SVG and canvas text read the variable.
+- Python and Office: Microsoft YaHei UI, colors from `tokens.py`.
 
 ## Python charts (matplotlib)
 ```python

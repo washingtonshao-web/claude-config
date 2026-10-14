@@ -13,7 +13,9 @@ Falconshire Publisher connector, the Bunny mirror and offline). Style skins link
     <link rel="stylesheet" href="kit/styles/<name>.css">
 are inlined the same way as <style data-kit-style="<name>">. Re-running refreshes
 previously inlined blocks to the current kit. --copy also places the raw kit files in
-out/kit/ so they are served alongside the page.
+out/kit/ so they are served alongside the page. Pages that reference kit/map/ (relief tiles and China
+boundary layers, see design/maps.md) get the map assets copied to <page dir>/kit/map/ automatically;
+publish those sites with publish.py (multi-file), not the single-file Publisher connector.
 """
 
 from __future__ import annotations
@@ -67,13 +69,19 @@ def main() -> None:
         raise SystemExit(__doc__)
     target = Path(args[0]).resolve()
     touched = []
+    map_dirs = set()
     for page in pages(target):
         html = page.read_text(encoding="utf-8")
+        if "kit/map/" in html:
+            map_dirs.add(page.parent)
         new, n = inline(html)
         if n and new != html:
             page.write_text(new, encoding="utf-8", newline="\n")
         if n:
             touched.append(f"{page.name} ({n})")
+    for d in sorted(map_dirs):
+        shutil.copytree(KIT_DIR / "map", d / "kit" / "map", dirs_exist_ok=True)
+        touched.append(f"copied map assets to {d / 'kit' / 'map'}")
     if "--copy" in sys.argv:
         dest = (target / "out" if target.is_dir() else target.parent) / "kit"
         dest.mkdir(parents=True, exist_ok=True)

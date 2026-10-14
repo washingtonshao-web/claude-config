@@ -7,7 +7,8 @@ Usage:
 Look at contact.png first (about 1.6k tokens for all four views); open a single view only
 to inspect a problem. Checks are measured, not eyeballed: horizontal overflow, elements past
 the right edge, page/console errors, failed requests, broken images, low-contrast text,
-tap targets under 44px and inputs under 16px on phones, Microsoft YaHei used without a fallback.
+tap targets under 44px and inputs under 16px on phones, Microsoft YaHei used without a fallback, and the fonts
+Chromium actually rendered (any SimSun/宋体 fallback is a hard failure; three or more text faces is flagged).
 Phone views run in WebKit (Safari's engine) at iPhone 18 Pro Max size; "gated" means the URL
 redirected to the Falconshire login, so shoot the local build instead.
 Prints a JSON report; exit code 1 when a hard check fails (overflow, errors, broken images).
@@ -19,6 +20,7 @@ import argparse
 import datetime
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -92,6 +94,42 @@ CHECKS_JS = r"""
   return out;
 }
 """
+
+BAD_FONTS = ("simsun", "nsimsun", "宋体", "新宋体", "mingliu", "pmingliu", "simsun-extb", "simsun-extg")
+ICON_FONTS = ("segoe ui symbol", "segoe ui emoji", "segoe mdl2", "segoe fluent", "material", "font awesome", "apple color emoji")
+
+
+def rendered_fonts(page) -> dict:
+    """Ask Chromium which platform fonts drew the text (CDP CSS.getPlatformFontsForNode). WebKit has no CDP: skipped."""
+    try:
+        cdp = page.context.new_cdp_session(page)
+    except Exception:
+        return {}
+    cdp.send("DOM.enable"); cdp.send("CSS.enable")
+    root = cdp.send("DOM.getDocument", {"depth": 0})["root"]["nodeId"]
+    sel = "h1,h2,h3,h4,h5,p,li,td,th,a,button,label,figcaption,small,span,div,text,tspan,dd,dt"
+    ids = cdp.send("DOM.querySelectorAll", {"nodeId": root, "selector": sel})["nodeIds"][:600]
+    glyphs: dict[str, int] = {}
+    for nid in ids:
+        try:
+            for f in cdp.send("CSS.getPlatformFontsForNode", {"nodeId": nid})["fonts"]:
+                glyphs[f["familyName"]] = glyphs.get(f["familyName"], 0) + f["glyphCount"]
+        except Exception:
+            continue
+    total = sum(glyphs.values()) or 1
+    text = {k: v for k, v in glyphs.items() if not any(i in k.lower() for i in ICON_FONTS)}
+    share = {k: round(v / total, 3) for k, v in sorted(text.items(), key=lambda kv: -kv[1]) if v / total >= 0.005}
+    bad = [k for k in text if any(b in k.lower() for b in BAD_FONTS)]
+    out = {"fonts": share}
+    if bad:
+        out["badFonts"] = bad  # SimSun etc.: a serif/CJK stack fell back to the Windows default
+    base = {re.sub(r"\s+(Semibold|Semilight|ExtraLight|Light|Thin|ExtraBold|Bold|Black|Medium|Heavy|Regular)$", "", k, flags=re.I) for k in share}
+    if len(base) >= 3:  # one Latin face + one CJK face is normal; a third usually means mixed stacks
+        out["mixedFonts"] = sorted(base)
+    heavy = [k for k in share if re.search(r"Black|Heavy", k, re.I)]
+    if heavy:
+        out["heavyWeights"] = heavy  # 900 Latin next to 700 CJK reads as uneven ("有深有浅")
+    return out
 
 
 def contact_sheet(shots: dict[str, Path], dest: Path) -> None:
@@ -184,13 +222,16 @@ def main() -> None:
                 break
             page.wait_for_timeout(a.wait)
             res = page.evaluate(CHECKS_JS, not name.startswith("desktop"))
+            if engine == "chromium":
+                res.update(rendered_fonts(page))
             shot = out / f"{name}.png"
             page.screenshot(path=str(shot), full_page=a.full)
             if not name.startswith("small"):
                 shots[name] = shot
             res.update(errors=errors[:5], failedRequests=failed[:5])
             res = {k: v for k, v in res.items() if v not in ([], 0, None)}
-            res["hardFail"] = bool(res.get("overflowX", 0) > 0 or res.get("noViewportMeta") or errors or res.get("brokenImages"))
+            res["hardFail"] = bool(res.get("overflowX", 0) > 0 or res.get("noViewportMeta") or errors or res.get("brokenImages")
+                                or res.get("badFonts"))
             hard |= res["hardFail"]
             same = next((k for k, v in report["views"].items() if v == res), None)
             report["views"][name] = f"same findings as {same}" if same else res

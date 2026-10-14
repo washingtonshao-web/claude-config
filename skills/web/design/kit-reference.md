@@ -8,7 +8,8 @@ All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in pag
 - Type: `--k-font --k-serif --k-mono`, sizes `--k-fs-xs sm md lg xl 2xl 3xl 4xl`
 - Space `--k-sp-1…8` (4 8 12 16 24 32 48 72), radius `--k-r-sm md lg`, `--k-max` 1180px, `--k-measure` 40em
 - Dark mode is automatic (OS) plus a toggle: any button with `data-k-theme-toggle`.
-- Style skins: `<link rel="stylesheet" href="kit/styles/editorial.css">` after `v1.css` restyles the same components (house default for data work, see `charts.md`); `apply_kit.py` inlines it too. It adds `--k-brand` (falcon copper rule) and `--k-chart-font`, and is light-only.
+- Style skins: `<link rel="stylesheet" href="kit/styles/editorial.css">` after `v1.css` restyles the same components (house default for data work, see `charts.md`); `apply_kit.py` inlines it too. It adds `--k-brand` (falcon copper rule) and `--k-chart-font`, and is light-only. Fonts are system faces only (bold sans headlines; Georgia only under `lang="en"`).
+- Map assets: `kit/map/tiles/relief/{z}/{x}/{y}.webp` and `kit/map/geo/*.json` (see `maps.md`); `apply_kit.py` copies them next to the page.
 
 ## Skeleton
 ```html
@@ -62,7 +63,7 @@ Without a TOC, drop `k-with-toc`/`k-toc` and put sections directly in `.k-page`.
     <div class="k-prose">…</div><ol class="k-sources">…</ol></div>
 </aside>
 ```
-  JS: `kit.openDrawer(id)` / `kit.closeDrawers()` to fill one drawer dynamically; Esc and scrim close it.
+  JS: `kit.openDrawer(id)` / `kit.closeDrawers()` to fill one drawer dynamically. Behaviour: each open adds a history entry, so browser Back, ✕ and Esc close it; opening never scrolls the page. On screens ≥900px it is a non-modal side panel (no scrim, page stays scrollable, clicking another card swaps the drawer); on phones it is a bottom sheet with a clear scrim (`k-scrim--dim` opts into dimming; don't, unless asked).
 - Tabs: `<div class="k-tabs"><button class="k-tab" aria-selected="true" aria-controls="p1">…</button></div><div class="k-tabpanel" id="p1">…</div>` (others `hidden`).
 - Buttons: `k-btn`, `k-btn--primary`, `k-btn--icon`.
 

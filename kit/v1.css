@@ -6,7 +6,8 @@
 :root {
   color-scheme: light;
   --k-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
-  --k-serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  /* Headline face. Chinese headlines are bold sans: no CJK serif ships on Windows, so a serif stack falls to SimSun. */
+  --k-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --k-mono: "SF Mono", "Cascadia Code", Consolas, "Microsoft YaHei UI", monospace;
 
   --k-fs-xs: 12px; --k-fs-sm: 14px; --k-fs-md: 16px; --k-fs-lg: 18px;
@@ -295,8 +296,9 @@ button.k-card { font: inherit; text-align: left; cursor: pointer; padding: 0; }
 .k-cite { font: 600 .72em/1 var(--k-mono); vertical-align: super; color: var(--k-accent); margin-left: 1px; }
 
 /* ---------- 12. Detail drawer ---------- */
-.k-scrim { position: fixed; inset: 0; z-index: 90; background: rgba(8, 10, 14, .45); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.k-scrim { position: fixed; inset: 0; z-index: 90; background: transparent; opacity: 0; pointer-events: none; transition: opacity .2s; }
 .k-scrim[data-open="true"] { opacity: 1; pointer-events: auto; }
+.k-scrim--dim { background: rgba(8, 10, 14, .45); } /* opt-in dimming; default is a clear click-catcher */
 .k-drawer {
   position: fixed; z-index: 100; top: 0; right: 0; bottom: 0; width: min(480px, 100vw);
   background: var(--k-surface); box-shadow: var(--k-shadow-lg); overflow-y: auto; overscroll-behavior: contain;

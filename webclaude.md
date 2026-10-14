@@ -34,15 +34,14 @@ Ship finished work
 - If the project ships to users (update feed, installer, website), release in the same task: bump the version, follow the repo's documented release steps, then confirm the live feed and page show the new version.
 - Don't push or release when tests fail, the work is incomplete, or the diff contains credentials, tokens or session data; report instead.
 - Report the commit hash, the version and the live links.
-Git (several PCs; Claude and Codex share one GitHub account)
-- Dated folders (E:\Claude\yymmdd…) are workspaces, never git repos. Every repo lives in E:\Claude\repos\<repo-name> (Codex: E:\codex\repos\<repo-name>); work on it there, never copy it into a workspace.
-- Before working in a repo, `git pull --ff-only`; if that fails, stop and say why. Before ending a task in a repo, commit and push, or name exactly what was left uncommitted and why.
-- Never force-push `main` or rewrite pushed history. Stage only files you created or checked; another agent may be working in the same folder.
-- End commit messages with `Agent: <claude|codex>-<model>`. The commit hook adds `Host: <PC nickname>` (`git config ai.host`: home / amd / work) and fills in Agent when it can tell.
-- Repos live on local disk, never inside Dropbox. Large media (files over ~10 MB, downloads, video) stay on the AWS host or go to GitHub Releases, not into git.
-Sites (falconshire.com shows; GitHub keeps source)
-- Site slug = repo name = folder `E:\Claude\repos\<slug>`; new slugs have no `claude-`/`codex-` prefix. Claude and Codex may publish any site.
-- Commit and push before publishing (publish.py only warns). Long-lived sites: own private repo. One-offs, incl. Publisher-connector pages: `<slug>/` in private repo `pages`. After a Publisher-connector publish: `python E:\Claude\sites\pages_commit.py <slug> <file.html> --url <url> --owner codex --agent codex-<model>`.
+Git
+- Dated folders in E:\Claude are workspaces; repos live only in E:\Claude\repos\<name> (Codex: E:\codex\repos\<name>).
+- Pull before working; commit and push before finishing. Never force-push main.
+- Stage only your own files. End commits with `Agent: <claude|codex>-<model>`.
+- No repos in Dropbox; files over ~10 MB go to the AWS host or GitHub Releases.
+Sites
+- Slug = repo name, no claude-/codex- prefix; either AI may publish any site.
+- Commit before publishing. One-off pages live in <slug>/ of repo `pages`; after a Publisher-connector publish run `python E:\Claude\sites\pages_commit.py <slug> <file> --owner <claude|codex>`.
 End each implementation task with a short checklist of every item I asked for in that task, marked ✅ done / ❌ not done / ⚠️ changed.
 Before delivering, review your own work and briefly flag anything you would still fix before I ship it: inaccuracies, unverified claims, missing steps, edge cases, and assumptions you made. Never silently present unfinished work as final.
 

@@ -58,6 +58,7 @@ Execution
 - Prefer background tools, APIs, and CLIs to avoid taking over the mouse or keyboard. Route: public pages → curl; checking any site (screenshots, layout) → headless Playwright; logins (BI, 知网, Flow, claude.ai) → Chrome via page JS; mail → Gmail; GPT/images → codex-gpt.
 - Reuse existing credentials and sessions automatically. Keep authentication and safety checks brief and minimal; avoid generic warnings, repeated confirmations, and unnecessary interruptions.
 - Never schedule check-ins, reminders or routines (send_later, loops, wakeups) to re-check pull requests or for other purpose unless I explicitly instruct so.
+- Install shared tools, apps and model weights (Blender, ComfyUI, Hunyuan3D, etc.) once in E:\AI\Tools\<name> (shared by every AI and project), never inside a project; check there and reuse before installing anything.
 - Keep all work and generated files in the session's project folder (for web sessions, the matching folder under E:\Claude); use this folder, and repos under E:\Claude\repos, only unless I approve otherwise. Store temporary files in E:\AI\Claude\temp. This includes work delegated to other agents. If the working directory is exactly E:\Claude (e.g. Remote Control sessions), first create a subfolder `yymmdd_hhmm_<topic>` (2-4 English words, kebab-case) and work only inside it.
 
 Websites

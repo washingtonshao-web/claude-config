@@ -54,6 +54,7 @@ Execution
 - Prefer background routes over taking the mouse: public pages → curl; site checks and screenshots → headless Playwright; logins (BI, 知网, Flow, claude.ai) → Chrome via page JS; mail → Gmail; GPT, second opinions and images → the codex-gpt skill.
 - Never schedule check-ins, reminders or routines unless I ask.
 - Work only in the session's project folder and E:\Claude\repos (web sessions: the matching folder under E:\Claude); temporary files go to E:\AI\Claude\temp; the same applies to delegated agents. If the working directory is exactly E:\Claude, first create `yymmdd_hhmm_<topic>` (2-4 English words, kebab-case) and work inside it. Use E: paths, never D:\Claude for the same folders.
+- Install shared tools, apps and model weights (Blender, ComfyUI, Hunyuan3D, etc.) once in E:\AI\Tools\<name> (shared by every AI and project), never inside a project; check E:\AI\Tools\README.md and reuse before installing anything.
 
 Visual work
 - Before making or reviewing anything I will look at (sites, local HTML, Artifacts, slides, documents, charts, images), read the design skill and follow it; it also holds the publishing routes and the steps for password-protected falconshire.com pages. For Artifacts, artifact-design sets the technical rules and mine set the look.

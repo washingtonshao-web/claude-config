@@ -14,20 +14,20 @@ Read this file, then only the reference file for what you are producing:
 | Any map (atlas, drill-down, route, bubbles) | `maps.md` (plus `web.md` for the page around it) |
 | Artifact, or a local single-file HTML page | `artifact.md`, `kit-reference.md` |
 | Any chart (HTML/SVG, matplotlib, pptx, docx) | `charts.md` (plus the dataviz skill for chart method) |
-| Slides (Artifact deck or .pptx) | `slides.md` |
+| Slides (HTML deck by default, or .pptx) | `slides.md` |
 | Document (HTML long-read, Word or PDF) | `docs.md` |
 | Hero, cover or illustration images | `images.md` |
 | Visual review before delivery (always) | `review.md` |
 
 Platform skills own the technical contract (artifact-design for Artifacts; pptx/docx/pdf for files; dataviz for chart form and interaction). This skill owns the look. On a technical constraint the platform skill wins; on style, this one wins.
 
-The kit at `E:\Claude\sites\_kit` (`v1.css`, `v1.js`, `styles/editorial.css`, `map/`, `apply_kit.py`) is the single source of colors, type, spacing and map assets. Do not read its CSS; use `kit-reference.md`. In Python get colors from `python scripts/tokens.py --style editorial` instead of typing hex values.
+The kit at `E:\Claude\sites\_kit` (`v1.css`, `v1.js`, `styles/editorial.css`, `map/`, `deck/`, `apply_kit.py`) is the single source of colors, type, spacing and map assets. Do not read its CSS; use `kit-reference.md`. In Python get colors from `python scripts/tokens.py --style editorial` instead of typing hex values.
 
 ## House style (decided 2026-10-03, fonts revised 2026-10-14)
 | Question | Decision |
 |---|---|
 | Look | **editorial** (Economist-inspired) for everything with data: reports, briefs, atlases, slides and documents with charts. **kit** look only for interactive dashboards and tools |
-| Signature color | Falcon copper `#b4531f` for the top rule, chart tabs, rubric and section numbers; never for data. Red stays for negatives and risk |
+| Signature color | Falcon copper `#b4531f` for the top rule, chart tabs, rubric and section numbers (where a page has them); never for data. Red stays for negatives and risk |
 | Theme | editorial is light only; kit pages keep light and dark. Map panels may be dark relief (see `maps.md`) |
 | Fonts | One system sans everywhere: Segoe UI / -apple-system for Latin, Microsoft YaHei UI / PingFang SC for Chinese. Headlines bold 700 (never 900: Latin Black next to CJK Bold looks uneven). Georgia serif only on English pages. **No Chinese serif and no web fonts**: Windows has no CJK serif, so the stack falls to SimSun |
 | Big hero image | Only for travel and lifestyle content; data pages open with the conclusion and the key chart or map (see `images.md`) |

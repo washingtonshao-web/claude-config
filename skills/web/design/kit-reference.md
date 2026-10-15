@@ -21,14 +21,14 @@ All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in pag
 </div></header>
 <main id="top">
   <section class="k-hero [k-hero--image]" [style="background-image:url(hero.webp)"]><div class="k-page">
-    <div class="k-hero__eyebrow">分类 · 日期</div><h1>标题</h1>
+    [<div class="k-hero__eyebrow">系列名或报告类型</div>]<h1>标题</h1>
     <p class="k-hero__lede">一句话导语</p><div class="k-hero__meta"><span>…</span></div>
   </div></section>
   <div class="k-page k-with-toc">
-    <nav class="k-toc"><a href="#s1">01 …</a></nav>
+    <nav class="k-toc"><a href="#s1">[01 ]…</a></nav>
     <div>
       <section class="k-section" id="s1">
-        <div class="k-section__head"><span class="k-section__num">01</span><h2>…</h2></div>
+        <div class="k-section__head">[<span class="k-section__num">01</span>]<h2>…</h2></div>
         <div class="k-prose"><p>…<span class="k-cite">[1]</span></p></div>
       </section>
     </div>
@@ -37,6 +37,8 @@ All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in pag
 <footer class="k-footer"><div class="k-page">…</div></footer>
 ```
 Without a TOC, drop `k-with-toc`/`k-toc` and put sections directly in `.k-page`.
+- Eyebrow (`k-hero__eyebrow`): only when it says something the h1 and meta line don't (series name, report type). Never the date; the date lives in `k-hero__meta`. Otherwise omit it. The kit sets no caps or tracking on it for Chinese; Latin caps at .06em only under `lang="en"`.
+- Section numbers (`k-section__num` and "01 …" in the TOC): only when the report has 4+ sections and a TOC or in-text cross references ("见第 3 节"). Otherwise omit the number span; `k-section__head` with just the `h2` needs no extra CSS.
 
 ## Report blocks
 - Verdict: `<div class="k-verdict"><div class="k-verdict__label">结论</div><p class="k-verdict__text">…</p><p class="k-verdict__note">…</p></div>`
@@ -69,6 +71,9 @@ Without a TOC, drop `k-with-toc`/`k-toc` and put sections directly in `.k-page`.
 
 ## Map chrome
 `<div class="k-map">` + `.k-map__hint` (one-line pan/zoom hint), `.k-map__controls` (+ / − / ⟲ buttons and `.k-map__zoom` level text), `.k-map__legend`. Works around Leaflet/MapLibre containers or an SVG.
+
+## Slide deck
+`kit/deck/deck.css` + `kit/deck/deck.js` (after `v1.css` and `editorial.css`; `apply_kit.py` inlines them): `<body class="k k-deck">` with one `<section class="k-slide [k-slide--cover|--statement|--number|--chart|--quote|--section|--sources]">` per slide, 1920×1080 canvas, sizes `calc(N * var(--u))`. Parts: `k-slide__title __sub __lede __statement __figure __source __meta __body __sources __part`, `k-bigs`/`k-big`, `k-cols`, `k-notes`. `kit/deck/deck_pdf.py deck.html [--png all]` prints the 16:9 PDF. Layouts and checks: `slides.md` "HTML deck".
 
 ## Utilities
 `k-muted k-ink2 k-small k-center k-num k-sr-only k-reveal k-stack k-grid`

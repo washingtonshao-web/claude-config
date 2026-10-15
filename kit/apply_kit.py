@@ -11,7 +11,9 @@ and this script swaps those tags for inline <style data-kit="v1"> / <script data
 blocks, so every page is one self-contained HTML file (works with publish.py, the
 Falconshire Publisher connector, the Bunny mirror and offline). Style skins linked as
     <link rel="stylesheet" href="kit/styles/<name>.css">
-are inlined the same way as <style data-kit-style="<name>">. Re-running refreshes
+are inlined the same way as <style data-kit-style="<name>">. The HTML slide deck
+    <link rel="stylesheet" href="kit/deck/deck.css">  <script src="kit/deck/deck.js"></script>
+is inlined as <style data-kit-deck="css"> / <script data-kit-deck="js"> (see design/slides.md). Re-running refreshes
 previously inlined blocks to the current kit. --copy also places the raw kit files in
 out/kit/ so they are served alongside the page. Pages that reference kit/map/ (relief tiles and China
 boundary layers, see design/maps.md) get the map assets copied to <page dir>/kit/map/ automatically;
@@ -36,6 +38,10 @@ STYLE_BLOCK_RE = re.compile(r'<style data-kit="%s">.*?</style>' % VERSION, re.S)
 SCRIPT_BLOCK_RE = re.compile(r'<script data-kit="%s">.*?</script>' % VERSION, re.S)
 SKIN_LINK_RE = re.compile(r'<link\b[^>]*href=["\'][^"\']*kit/styles/([\w-]+)\.css["\'][^>]*>', re.I)
 SKIN_BLOCK_RE = re.compile(r'<style data-kit-style="([\w-]+)">.*?</style>', re.S)
+DECK_CSS_RE = re.compile(r'<link\b[^>]*href=["\'][^"\']*kit/deck/deck\.css["\'][^>]*>', re.I)
+DECK_JS_RE = re.compile(r'<script\b[^>]*src=["\'][^"\']*kit/deck/deck\.js["\'][^>]*>\s*</script>', re.I)
+DECK_CSS_BLOCK_RE = re.compile(r'<style data-kit-deck="css">.*?</style>', re.S)
+DECK_JS_BLOCK_RE = re.compile(r'<script data-kit-deck="js">.*?</script>', re.S)
 
 
 def skin(name: str) -> str:
@@ -53,6 +59,13 @@ def inline(html: str) -> tuple[str, int]:
     for pattern in (SKIN_LINK_RE, SKIN_BLOCK_RE):
         html, n = pattern.subn(lambda m: skin(m.group(1)), html)
         total += n
+    if DECK_CSS_RE.search(html) or DECK_JS_RE.search(html) or 'data-kit-deck="' in html:
+        deck = KIT_DIR / "deck"
+        css = f'<style data-kit-deck="css">\n{(deck / "deck.css").read_text(encoding="utf-8")}</style>'
+        js = f'<script data-kit-deck="js">\n{(deck / "deck.js").read_text(encoding="utf-8")}</script>'
+        for pattern, block in ((DECK_CSS_RE, css), (DECK_CSS_BLOCK_RE, css), (DECK_JS_RE, js), (DECK_JS_BLOCK_RE, js)):
+            html, n = pattern.subn(lambda _m, b=block: b, html)
+            total += n
     return html, total
 
 
@@ -89,6 +102,9 @@ def main() -> None:
             shutil.copy2(KIT_DIR / name, dest / name)
         if (KIT_DIR / "styles").is_dir():
             shutil.copytree(KIT_DIR / "styles", dest / "styles", dirs_exist_ok=True)
+        (dest / "deck").mkdir(exist_ok=True)
+        for name in ("deck.css", "deck.js"):
+            shutil.copy2(KIT_DIR / "deck" / name, dest / "deck" / name)
         touched.append(f"copied kit files to {dest}")
     print("kit applied: " + (", ".join(touched) if touched else "no kit references found"))
 

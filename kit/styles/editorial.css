@@ -45,7 +45,7 @@ body.k { background: #ffffff; color: #0d0d0d; }
 /* verdict and KPIs as print boxes */
 .k-verdict { background: #ffffff; border: 0; border-top: 3px solid var(--k-ink); border-bottom: 1px solid var(--k-line); border-radius: 0; box-shadow: none; padding: 16px 0 14px; }
 .k-verdict::before { display: none; }
-.k-verdict__label { color: var(--k-brand); font-family: var(--k-chart-font); letter-spacing: .06em; }
+.k-verdict__label { color: var(--k-brand); font-family: var(--k-chart-font); }
 .k-verdict__text { font-family: var(--k-serif); font-weight: 700; }
 .k-kpis { gap: 0; border-bottom: 1px solid var(--k-line); }
 .k-kpi { background: transparent; border: 0; border-radius: 0; box-shadow: none; border-right: 1px solid #e3e8eb; padding: 14px 14px 12px 0; }

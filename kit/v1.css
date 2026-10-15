@@ -144,7 +144,9 @@ body.k {
 @media (max-width: 719px) { .k-nav { display: none; } }
 
 .k-hero { position: relative; padding: var(--k-sp-8) 0 var(--k-sp-7); overflow: hidden; }
-.k-hero__eyebrow { font: 600 var(--k-fs-xs)/1.4 var(--k-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k-accent); margin-bottom: var(--k-sp-4); }
+.k-hero__eyebrow { font: 600 var(--k-fs-xs)/1.4 var(--k-mono); color: var(--k-accent); margin-bottom: var(--k-sp-4); }
+/* small labels: no caps or tracking on Chinese (house rule); Latin caps only under lang="en", max .06em */
+.k-hero__eyebrow:lang(en), .k-verdict__label:lang(en) { text-transform: uppercase; letter-spacing: .06em; }
 .k-hero h1 { font-size: var(--k-fs-4xl); line-height: 1.12; letter-spacing: -.02em; max-width: 18em; }
 .k-hero__lede { font-size: var(--k-fs-lg); color: var(--k-ink-2); max-width: 36em; margin: var(--k-sp-5) 0 0; line-height: 1.7; }
 .k-hero__meta { display: flex; flex-wrap: wrap; gap: 6px var(--k-sp-4); margin-top: var(--k-sp-5); font-size: var(--k-fs-sm); color: var(--k-muted); }
@@ -163,7 +165,7 @@ body.k {
   background: var(--k-surface); border: 1px solid var(--k-line); border-left: 4px solid var(--k-accent);
   box-shadow: var(--k-shadow);
 }
-.k-verdict__label { font: 600 var(--k-fs-xs)/1.4 var(--k-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--k-accent); }
+.k-verdict__label { font: 600 var(--k-fs-xs)/1.4 var(--k-mono); color: var(--k-accent); }
 .k-verdict__text { font-size: var(--k-fs-xl); font-weight: 650; line-height: 1.5; margin: 0; }
 .k-verdict__note { color: var(--k-ink-2); font-size: var(--k-fs-sm); margin: 0; }
 
@@ -256,7 +258,7 @@ button.k-card { font: inherit; text-align: left; cursor: pointer; padding: 0; }
 .k-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--k-line); border-radius: var(--k-r-md); background: var(--k-surface); margin: var(--k-sp-4) 0; }
 .k-table { width: 100%; border-collapse: collapse; font-size: var(--k-fs-sm); line-height: 1.5; }
 .k-table th, .k-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--k-line); vertical-align: top; }
-.k-table th { position: sticky; top: 0; background: var(--k-surface-2); font-weight: 600; color: var(--k-ink-2); font-size: var(--k-fs-xs); letter-spacing: .02em; white-space: nowrap; }
+.k-table th { position: sticky; top: 0; background: var(--k-surface-2); font-weight: 600; color: var(--k-ink-2); font-size: var(--k-fs-xs); white-space: nowrap; }
 .k-table tbody tr:last-child td { border-bottom: 0; }
 .k-table tbody tr:hover td { background: color-mix(in srgb, var(--k-accent-soft) 45%, transparent); }
 .k-table .k-num, .k-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -288,7 +290,7 @@ button.k-card { font: inherit; text-align: left; cursor: pointer; padding: 0; }
 /* ---------- 11. Facts, sources ---------- */
 .k-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: var(--k-sp-3); margin: var(--k-sp-4) 0; }
 .k-fact { padding: var(--k-sp-3); border-radius: var(--k-r-md); background: var(--k-surface-2); }
-.k-fact dt { font-size: var(--k-fs-xs); color: var(--k-muted); letter-spacing: .02em; }
+.k-fact dt { font-size: var(--k-fs-xs); color: var(--k-muted); }
 .k-fact dd { margin: 2px 0 0; font-weight: 600; font-size: var(--k-fs-sm); line-height: 1.5; }
 .k-sources { counter-reset: src; list-style: none; padding: 0; margin: var(--k-sp-4) 0; font-size: var(--k-fs-sm); color: var(--k-ink-2); }
 .k-sources li { counter-increment: src; position: relative; padding: 6px 0 6px 34px; border-bottom: 1px dashed var(--k-line); line-height: 1.6; word-break: break-word; }

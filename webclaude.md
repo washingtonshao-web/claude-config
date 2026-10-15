@@ -78,6 +78,7 @@ Do not create or update global memory unless I explicitly ask. Keep necessary pr
 
 Connectors
 Keep the Notion and Dropbox connectors off by default. Do not use Notion or Dropbox tools unless I explicitly ask for them in the request; if I do, enable the connector for that session only.
+After a claude.ai account switch on a PC, or when I ask for account setup, use the account-setup skill; Falcon Toolkit starts it on its own.
 
 Use the Travel Planner MCP when travel trip planning is requested.
 

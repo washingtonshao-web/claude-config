@@ -7,6 +7,10 @@
 - Component classes and markup: `kit-reference.md`.
 - Existing sites: move them onto the kit only when I ask for a redesign or a substantial update.
 
+## Publishing and protected pages (moved from CLAUDE.md)
+- Publish a single self-contained HTML page with the Falconshire Publisher connector when it is available. A site with local images, data files, map tiles or several pages, or any site when the connector is missing, goes through python "E:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.
+- Password-protected `*.falconshire.com` pages: open them in the Playwright browser, whose profile (`~\.claude\playwright-profile`) holds my 30-day login for every shared-password site; don't use curl or WebFetch for them. If it shows the `/_falcon-auth/login` page (login expired, a site with its own password, or a new PC), close the Playwright browser, open that profile in a visible Chrome window at the page (`chrome.exe --user-data-dir=<profile> <url>`) and bring it to the front for me to type the password. Once the page title changes, close the window gracefully so the login is saved, then continue.
+
 ## Page archetypes (the first screen decides the type)
 - **Research report**: header → headline block (rubric, bold sans h1 stating the conclusion, one-line lede, date/meta; no big photo hero, see `images.md`) → `k-verdict` one-sentence conclusion → `k-kpi` row only for numbers the reader would act on (0–4) → the single most important chart. Then numbered `k-section`s, `k-toc` on wide screens, `k-sources` last. Put the evidence in visuals (chart, table, diagram) where it carries the argument; never add a chart or KPI as decoration.
 - **Map / atlas**: the map fills the first screen, with no stats banner above it. Follow `maps.md`.

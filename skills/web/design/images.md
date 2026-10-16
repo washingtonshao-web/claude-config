@@ -3,7 +3,7 @@
 ## When to use a big image
 | Content | Lead image |
 |---|---|
-| Travel, places, lifestyle, food | Big hero (21:9 desktop, 4:3 phone). Real photos of the real place first; illustration if none are usable |
+| Travel, places, lifestyle, food | Full-bleed photo cover, edge to edge: title and one-line lede in white over the photo on a dark gradient (contrast ≥4.5:1 measured on the photo behind the text), date · place line above the title in normal case, photo credit small at bottom-right. Desktop about min(62svh, 600px) tall; phone may fill most of the first screen. Real photos of the real place first; illustration if none are usable. (My preference since 2026-10-17: the overlaid cover over a white title block above the photo) |
 | Data reports, briefs, atlases | No hero. Open with headline, conclusion and the key chart. Optional slim illustration band (21:6) or a small spot illustration beside the headline |
 | Catalogs and encyclopedias | Thumbnails per item (real photos of the actual thing), no hero |
 | Slides | Cover may carry one illustration; content slides use charts, not pictures |

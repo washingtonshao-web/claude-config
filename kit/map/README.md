@@ -24,4 +24,6 @@ Self-hosted street-level basemap (Protomaps/OSM vector tiles, Asia z0–14, worl
 
 Options: `center` [lng, lat], `zoom`, `bounds` [[w, s], [e, n]] (overrides center/zoom), `dark` (`true`/`false`, default follows the kit theme), `interactive` (default true), `controls` (false hides +/−), `maxZoom` (default 16), `options` (extra MapLibre map options). On touch screens one finger scrolls the page (cooperative gestures). Loads MapLibre GL 5.24.0 and PMTiles 4.4.1 from the tiles host once per page; failed range requests are retried once. Attribution (© OpenStreetMap contributors · Protomaps) stays visible in compact form.
 
+Styles: default `light.json` is the colourful AMap-like street map (2026-10-17); `quiet: true` loads the pale `quiet.json` for data maps (choropleths, atlases) where the basemap should stay in the background; `dark: true` wins over `quiet`.
+
 To keep place names above your data, insert data layers below the place labels: `map.addLayer(layer, "places_subplace")`. `base` (testing only) serves style, fonts, sprites, geo and libraries from another origin while the tile archives stay on the tiles host.

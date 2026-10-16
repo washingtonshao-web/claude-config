@@ -30,7 +30,7 @@ The kit at `E:\Claude\sites\_kit` (`v1.css`, `v1.js`, `styles/editorial.css`, `m
 | Signature color | Falcon copper `#b4531f` for the top rule, chart tabs, rubric and section numbers (where a page has them); never for data. Red stays for negatives and risk |
 | Theme | editorial is light only; kit pages keep light and dark. Map panels may be dark relief (see `maps.md`) |
 | Fonts | One system sans everywhere: Segoe UI / -apple-system for Latin, Microsoft YaHei UI / PingFang SC for Chinese. Headlines bold 700 (never 900: Latin Black next to CJK Bold looks uneven). Georgia serif only on English pages. **No Chinese serif and no web fonts**: Windows has no CJK serif, so the stack falls to SimSun |
-| Big hero image | Only for travel and lifestyle content; data pages open with the conclusion and the key chart or map (see `images.md`) |
+| Big hero image | Only for travel and lifestyle content, as a full-bleed photo cover with the title over it; data pages open with the conclusion and the key chart or map (see `images.md`) |
 | Image style | Flat editorial illustration in the house palette; no photorealistic AI renders. Real photos only for real places and things |
 | Density | Medium: prose alternates with charts. Desktop and phone get equal care; desktop uses the width (side TOC, two-up charts), phone is one column |
 | Annotation | Every chart: a conclusion title plus 1–2 short notes with leader lines on the points that matter |

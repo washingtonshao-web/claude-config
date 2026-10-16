@@ -1,5 +1,6 @@
 /* Falconshire vector basemap loader (no dependencies).
-   K.basemap(el, {center, zoom, bounds, dark, interactive, controls, maxZoom, base, options}) -> Promise<maplibregl.Map>
+   K.basemap(el, {center, zoom, bounds, dark, quiet, interactive, controls, maxZoom, base, options}) -> Promise<maplibregl.Map>
+   Default light style is the colourful street map; quiet: true loads the pale style for data maps.
    Loads MapLibre GL + PMTiles from tiles.falconshire.com once, registers pmtiles://, and resolves
    with the map after its style has loaded (add your own sources/layers then). See README.md. */
 (function () {
@@ -97,16 +98,17 @@
     if (!el) return Promise.reject(new Error("basemap: container not found"));
     var base = (opts.base || TILES).replace(/\/$/, "");
     var dark = opts.dark == null || opts.dark === "auto" ? prefersDark() : !!opts.dark;
+    var name = dark ? "dark" : opts.quiet ? "quiet" : "light";
     var coarse = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
     // CJK glyphs are drawn locally; zh-CN picks Simplified glyph forms.
     if (!el.lang && !document.documentElement.lang) el.lang = "zh-CN";
     addCss();
     el.classList.add("k-basemap");
     el.classList.toggle("k-basemap-dark", dark);
-    if (!el.style.background) el.style.background = dark ? "#0e1723" : "#c9d6df"; // water tone while tiles load
+    if (!el.style.background) el.style.background = { dark: "#0e1723", quiet: "#c9d6df", light: "#a4ccfa" }[name]; // water tone while tiles load
 
     return libs(base).then(function () {
-      return loadStyle(base + "/v1/style/" + (dark ? "dark" : "light") + ".json");
+      return loadStyle(base + "/v1/style/" + name + ".json");
     }).then(function (style) {
       var o = {
         container: el,
@@ -148,7 +150,7 @@
     });
   }
 
-  basemap.styleURL = function (dark, base) { return (base || TILES) + "/v1/style/" + (dark ? "dark" : "light") + ".json"; };
+  basemap.styleURL = function (dark, base, quiet) { return (base || TILES) + "/v1/style/" + (dark ? "dark" : quiet ? "quiet" : "light") + ".json"; };
   window.K = window.K || {};
   window.K.basemap = basemap;
 })();

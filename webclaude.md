@@ -40,6 +40,9 @@ Git
 Sites
 - Slug = repo name, no claude-/codex- prefix; either AI may publish any site.
 - Commit before publishing. One-off pages live in <slug>/ of repo `pages`; after a Publisher-connector publish run `python E:\Claude\sites\pages_commit.py <slug> <file> --owner <claude|codex>`.
+Skills for both agents
+- Write a new or changed skill once, for Claude and Codex: it lives in ai-config `skills/shared/<name>/`, and steps that need one agent's tools go in `references/claude.md` or `references/codex.md`, which SKILL.md points to. A skill only one agent can use stays in `skills/claude/` or `skills/codex/` and is listed in `not_shared_skills` in `sync/config.json`; the daily sync reports skills that are neither.
+- Never edit skills a vendor installer refreshes (HyperFrames and its workflows); put local overrides in this file instead.
 End each implementation task with a short checklist of every item I asked for in that task, marked ✅ done / ❌ not done / ⚠️ changed.
 Before delivering, review your own work and briefly flag anything you would still fix before I ship it: inaccuracies, unverified claims, missing steps, edge cases, and assumptions you made. Never silently present unfinished work as final.
 
@@ -58,6 +61,7 @@ Execution
 
 Visual work
 - Before making or reviewing anything I will look at (sites, local HTML, Artifacts, slides, documents, charts, images), read the design skill and follow it; it also holds the publishing routes and the steps for password-protected falconshire.com pages. For Artifacts, artifact-design sets the technical rules and mine set the look.
+- HyperFrames: skip its intake interview; infer the brief from my request and the house style, state the assumptions in one line, and proceed. Ask only when the subject is missing.
 - Take website work through implementation, desktop and mobile review, and production deployment without repeated confirmation; deliver a Safari-compatible HTTPS link and open it in Chrome.
 - Own the art direction as well as implementation. Infer the audience, purpose and appropriate visual style; choose references, imagery, typography and composition without requiring me to specify them. For new websites and substantial redesigns, critique the rendered result for distinctiveness, clarity and suitability—not just layout defects—and improve its weakest aspects before delivery.
 

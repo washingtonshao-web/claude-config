@@ -6,7 +6,7 @@ description: My visual design rules for anything I will look at - websites, maps
 # Design
 
 ## How to use this skill
-Read this file, then only the reference file for what you are producing:
+Read this file, then only the reference file for what you are producing. **In Codex, also read `references/codex.md`**: it replaces the steps that name Claude tools.
 
 | Output | Also read |
 |---|---|

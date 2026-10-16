@@ -44,7 +44,7 @@ Live sites sit behind the Falconshire login. To look at one, serve its release f
 - Phone: one-finger drag scrolls the page (cooperative gestures); +/−/复位 buttons are 44 px; give the pan/zoom hint once, in one line.
 
 ## Content around the map
-- The map is the first screen. No national totals, version numbers, "data notes" or rankings that nobody asked for above it. Put secondary lists below the map.
+- The map is the first screen (on travel pages it comes right after the full-screen photo cover, see `images.md`). No national totals, version numbers, "data notes" or rankings that nobody asked for above it. Put secondary lists below the map.
 - Lists beside the map: one row per unit, with the key people or values in that row, sorted meaningfully (newest first, or by size) in the same direction in every column.
 
 ## Check

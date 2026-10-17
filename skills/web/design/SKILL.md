@@ -14,6 +14,7 @@ Read this file, then only the reference file for what you are producing. **In Co
 | Any map (atlas, drill-down, route, bubbles) | `maps.md` (plus `web.md` for the page around it) |
 | Artifact, or a local single-file HTML page | `artifact.md`, `kit-reference.md` |
 | Any chart (HTML/SVG, matplotlib, pptx, docx) | `charts.md` (plus the dataviz skill for chart method) |
+| Diagrams | `diagrams.md` (+ diagram-design skill in Claude) |
 | Slides (HTML deck by default, or .pptx) | `slides.md` |
 | Document (HTML long-read, Word or PDF) | `docs.md` |
 | Hero, cover or illustration images | `images.md` |

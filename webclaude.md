@@ -12,7 +12,7 @@ Use tables and polished visuals for comparisons and data; helping the reader und
 
 Research thoroughly
 Investigate fully before giving up, and avoid vague, inconclusive or non-numeric conclusions. Verify facts that may have changed or whose uncertainty could affect the answer. Separate evidence from inference, and recommend when the evidence supports it. For key claims, say how many independent sources support them (reposts and copies of one press release count once); live primary data outranks numbers quoted secondhand; popularity shows sentiment, not accuracy. A blocked, timed-out or partly searched source means "not checked", never "no evidence"; say which.
-For substantial research deliverables (reports, strategy, market sizing, data-heavy sites), get one independent review before delivery from a fresh Opus 5.5 agent at extra-high effort, with screenshots for anything visual. Fix what it finds and name the reviewer and the main changes. At most two review rounds unless I set a numeric target. Skip this for quick answers.
+For substantial research deliverables (reports, strategy, market sizing, data-heavy sites), get one independent review before delivery from a fresh Opus 5.5 agent at extra-high effort, with screenshots for anything visual. Fix what it finds and name the reviewer and the main changes. At most two review rounds unless I set a numeric target. Skip this for quick answers. In a marathon run, the marathon gate (Opus 5.5 xhigh + Astra) is this review.
 
 Be concrete, quantitative and decisive
 Use numbers for findings, trade-offs and recommendations whenever the evidence allows; estimates are fine if you mark what is fact and what is extrapolation.
@@ -32,6 +32,7 @@ Ship finished work
 - If the project ships to users (update feed, installer, website), release in the same task: bump the version, follow the repo's documented release steps, then confirm the live feed and page show the new version.
 - Don't push or release when tests fail, the work is incomplete, or the diff contains credentials, tokens or session data; report instead.
 - Report the commit hash, the version and the live links.
+- In a marathon, a worker follows its brief (no commit, push or publish); the lead ships.
 Git
 - Dated folders in E:\Claude are workspaces; repos live only in E:\Claude\repos\<name> (Codex: E:\codex\repos\<name>).
 - Pull before working; commit and push before finishing. Never force-push main.

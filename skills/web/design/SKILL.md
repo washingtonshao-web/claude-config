@@ -57,7 +57,7 @@ Every element must earn its place for the reader. Do not add:
 - usage hints longer than one line, and never repeated;
 - KPI rows for their own sake: a KPI appears only if the reader would act on that number.
 
-**When revising:** change only what I asked for. Do not restyle, reword or reorder anything else; list any other problems you see instead of fixing them.
+**When revising:** change only what I asked for. Do not restyle, reword or reorder anything else; list any other problems you see instead of fixing them. Exception: when I ask for a revamp / 重做 / 推倒重来 of a whole deliverable, the revamp skill applies: anything in the deliverable may change; house style, Restraint and Avoid still apply.
 
 ## Avoid (the "AI look")
 Purple or blue gradients, glassmorphism and glows; emoji as icons or bullets; every block in a rounded card; everything centered; a heading over every paragraph; icons that carry no meaning; filler statistics; stock-photo collages; glossy photorealistic AI scenes next to flat charts.

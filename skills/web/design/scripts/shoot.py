@@ -4,7 +4,7 @@
 Usage:
     python shoot.py <page.html | URL> [--out DIR] [--views desktop-light,iphone-dark] [--full] [--wait MS]
                     [--storage KEY=VALUE ...]   # localStorage set before the page loads (e.g. a site's own PIN unlock)
-                    [--login]                   # live password-protected *.falconshire.com page: reuse the saved login
+                    [--login]                   # live password-protected *.falconshire.com page: fresh login via SSH
 
 Look at contact.png first (about 1.6k tokens for all four views); open a single view only
 to inspect a problem. Checks are measured, not eyeballed: horizontal overflow, elements past
@@ -12,8 +12,8 @@ the right edge, page/console errors, failed requests, broken images, low-contras
 tap targets under 44px and inputs under 16px on phones, Microsoft YaHei used without a fallback, and the fonts
 Chromium actually rendered (any SimSun/宋体 fallback is a hard failure; three or more text faces is flagged).
 Phone views run in WebKit (Safari's engine) at iPhone 18 Pro Max size; "gated" means the URL
-redirected to the Falconshire login: rerun with --login (cookies from ~/.claude/playwright-profile; close the
-Playwright browser first), or shoot the local build.
+redirected to the Falconshire login: rerun with --login (a fresh login signed by the AWS host through the
+static-sites-prod SSH key, see falcon_login.py; falls back to ~/.claude/playwright-profile), or shoot the local build.
 AI tells are warnings under "aiTells" (never a hard failure): gradient text, tracked caps, eyebrows, 01/02 labels, side stripes, flat type scale, gray on color, em-dash density, emoji icons, >3 card radii.
 Prints a JSON report; exit code 1 when a hard check fails (overflow, errors, broken images).
 """
@@ -277,7 +277,13 @@ def contact_sheet(shots: dict[str, Path], dest: Path) -> None:
 
 
 def login_state(p, report):
-    """Cookies of the Playwright profile that holds the 30-day Falconshire login, for every view's context."""
+    """A fresh Falconshire login signed by the AWS host (falcon_login.py); the saved profile only as fallback."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from falcon_login import storage_state
+        return storage_state("shoot")
+    except Exception as e:
+        report.setdefault("notes", []).append(f"--login: fresh login unavailable ({str(e)[:120]}); trying the saved profile")
     profile, errors = Path.home() / ".claude" / "playwright-profile", []
     for channel in ("chrome", None):  # the profile's cookies are encrypted for the browser that wrote them
         try:

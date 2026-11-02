@@ -9,6 +9,7 @@
 
 ## Publishing and protected pages (moved from CLAUDE.md)
 - Publish a single self-contained HTML page with the Falconshire Publisher connector when it is available. A site with local images, data files, map tiles or several pages, or any site when the connector is missing, goes through python "E:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.
+- Report a published page as a labelled markdown link, `[站点名](https://<slug>.falconshire.com/)`; say 密码保护 or the version in a separate sentence, never straight after a bare URL.
 - Password-protected `*.falconshire.com` pages (any PC with the `static-sites-prod` SSH key; no password, nothing for me to do): the AWS host signs fresh 30-day login cookies (`falconshire-ops login-cookies`) and `scripts/falcon_login.py` uses them. Screenshots: `shoot.py <url> --login`. Read a page: `python scripts/falcon_login.py --text <url>`; check access: `--check <url>`. A site's own in-page PIN (health: `hr-unlock`) goes in `--storage KEY=VALUE`. Interactive Playwright MCP browser: run `python scripts/falcon_login.py` while that browser is closed (it writes `~\.claude\playwright-profile`; refuses when another session has the profile open). Don't use curl or WebFetch for these pages, and don't type the password.
 
 ## Page archetypes (the first screen decides the type)

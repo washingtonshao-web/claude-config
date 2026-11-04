@@ -50,7 +50,7 @@ Missing sections the audience expects (the plenary studies at a congress talk; a
 
 ## D. Narration and voice (films, TTS)
 - Write for the ear: ≤25 characters per spoken clause; one number per sentence, two at most; round numbers ("约七成") unless the exact value is the point; never read a list of values ("零点二七、零点二九、零点四一") or letters ("P D L 一": say "PD-L1" as people say it).
-- The voice is chosen by listening, not by a reviewer reading a transcript: make 2–4 samples of the same paragraph (animation-making's Doubao voices first; for a male presenter voice compare at least two male voices), and use the one the user picked; if the user has not picked, use the animation-making default and say so in the report.
+- The voice is chosen by listening, not by a reviewer reading a transcript: make 2–4 samples of the same paragraph (animation-making's Doubao voices first; for a male presenter voice compare at least two male voices), and pick the most natural one yourself (name it in the report). It is scored with the narration like any other item; no sign-off from the user is needed.
 - Subtitles follow the spoken words, not the written page.
 
 ## E. Before you deliver

@@ -18,6 +18,7 @@ Read this file, then only the reference file for what you are producing. **In Co
 | Slides (HTML deck by default, or .pptx) | `slides.md` |
 | Document (HTML long-read, Word or PDF) | `docs.md` |
 | Hero, cover or illustration images | `images.md` |
+| Any prose, captions, slide text or narration (always) | `writing.md` (de-AI checklist, format for the occasion, `scripts/ai_tells.py`) |
 | Visual review before delivery (always) | `review.md` |
 
 Platform skills own the technical contract (artifact-design for Artifacts; pptx/docx/pdf for files; dataviz for chart form and interaction). This skill owns the look. On a technical constraint the platform skill wins; on style, this one wins.
@@ -61,6 +62,7 @@ Every element must earn its place for the reader. Do not add:
 
 ## Avoid (the "AI look")
 Purple or blue gradients, glassmorphism and glows; emoji as icons or bullets; every block in a rounded card; everything centered; a heading over every paragraph; icons that carry no meaning; filler statistics; stock-photo collages; glossy photorealistic AI scenes next to flat charts.
+The words have their own AI look (tally sentences, notes on every line, talk about the document, the wrong genre): `writing.md`.
 
 ## Before delivery
 Run the visual review in `review.md`: `scripts/shoot.py` for screenshots and measured checks, then the scorecard. For websites and pages others will see, the scorecard is filled in by GPT-6 Astra from the screenshots (independent reviewer), not by you. Deliver at 80% of the applicable points with no item at 0; otherwise fix and re-shoot only the affected views.

@@ -34,6 +34,7 @@ Report each result as one line, and give these lines to the reviewer.
 Open `contact.png` first (about 1.6k tokens for four views). Open a single view, or crop a region, only to inspect a specific problem. Do not re-shoot views you did not change.
 
 ## 4. Score (24 points; deliver at 80% of the applicable points with no item at 0)
+The scorecard judges the look. The voice of the prose is judged with `writing.md` and `scripts/ai_tells.py`; run it and give its summary line to the reviewer.
 Items that don't apply (for example interaction on a static document) are marked n/a and left out of the total.
 | # | Item | 2 | 1 | 0 |
 |---|---|---|---|---|
@@ -47,7 +48,7 @@ Items that don't apply (for example interaction on a static document) are marked
 | 8 | Interaction feel | Click test clean: no jumps, Back works, no white flash, fast | One slip | Page jumps, no way back, or blank frames |
 | 9 | Restraint | Nothing from the Restraint list in SKILL.md | One instance | Several |
 | 10 | Images | Consistent style, sharp, no layout jump | One weak image | Stretched, blurry or missing |
-| 11 | AI look | None of the "Avoid" list in SKILL.md | One instance | Several |
+| 11 | AI look (visual and words) | None of the "Avoid" list in SKILL.md, and no tally, meta or note-on-every-line text on first screens (`ai_tells.py` openers 0, `writing.md` section A) | One instance | Several |
 | 12 | Theme and contrast | Dark mode (or the chosen single theme) clean, contrast passes | Small slips | Broken or unreadable |
 
 ## 5. Who scores
@@ -56,6 +57,6 @@ Items that don't apply (for example interaction on a static document) are marked
   ```
   "$C" exec -m gpt-6-astra -c model_reasoning_effort=high --skip-git-repo-check --ephemeral -s read-only -C <dir> -i <contact.png> -i <desktop-light.png> -i <iphone-light.png> -o <scratchpad>/astra-review.txt "<prompt>" </dev/null
   ```
-  In the prompt, include the scorecard above, the Restraint and Avoid lists from SKILL.md, the page's purpose, the shoot.py JSON and the click-test lines. Ask for a score per item, the three most important fixes, and nothing else.
+  In the prompt, include the scorecard above, the Restraint and Avoid lists from SKILL.md, the page's purpose, the shoot.py JSON, the `ai_tells.py` summary line and the click-test lines. Ask for a score per item, the three most important fixes, and nothing else.
 - If Astra is unavailable, use a fresh Opus 5.5 high-effort subagent with the same inputs, and label it 同模型复核.
 - Fix every 0. Fix every 1 on items 3, 5, 8 and 9 (fonts, charts and maps, interaction, restraint), the complaints that keep coming back. Fix other 1s when it's cheap. Re-shoot only the affected views and re-score those items. Report the final score and the reviewer in one line, and append one row to `review-scores.csv` in the site's folder (create it with this header): `date,view,reviewer,score,max,zeros,top_fix`. The history shows which sites slip and which rules fail most.

@@ -31,9 +31,7 @@ Deliver what I asked for: advice for advice, a draft for a draft, implementation
 Ship finished work
 - After a code change is finished and verified (build and tests pass; UI checked visually), commit and push it to the repo's remote without asking. My personal repos may use main.
 - If the project ships to users (update feed, installer, website), release in the same task: bump the version, follow the repo's documented release steps, then confirm the live feed and page show the new version.
-- Don't push or release when tests fail, the work is incomplete, or the diff contains credentials, tokens or session data; report instead.
-- Report the commit hash, the version and the live links.
-- Give every link as a labelled markdown link, e.g. [山海经·异兽行](https://shanhaijing.falconshire.com/), or as a bare URL followed by a space or line end. Never put Chinese text or full-width punctuation （），。： straight after a URL: chat renderers pull it into the link and break it. Put notes such as 密码保护 or the version in their own sentence or table cell.
+- Write links as labelled markdown, e.g. [山海经·异兽行](https://shanhaijing.falconshire.com/). A bare URL must end at a space or line break, never directly before Chinese text or full-width punctuation.
 - In a marathon, a worker follows its brief (no commit, push or publish); the lead ships.
 Git
 - Dated folders in E:\Claude are workspaces; repos live only in E:\Claude\repos\<name> (Codex: E:\codex\repos\<name>).
@@ -76,7 +74,6 @@ Don't create or update global memory unless I ask. Keep project state in the pro
 
 Connectors
 Keep Notion and Dropbox off; use them only when I ask in the request, and then for that session only.
-After a claude.ai account switch on a PC, or when I ask for account setup, use the account-setup skill.
 
 Use the Travel Planner MCP when travel trip planning is requested.
 

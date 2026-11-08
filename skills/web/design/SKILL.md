@@ -18,7 +18,7 @@ Read this file, then only the reference file for what you are producing. **In Co
 | Slides (HTML deck by default, or .pptx) | `slides.md` |
 | Document (HTML long-read, Word or PDF) | `docs.md` |
 | Hero, cover or illustration images | `images.md` |
-| Any prose, captions, slide text or narration (always) | `writing.md` (de-AI checklist, format for the occasion, `scripts/ai_tells.py`) |
+| Any prose, captions, slide text or narration (always) | `writing.md` (short rules; full pass = the de-ai skill) |
 | Visual review before delivery (always) | `review.md` |
 
 Platform skills own the technical contract (artifact-design for Artifacts; pptx/docx/pdf for files; dataviz for chart form and interaction). This skill owns the look. On a technical constraint the platform skill wins; on style, this one wins.
@@ -38,6 +38,8 @@ The kit at `E:\Claude\sites\_kit` (`v1.css`, `v1.js`, `styles/editorial.css`, `m
 | Annotation | Every chart: a conclusion title plus 1–2 short notes with leader lines on the points that matter |
 | Interaction | By content: reports are static with hover tooltips; atlases, catalogs and tools get filters and switches; motion only when it explains something |
 | Office files | Slides and Word use the same system (white page, copper rule, same palette, conclusion titles) |
+
+**Exception, the user's own hobby sites** (藏宝阁, 荐品, Objectarium 器物与玩具, 山茶花园, 免提子, decided 2026-11-08): each keeps the crafted identity the user picked: a self-hosted subset of the display font they chose, a textured page, an illustrated banner carrying the title only, and no dark mode where they removed it. The qc-site skill checks that those fonts load and cover every character. Everything else in this skill still applies.
 
 ## Rules for every medium
 - **Conclusion first.** Page headlines, slide titles and chart titles state the finding ("德国仍居首"), not the topic ("各国出口额"). The subtitle carries measure, unit and period.
@@ -62,7 +64,7 @@ Every element must earn its place for the reader. Do not add:
 
 ## Avoid (the "AI look")
 Purple or blue gradients, glassmorphism and glows; emoji as icons or bullets; every block in a rounded card; everything centered; a heading over every paragraph; icons that carry no meaning; filler statistics; stock-photo collages; glossy photorealistic AI scenes next to flat charts.
-The words have their own AI look (tally sentences, notes on every line, talk about the document, the wrong genre): `writing.md`.
+The words have their own AI look (tally sentences, notes on every line, talk about the document, the wrong genre): `writing.md`, and the de-ai skill for a full pass.
 
 ## Before delivery
 Run the visual review in `review.md`: `scripts/shoot.py` for screenshots and measured checks, then the scorecard. For websites and pages others will see, the scorecard is filled in by GPT-6 Astra from the screenshots (independent reviewer), not by you. Deliver at 80% of the applicable points with no item at 0; otherwise fix and re-shoot only the affected views.

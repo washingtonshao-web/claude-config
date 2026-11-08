@@ -34,7 +34,7 @@ Report each result as one line, and give these lines to the reviewer.
 Open `contact.png` first (about 1.6k tokens for four views). Open a single view, or crop a region, only to inspect a specific problem. Do not re-shoot views you did not change.
 
 ## 4. Score (24 points; deliver at 80% of the applicable points with no item at 0)
-The scorecard judges the look. The voice of the prose is judged with `writing.md` and `scripts/ai_tells.py`; run it and give its summary line to the reviewer.
+The scorecard judges the look. The voice of the prose is judged with `writing.md` and the de-ai skill's `scripts/ai_tells.py`; run it and give its summary line to the reviewer.
 Items that don't apply (for example interaction on a static document) are marked n/a and left out of the total.
 | # | Item | 2 | 1 | 0 |
 |---|---|---|---|---|
@@ -48,7 +48,7 @@ Items that don't apply (for example interaction on a static document) are marked
 | 8 | Interaction feel | Click test clean: no jumps, Back works, no white flash, fast | One slip | Page jumps, no way back, or blank frames |
 | 9 | Restraint | Nothing from the Restraint list in SKILL.md | One instance | Several |
 | 10 | Images | Consistent style, sharp, no layout jump | One weak image | Stretched, blurry or missing |
-| 11 | AI look (visual and words) | None of the "Avoid" list in SKILL.md, and no tally, meta or note-on-every-line text on first screens (`ai_tells.py` openers 0, `writing.md` section A) | One instance | Several |
+| 11 | AI look (visual and words) | None of the "Avoid" list in SKILL.md, and no tally, meta or note-on-every-line text on first screens (`ai_tells.py` openers 0, de-ai `patterns.md` section A) | One instance | Several |
 | 12 | Theme and contrast | Dark mode (or the chosen single theme) clean, contrast passes | Small slips | Broken or unreadable |
 
 ## 5. Who scores

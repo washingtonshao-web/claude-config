@@ -58,5 +58,5 @@ Items that don't apply (for example interaction on a static document) are marked
   "$C" exec -m gpt-6-astra -c model_reasoning_effort=high --skip-git-repo-check --ephemeral -s read-only -C <dir> -i <contact.png> -i <desktop-light.png> -i <iphone-light.png> -o <scratchpad>/astra-review.txt "<prompt>" </dev/null
   ```
   In the prompt, include the scorecard above, the Restraint and Avoid lists from SKILL.md, the page's purpose, the shoot.py JSON, the `ai_tells.py` summary line and the click-test lines. Ask for a score per item, the three most important fixes, and nothing else.
-- If Astra is unavailable, use a fresh Opus 5.5 high-effort subagent with the same inputs, and label it 同模型复核.
+- If Astra is unavailable, use a fresh Claude Fable 5.2 high-effort subagent (`model: "fable"`, `effort: "high"`) with the same inputs, and label it `Fable 复核（非 Astra）`.
 - Fix every 0. Fix every 1 on items 3, 5, 8 and 9 (fonts, charts and maps, interaction, restraint), the complaints that keep coming back. Fix other 1s when it's cheap. Re-shoot only the affected views and re-score those items. Report the final score and the reviewer in one line, and append one row to `review-scores.csv` in the site's folder (create it with this header): `date,view,reviewer,score,max,zeros,top_fix`. The history shows which sites slip and which rules fail most.

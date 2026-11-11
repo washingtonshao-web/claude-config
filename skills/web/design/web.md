@@ -37,4 +37,4 @@ A panel that slides in with a photo header, then short labeled fact blocks, with
 Show something within about 2 seconds. Load large data after the page appears, not before.
 
 ## Review loop for large jobs
-Set a numeric goal (the `review.md` scorecard works). Each stage gets an independent GPT-6 Astra (high) review: from screenshots for visual stages (`review.md` §5), from the data and text for content stages. If Astra is unavailable, use a fresh Opus 5.5 high-effort agent, labelled 同模型复核. Keep going until the goal is met.
+Set a numeric goal (the `review.md` scorecard works). Each stage gets an independent GPT-6 Astra (high) review: from screenshots for visual stages (`review.md` §5), from the data and text for content stages. If Astra is unavailable, use a fresh Claude Fable 5.2 high-effort agent (`model: "fable"`, `effort: "high"`), labelled Fable 复核（非 Astra）. Keep going until the goal is met.

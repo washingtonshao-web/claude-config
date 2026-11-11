@@ -1,13 +1,13 @@
 export const meta = {
   name: 'deep-research',
-  description: 'Deep research: plan, parallel researchers, gap check, report, independent Opus review and fix',
+  description: 'Deep research: plan, parallel researchers, gap check, report, independent Fable 5.2 review and fix',
   whenToUse: 'The user says "deep research" / 深度研究 / /deep-research about a topic or question',
   phases: [
     { title: 'Plan', detail: 'split the question into sub-questions' },
     { title: 'Research', detail: 'one agent per sub-question' },
     { title: 'Gaps', detail: 'completeness critic + gap-fill researchers' },
     { title: 'Write', detail: 'synthesize report.md' },
-    { title: 'Review', detail: 'independent Opus high-effort review', model: 'opus' },
+    { title: 'Review', detail: 'independent Fable 5.2 high-effort review', model: 'fable' },
     { title: 'Fix', detail: 'apply review findings' },
   ],
 }
@@ -181,14 +181,14 @@ for (let round = 1; round <= 2; round++) {
 Question it answers: ${Q}. Today: ${DATE}.
 
 First get GPT-6 Astra's independent review: run the codex-gpt command (C=$(ls -t /c/Users/Administrator/AppData/Local/OpenAI/Codex/bin/*/codex.exe|head -1); "$C" exec -m gpt-6-astra -c model_reasoning_effort=high --skip-git-repo-check --ephemeral -s read-only -C <report folder> -o <temp file> "<this checklist + the report path>" </dev/null) and base your issue list on its findings plus your own spot-checks; say in the verdict which model reviewed. If Codex fails, review it yourself and start the verdict with 同模型独立复核.
-Check: does it actually answer the question; are key numbers correct and current (spot-check the 5 most important against their sources with WebSearch/WebFetch); are facts, estimates and inferences labeled honestly; missing major considerations; internal contradictions; unsupported recommendations. Report concrete issues with fixes. Do not edit the file.`, { label: `review-${round}`, phase: 'Review', schema: REVIEW, model: 'opus', effort: 'high' })
+Check: does it actually answer the question; are key numbers correct and current (spot-check the 5 most important against their sources with WebSearch/WebFetch); are facts, estimates and inferences labeled honestly; missing major considerations; internal contradictions; unsupported recommendations. Report concrete issues with fixes. Do not edit the file.`, { label: `review-${round}`, phase: 'Review', schema: REVIEW, model: 'fable', effort: 'high' })
   lastReview = review
   rounds = round
   if (!review.issues.length) break
 
   phase('Fix')
   await agent(`Revise ${OUT}/report.md to address these review findings: ${JSON.stringify(review.issues)}
-Verify any number you change against its source. Keep the structure. At the end of the report, add or update a short "Review" section: reviewer = the model named in the review verdict (GPT-6 Astra, or Claude Opus 5.5 as 同模型独立复核), round ${round}, and the main changes made. Return a one-line summary of changes.`, { label: `fix-${round}`, phase: 'Fix' })
+Verify any number you change against its source. Keep the structure. At the end of the report, add or update a short "Review" section: reviewer = the model named in the review verdict (GPT-6 Astra, or Claude Fable 5.2 high as the Claude-side reviewer), round ${round}, and the main changes made. Return a one-line summary of changes.`, { label: `fix-${round}`, phase: 'Fix' })
 
   if (!review.issues.some(i => i.severity === 'critical')) break
   log(`Round ${round} had critical issues; running a second review.`)

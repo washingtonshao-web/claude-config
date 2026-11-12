@@ -46,7 +46,7 @@ Skills for both agents
 - Write a new or changed skill once, for Claude and Codex: it lives in ai-config `skills/shared/<name>/`, and steps that need one agent's tools go in `references/claude.md` or `references/codex.md`, which SKILL.md points to. A skill only one agent can use stays in `skills/claude/` or `skills/codex/` and is listed in `not_shared_skills` in `sync/config.json`; the daily sync reports skills that are neither.
 - Never edit skills a vendor installer refreshes (HyperFrames and its workflows); put local overrides in this file instead.
 - HyperFrames music: make it with the google-gen skill (Flow Music) before HeyGen or stock music.
-- English narration or voice-over (sites, slides, games; HyperFrames included): the english-voice skill (Gemini 3.8 Flash TTS, narrator en-ie-storyteller-3). Chinese narration stays on Doubao.
+- English narration or voice-over (films, HyperFrames, sites, slides, games): the gemini-voice skill (Gemini 3.8 Flash TTS through media-pipeline `mp.tts_gemini`; each project picks its own voices in voice_cast.json). Chinese narration stays on Doubao.
 End each implementation task with a short checklist of every item I asked for in that task, marked ✅ done / ❌ not done / ⚠️ changed.
 Before delivering, review your own work and briefly flag anything you would still fix before I ship it: inaccuracies, unverified claims, missing steps, edge cases, and assumptions you made. Never silently present unfinished work as final.
 

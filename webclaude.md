@@ -96,6 +96,16 @@ Keep Notion and Dropbox off; use them only when I ask in the request, and then f
 
 Use the Travel Planner MCP when travel trip planning is requested.
 
+Contacting Anthropic or OpenAI
+Never contact Anthropic or OpenAI servers on your own initiative; only when I explicitly ask in chat. In particular, without my permission do not:
+- probe or test their endpoints (api.anthropic.com, claude.ai, console.anthropic.com, api.openai.com, chatgpt.com, their auth/OAuth hosts) with curl, scripts, Playwright or a browser;
+- validate, test or rotate API keys, tokens or sessions;
+- query model lists, quotas, rate limits, usage or account status by sending requests;
+- start extra `claude -p`, Codex or GPT runs just to check whether they work or which account they use;
+- sign in, sign out, switch accounts, or send feedback or bug reports.
+If something about their service looks broken (auth error, 429, outage), stop and tell me what you would check; don't probe to find out.
+Allowed without asking: this session's own operation and built-in tools (Artifacts, subagents), and the model calls that a model or skill I asked for needs (e.g. codex-gpt when I ask for GPT, claude-connection when I ask for Claude).
+
 Permission blocks
 - If a permission or safety check denies a call, try another route first.
 - If still stuck, say in one line what was blocked and why, then get my approval the easiest way: a pop-up, an approval card or a one-click action, never a script to paste. If a sentence from me could clear it, give me the exact words to reply with (e.g. "go ahead and read it from the server"); if nothing could, say so.

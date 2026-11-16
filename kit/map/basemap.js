@@ -1,5 +1,5 @@
 /* Falconshire vector basemap loader (no dependencies).
-   K.basemap(el, {center, zoom, bounds, dark, quiet, interactive, controls, maxZoom, base, options}) -> Promise<maplibregl.Map>
+   K.basemap(el, {center, zoom, bounds, dark, quiet, interactive, controls, maxZoom, base, early, options}) -> Promise<maplibregl.Map>
    Default light style is the colourful street map; quiet: true loads the pale style for data maps.
    Loads MapLibre GL + PMTiles from tiles.falconshire.com once, registers pmtiles://, and resolves
    with the map after its style has loaded (add your own sources/layers then). See README.md. */
@@ -144,7 +144,8 @@
         map.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-right");
       }
       map.touchZoomRotate && map.touchZoomRotate.disableRotation();
-      return new Promise(function (ok) {
+      return new Promise(function (ok) { // early: resolve once the style is in, so data layers draw before the base tiles arrive
+        if (opts.early) { if (map.isStyleLoaded()) ok(map); else map.once("style.load", function () { ok(map); }); return; }
         if (map.loaded()) ok(map); else map.once("load", function () { ok(map); });
       });
     });

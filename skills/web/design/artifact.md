@@ -19,7 +19,7 @@ Two cases share these rules: a page published with the Artifact tool, and a sing
 | Map | Follow `maps.md`. Map pages with tiles are multi-file: publish them as a Falconshire site with `publish.py`, not as an Artifact |
 
 ## Effort
-- Match design effort to the job: a quick answer page gets kit defaults and one chart; a deliverable for other people gets the full archetype and the full review (Astra scoring, `review.md` §5). No hero image unless it is travel or lifestyle content (`images.md`).
+- Match design effort to the job: a quick answer page gets kit defaults and one chart; a deliverable for other people gets the full archetype and the full review (the verdict, `review.md` §3). Most Artifacts I ask for are reports; an Artifact made to enjoy or show takes the showcase look (`showcase.md`), single-theme, with its images inlined.
 - Keep it to what the first screen needs: the conclusion and the evidence must be visible without scrolling on a 1440×900 desktop and in the iPhone view.
 
 ## Small things that matter

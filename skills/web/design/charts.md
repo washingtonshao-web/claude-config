@@ -1,11 +1,13 @@
 # Charts
 
-The dataviz skill decides chart form, marks and interaction. This file decides the look.
+The dataviz skill decides chart form, marks and interaction. This file decides the look. Where the dataviz skill is not available (Codex, some unattended runs), this file is enough.
 
 ## Rules for every style
 - Title states the finding ("德国仍居首"); subtitle gives measure, unit and period ("2025年7月–2026年6月出口额，亿美元").
-- Every chart carries 1–2 short notes with leader lines on the points the reader must not miss (a turning point, the leader, an outlier). Not more: two notes is the ceiling.
-- Label lines and bars directly; a legend only when there are more than 4 series.
+- A chart with a point the reader must not miss (a turning point, the leader, an outlier) carries 1–2 short notes with leader lines. Not more: two notes is the ceiling. A sorted ranking whose title already names the leader may carry none; a map uses its labels and legend instead.
+- Label lines and bars directly; a legend only when there are more than 4 series. A mark encoding (hollow = estimate, diamond = open weights) is explained in one line of key under the subtitle, not in a legend box.
+- Axis placement: time series and vertical bars put the value axis on the right with a horizontal hairline grid; horizontal bars and dot plots put the value axis at the top or bottom with a vertical hairline grid.
+- Never colour alone (I am colour-blind): series that must be told apart also differ by direct label, mark shape, dash or fill (solid against outlined). Status colours carry a word or an icon.
 - Emphasize the series the title talks about in the accent color; push the rest toward grey.
 - One value axis. No dual axes, no 3D, no pie with more than 5 slices.
 - Bars start at zero and are sorted by value unless order itself carries meaning (time, rank change).
@@ -21,7 +23,7 @@ Pick the style for the whole deliverable, not per chart.
 
 | Style | Look | Use for |
 |---|---|---|
-| `editorial` | Economist-inspired house style. White page, light only. Falcon-copper `#b4531f` rule across the top of each chart with a short copper tab at the left; bold short title plus one-line subtitle; value axis on the right; hairline horizontal grid; chart text in the kit sans. Series `#006ba2 #3ebcd2 #379a8b #ebb434 #b4ba39 #9a607f #d1b07c #758d99`; red `#e3120b` only for negatives and risk | Default for all data work |
+| `editorial` | Economist-inspired house style. White page, light only. Falcon-copper `#b4531f` rule across the top of each chart with a short copper tab at the left; bold short title plus one-line subtitle; value axis and grid as in the rules above; chart text in the kit sans. Series `#006ba2 #3ebcd2 #379a8b #ebb434 #b4ba39 #9a607f #d1b07c #758d99`; red `#e3120b` only for negatives and risk | Default for all data work |
 | `kit` | Kit tokens `--k-s1…--k-s8` in fixed order, `--k-seq-*` for magnitude; 2px lines with end dots, 10% area tint, 4px rounded bars, light and dark | Dashboards, tools, pages that must match older kit sites |
 | `ft` | Light salmon paper, serif headline, tick labels on the grid lines, bold zero line, Oxford blue / orange / teal | Only when I ask for it |
 

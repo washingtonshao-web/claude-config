@@ -1,40 +1,42 @@
 # Websites (Falconshire sites)
 
+Publishing, auto-publish and password-protected pages: `publish.md`.
+
 ## Design kit (use it on every new site)
-- Canonical kit: `E:\Claude\sites\_kit\` (`v1.css`, `v1.js`, `apply_kit.py`). Showcase (local only; the published page was retired 2026-10-13): `E:\Claude\sites\claude-design-kit\out\index.html`
-- In `<head>`: `<link rel="stylesheet" href="kit/v1.css">` and `<script src="kit/v1.js"></script>`; `<body class="k">`. Write only page-specific CSS on top; do not restyle kit tokens per site except `--k-accent` when a brand color is required. Data sites (reports, briefs, atlases) also link `kit/styles/editorial.css` after `v1.css`; dashboards and tools stay on plain kit.
-- Before publishing, run `python "E:\Claude\sites\_kit\apply_kit.py" <site-dir>`. It inlines the kit so the page is one self-contained HTML file (works with publish.py, the Falconshire Publisher connector and the Bunny mirror). Re-running refreshes an old copy to the current kit.
+- Canonical kit: `E:\Claude\sites\_kit\` (`v1.css`, `v1.js`, `apply_kit.py`).
+- In `<head>`: `<link rel="stylesheet" href="kit/v1.css">` and `<script src="kit/v1.js"></script>`; `<body class="k">`. Write only page-specific CSS on top.
+- **Report look:** also link `kit/styles/editorial.css` after `v1.css`. Do not restyle kit tokens.
+- **Showcase look:** do not link the editorial skin. Set the page's own theme by redefining the kit tokens once on `:root` (`--k-page`, `--k-surface`, `--k-ink`, `--k-ink-2`, `--k-muted`, `--k-line`, `--k-accent`, `--k-accent-soft`) from the palette you named (`showcase.md`), and add the display typeface as one extra variable used only by titles. Kit components then follow the theme.
+- Run `python "E:\Claude\sites\_kit\apply_kit.py" <site-dir>` on anything that leaves the build folder (published, sent as a file, opened from elsewhere). It inlines the kit so the page is one self-contained HTML file. Re-running refreshes an old copy.
+- Phones: the kit hides `.k-nav` and `.k-toc` under 720px. A page with 4+ sections adds a compact jump row under the header on phones.
 - Component classes and markup: `kit-reference.md`.
 - Existing sites: move them onto the kit only when I ask for a redesign or a substantial update.
 
-## Publishing and protected pages (moved from CLAUDE.md)
-- Publish a single self-contained HTML page with the Falconshire Publisher connector when it is available. A site with local images, data files, map tiles or several pages, or any site when the connector is missing, goes through python "E:\Claude\sites\publish.py" <site-dir>. Use one publishing route per release. Preserve the existing AWS fixed-IP host, access setup, and Bunnynook mirror unless I explicitly request a change.
-- Auto-publish from GitHub (daily on WIN-SRN4BNNK79B, right after the 04:00 AI Config Sync; result in Falcon Toolkit's AI Config Sync status): a site listed in `E:\Claude\sites\autopublish.json` is rebuilt from its newest version tag and published with publish.py when that tag is newer than the live site. Commits on main never publish by themselves. To release such a site, push a version tag (`gh release create v1.2.1` or `git tag v1.2.1 && git push --tags`); to add a site, give it build steps in that file (never one whose live data comes from elsewhere, such as quota). By hand: `python E:\Claude\sites\site_autopublish.py --dry-run`.
-- Report a published page as a labelled markdown link, `[站点名](https://<slug>.falconshire.com/)`; say 密码保护 or the version in a separate sentence, never straight after a bare URL.
-- Password-protected `*.falconshire.com` pages (any PC with the `static-sites-prod` SSH key; no password, nothing for me to do): the AWS host signs fresh 30-day login cookies (`falconshire-ops login-cookies`) and `scripts/falcon_login.py` uses them. Screenshots: `shoot.py <url> --login`. Read a page: `python scripts/falcon_login.py --text <url>`; check access: `--check <url>`. A site's own in-page PIN (health: `hr-unlock`) goes in `--storage KEY=VALUE`. Interactive Playwright MCP browser: run `python scripts/falcon_login.py` while that browser is closed (it writes `~\.claude\playwright-profile`; refuses when another session has the profile open). Don't use curl or WebFetch for these pages, and don't type the password.
-
-## Page archetypes (the first screen decides the type)
-- **Research report**: header → headline block (bold sans h1 stating the conclusion, one-line lede, date/meta; a rubric above the h1 only for a series name or report type, never the date; no big photo hero, see `images.md`) → `k-verdict` one-sentence conclusion → `k-kpi` row only for numbers the reader would act on (0–4) → the single most important chart. Then `k-section`s (numbered 01/02 only with 4+ sections and a TOC or in-text cross references such as "见第 3 节"), `k-toc` on wide screens, `k-sources` last. Put the evidence in visuals (chart, table, diagram) where it carries the argument; never add a chart or KPI as decoration.
-- **Map / atlas**: the map fills the first screen, with no stats banner above it. Follow `maps.md`.
-- **Catalog / encyclopedia**: sticky `k-search` + `k-chips` filters → `k-grid k-grid--rows` cards → `k-drawer` detail.
-- **Game**: full-viewport canvas; kit only for menus, HUD text, pause/win/lose overlays.
+## Page archetypes
+- **Research report** (report look): the first screen follows SKILL.md "First screen". Headline block (bold sans h1 at `--k-fs-3xl` stating the conclusion, one-line lede with the detail; a rubric above the h1 only for a series name or report type) → `k-verdict` one-sentence conclusion, which may hold a small table of the key choices → the single most important chart, beside the verdict on desktop where it fits → the date and data-cutoff line → `k-kpi` row only for numbers the reader would act on (0–4). Then `k-section`s (numbered 01/02 only with 4+ sections and a TOC or in-text cross references), `k-toc` on wide screens, `k-sources` last. Put the evidence in visuals where it carries the argument; never add a chart or KPI as decoration.
+- **Data atlas** (report look): a slim white title band (title and one line of finding), then the map filling the rest of the first screen, with the evidence (top and bottom items with numbers) at the top of the side panel; no stats banner and no block over the map. Follow `maps.md`.
+- **Showcase page** (showcase look): one scene fills the first screen with the title over it (`showcase.md`), then the content in the same theme.
+- **Catalog, 图鉴, encyclopedia** (showcase look): a cover scene or the map first, then sticky `k-search` + `k-chips` filters → `k-grid k-grid--rows` cards with real photographs → `k-drawer` detail.
+- **Game:** full-viewport canvas; kit only for menus, HUD text, pause/win/lose overlays.
 
 ## Typography and layout
 - Body 16px on phones and 17px on desktop, line-height 1.75, prose width `--k-measure` (≈40 Chinese characters).
-- Fonts come from the kit: one system sans stack (Segoe UI / -apple-system → PingFang SC → Microsoft YaHei UI) for body, headlines (bold 700) and charts. Do not add web fonts, serif CJK stacks or a page-specific font-family; site CSS and canvas/SVG text use `var(--k-font)`.
+- Text sizes come from the kit scale (`--k-fs-xs sm md lg xl 2xl 3xl 4xl`); do not invent sizes in between. Report look: the kit's one system sans stack for body, headlines (bold 700) and charts, with no web fonts. Showcase look: one display typeface for titles (`showcase.md`), body in `var(--k-font)`.
+- Reading sizes: prose at body size; tables, lists and panel rows at least `--k-fs-sm` (14px) in `--k-ink-2` or darker; `--k-fs-xs` and `--k-muted` only for sources, axis ticks and secondary meta. When a first screen is too full, take something off it; never shrink the text to make it fit.
+- Long tables: over 15 rows, show the first 10 with a "显示全部 N 行" button, so two long tables never run back to back. Every row stays in the page.
 - Desktop and phone get equal care. Desktop uses the width: side TOC, two charts side by side where they compare; phone is one column with the same order.
 
 ## Images
-Follow `images.md`: big hero only for travel and lifestyle sites; data sites open with the conclusion; illustrations, not photorealistic AI renders.
+Follow `images.md`.
 
 ## Maps
 See `maps.md` (basemap, boundaries, labels, drill-down, click test).
 
 ## Detail views
-A panel that slides in with a photo header, then short labeled fact blocks, with sources last (`k-drawer` + `k-facts` + `k-sources`). No dark scrim (the kit's default is clear). It has Back (browser back closes it) as well as ✕, and opening it never scrolls the page. On phones, cards become rows with the thumbnail on the left, the drawer becomes a bottom sheet, and search stays pinned at the top.
+A panel that slides in with a photo header when the item has a photo, then short labeled fact blocks, with sources last (`k-drawer` + `k-facts` + `k-sources`). When a side list already occupies the right edge, the detail opens inside that list's panel instead (`maps.md`). No dark scrim (the kit's default is clear). It has Back (browser back closes it) as well as ✕, and opening it never scrolls the page. On phones, cards become rows with the thumbnail on the left, the drawer becomes a bottom sheet, and search stays pinned at the top.
 
 ## Performance
-Show something within about 2 seconds. Load large data after the page appears, not before.
+Show something within about 2 seconds. Load large data after the page appears, not before. A cover image is preloaded and sized so the first screen does not jump.
 
-## Review loop for large jobs
-Set a numeric goal (the `review.md` scorecard works). Each stage gets an independent GPT-6 Astra (high) review: from screenshots for visual stages (`review.md` §5), from the data and text for content stages. If Astra is unavailable, use a fresh Claude Fable 5.2 high-effort agent (`model: "fable"`, `effort: "high"`), labelled Fable 复核（非 Astra）. Keep going until the goal is met.
+## Large jobs
+Each stage gets the independent verdict in `review.md` (from screenshots for visual stages, from the data and text for content stages). Two rounds at most per stage.

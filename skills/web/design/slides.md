@@ -53,7 +53,7 @@ Behaviour: ←/→, PageUp/PageDown, Space, Home/End, click or tap the left/righ
 Build and check:
 1. `python "E:\Claude\sites\_kit\apply_kit.py" deck.html` (inlines kit and deck files; re-run after kit changes).
 2. `python "E:\Claude\sites\_kit\deck\deck_pdf.py" deck.html --png all` → `deck.pdf` (fails if pages ≠ slides, i.e. a slide overflows) plus 1920×1080 PNGs in `deck-slides\`. Look at every PNG for overflow, tiny text and title positions that jump between slides.
-3. `shoot.py deck.html --views desktop-light,iphone-light` for the screen and phone views, then the `review.md` scorecard.
+3. `shoot.py deck.html --views desktop-light,iphone-light` for the screen and phone views, then `review.md`.
 
 ## Check (pptx)
-Render to images (the pptx skill's thumbnail/PDF route) and review them with the `review.md` scorecard. The usual failures are text overflow, alignment between slides and inconsistent title positions.
+Render to images (the pptx skill's thumbnail/PDF route) and review them with `review.md` (checklist, then the verdict). The usual failures are text overflow, alignment between slides and inconsistent title positions.

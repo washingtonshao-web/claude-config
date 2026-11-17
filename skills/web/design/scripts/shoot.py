@@ -88,7 +88,10 @@ CHECKS_JS = r"""
   }
   if (isMobile) for (const el of document.querySelectorAll('a,button,input,select,[role=button]')) {
     if (!visible(el)) continue; const r = el.getBoundingClientRect();
-    if ((r.width < 44 || r.height < 44) && !(el.tagName === 'A' && el.closest('p,li,td,figcaption'))) out.smallTargets++;
+    if (el.closest('.leaflet-control-attribution,.maplibregl-ctrl-attrib,.mapboxgl-ctrl-attrib')) continue;  // map credits
+    if (el.tagName === 'A' && el.closest('p,li,td,th,figcaption,dd')) continue;   // links inside running text
+    if (r.width >= 200 && r.height >= 32) continue;                               // full-width list rows
+    if (r.width < 44 || r.height < 44) out.smallTargets++;
   }
   if (isMobile) for (const el of document.querySelectorAll('input,select,textarea'))
     if (visible(el) && parseFloat(getComputedStyle(el).fontSize) < 16) out.smallInputs++;  // iOS zooms on focus
@@ -148,7 +151,9 @@ AI_TELLS_JS = r"""
 
   // numbered section labels 01 / 02 / "01 · Features" - flag only (impeccable numbered-section-labels: >= 2 distinct;
   // hallmark "Eyebrow on every section"; taste-skill measured index numbering on 38% of top vs 21% of weak sites)
-  const nums = texts.filter(el => !el.closest('td,th,ol,time') && el.textContent.trim().length <= 40 &&
+  // the house rule allows section numbers when there are 4+ sections with a TOC (web.md): kit numbers are exempt then
+  const tocOK = !!document.querySelector('.k-toc') && document.querySelectorAll('.k-section').length >= 4;
+  const nums = texts.filter(el => !el.closest('td,th,ol,time') && !(tocOK && el.closest('.k-section__num,.k-toc')) && el.textContent.trim().length <= 40 &&
     (/^[(\[#]?0\d{1,2}[)\].:\/]?$/.test(el.textContent.trim()) || /^0\d\s*[·\/.:|—–-]\s*\S/.test(el.textContent.trim())));
   const distinct = new Set(nums.map(el => el.textContent.trim().slice(0, 2)));
   if (distinct.size >= 2) out.numberedLabels = `${nums.length} (${[...distinct].slice(0, 6).join(' ')})`;
@@ -157,9 +162,10 @@ AI_TELLS_JS = r"""
   // stripe + (radius or fill); impeccable exempts square boxes, hallmark gate 5 does not)
   const SAFE = /^(BLOCKQUOTE|NAV|A|INPUT|TEXTAREA|SELECT|PRE|CODE|SPAN|TH|TD|TR|LI|BUTTON|HR|IMG|SVG)$/;
   const boxes = [...document.body.querySelectorAll('*')].filter(el => !SAFE.test(el.tagName) && visible(el)).slice(0, 3000);
+  const KIT_STRIPE = '.k-callout,.k-verdict,.k-toc,.k-drawer';   // kit components with a deliberate accent edge
   const stripes = [];
   for (const el of boxes) { const s = getComputedStyle(el), r = el.getBoundingClientRect();
-    if (r.width < 120 || r.height < 32) continue;
+    if (r.width < 120 || r.height < 32 || el.matches(KIT_STRIPE)) continue;
     const fill = rgb(s.backgroundColor)[3] ?? 1, rad = px(s.borderTopRightRadius) + px(s.borderBottomRightRadius) + px(s.borderTopLeftRadius);
     for (const side of ['Left', 'Right']) { const w = px(s[`border${side}Width`]), other = Math.max(px(s.borderTopWidth), px(s.borderBottomWidth), px(s[`border${side === 'Left' ? 'Right' : 'Left'}Width`]));
       if (w > 1 && s[`border${side}Style`] !== 'none' && spread(rgb(s[`border${side}Color`])) >= 30 && w >= other * 2 && (rad > 0 || fill > 0.05))
@@ -171,7 +177,9 @@ AI_TELLS_JS = r"""
   for (const el of texts) if (/^(P|LI|DD|TD)$/.test(el.tagName)) { const k = px(getComputedStyle(el).fontSize); sizes[k] = (sizes[k] || 0) + el.textContent.length; }
   const body = +Object.keys(sizes).sort((a, b) => sizes[b] - sizes[a])[0] || px(getComputedStyle(document.body).fontSize);
   const top = h1 || [...document.querySelectorAll('h2')].find(visible);
-  if (top && px(getComputedStyle(top).fontSize) / body < 1.8) out.flatScale = `${top.tagName.toLowerCase()} ${px(getComputedStyle(top).fontSize)}px / body ${body}px = ${(px(getComputedStyle(top).fontSize) / body).toFixed(2)}`;
+  const mapFirst = [...document.querySelectorAll('canvas,.leaflet-container,.maplibregl-map')].some(el => { const r = el.getBoundingClientRect();
+    return visible(el) && r.width * Math.min(r.height, innerHeight - Math.max(r.top, 0)) > 0.5 * innerWidth * innerHeight; });
+  if (top && !mapFirst && px(getComputedStyle(top).fontSize) / body < 1.8) out.flatScale = `${top.tagName.toLowerCase()} ${px(getComputedStyle(top).fontSize)}px / body ${body}px = ${(px(getComputedStyle(top).fontSize) / body).toFixed(2)}`;
 
   // gray text on a colored ground (impeccable gray-on-color: ink HSL s < 0.2, 0.3 < l < 0.85; ground channel spread >= 40)
   const bgOf = el => { for (let p = el; p; p = p.parentElement) { const c = rgb(getComputedStyle(p).backgroundColor); if ((c[3] ?? 1) > 0.5) return c; } return [255, 255, 255]; };
@@ -182,7 +190,9 @@ AI_TELLS_JS = r"""
 
   // em-dash density: > 1 per 120 non-space chars of body text, at least 3 (impeccable em-dash-overuse is looser: >= 8 and
   // ~1 per 500; taste-skill lint warns past 4 per page). A Chinese "——" counts once.
-  const copy = (document.querySelector('main') || document.body).innerText, chars = copy.replace(/\s/g, '').length, dashes = (copy.match(/—+|\s--\s/g) || []).length;
+  const clone = (document.querySelector('main') || document.body).cloneNode(true);
+  clone.querySelectorAll('table,script,style,svg,pre,code').forEach(n => n.remove());   // "—" placeholders in empty cells are not prose
+  const copy = clone.textContent, chars = copy.replace(/\s/g, '').length, dashes = (copy.match(/—+|\s--\s/g) || []).length;
   if (dashes >= 3 && dashes * 120 > chars) out.emDash = `${dashes} in ${chars} chars (1 per ${Math.round(chars / dashes)})`;
 
   // emoji as icons in headings, buttons and list markers (hallmark gate 30 "Icon tells"; taste-skill emoji, banned)
@@ -204,11 +214,68 @@ AI_TELLS_JS = r"""
 }
 """
 
+# First-screen floor (SKILL.md "First screen"): what the first screen must carry, by look. Measured, so a rule cannot be skipped.
+FLOOR_JS = r"""
+(look) => {
+  const vw = innerWidth, vh = innerHeight, out = {look};
+  const visible = el => { const r = el.getBoundingClientRect(), s = getComputedStyle(el);
+    return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0.05; };
+  const inView = el => { const r = el.getBoundingClientRect();
+    return Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0)) * Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0)); };
+  // headline length: Chinese characters, or English words
+  const h1 = [...document.querySelectorAll('h1')].find(visible);
+  if (h1) { const t = h1.textContent.trim().replace(/\s+/g, ' '), cjk = (t.match(/[㐀-鿿]/g) || []).length;
+    out.h1 = cjk >= 4 ? {chars: t.replace(/[\s，。、；：,.;:！？!?“”"'（）()·—-]/g, '').length} : {words: t.split(' ').filter(Boolean).length};
+    out.h1.top = Math.round(h1.getBoundingClientRect().top); }
+  // something to look at on the first screen: chart, map, picture, video, table of figures or big number
+  let best = 0, bestName = '', hero = 0;
+  for (const el of document.body.querySelectorAll('svg,canvas,img,video,picture,table,figure,[class*="kpi"],[class*="leaflet-container"],[class*="maplibregl-map"],*')) {
+    const tag = el.tagName.toLowerCase(), s = getComputedStyle(el);
+    const media = /^(svg|canvas|img|video|picture)$/.test(tag) || /url\(/.test(s.backgroundImage) || /leaflet-container|maplibregl-map/.test(el.className + '');
+    const data = media || tag === 'table' || tag === 'figure' || /kpi|k-big/.test(el.className + '');
+    if (!data || !visible(el)) continue;
+    const r = el.getBoundingClientRect(); if (r.width < 120 || r.height < 60) continue;   // icons and logos do not count
+    const a = inView(el) / (vw * vh);
+    if (a > best) { best = a; bestName = tag + (el.id ? '#' + el.id : '') + (el.classList.length ? '.' + el.classList[0] : ''); }
+    if (media && a > hero) hero = a;
+  }
+  out.visual = {share: +best.toFixed(2), what: bestName}; out.heroShare = +hero.toFixed(2);
+  const map = [...document.querySelectorAll('.leaflet-container,.maplibregl-map,.k-map')].filter(visible).map(inView).sort((a, b) => b - a)[0];
+  if (map) out.mapShare = +(map / (vw * vh)).toFixed(2);   // maps.md: a map that is the page covers at least 70% of the first screen
+  // a tool shows a working control on the first screen
+  out.controls = [...document.querySelectorAll('input,select,textarea,button,[role=button],[role=slider],canvas')].filter(el => visible(el) && inView(el) > 0).length;
+  // type and colour discipline on the first screen
+  const sizes = new Set(), colours = new Set();
+  for (const el of document.body.querySelectorAll('*')) {
+    if (![...el.childNodes].some(t => t.nodeType === 3 && t.textContent.trim().length > 1) || !visible(el) || !inView(el) || el.closest('svg,canvas')) continue;
+    const s = getComputedStyle(el); sizes.add(Math.round(parseFloat(s.fontSize))); colours.add(s.color); }
+  out.textSizes = [...sizes].sort((a, b) => a - b); out.textColours = colours.size;
+  // Restraint list as patterns: status lines, stamps, counters, tool names
+  const text = (document.querySelector('main') || document.body).innerText;
+  const PAT = [/generated (by|with)\b[^\n]{0,30}/i, /由\s*(AI|Claude|GPT|Codex)[^\n]{0,8}生成/, /\bpowered by\b[^\n]{0,24}/i, /\bv\d+\.\d+\.\d+\b/, /版本(号)?\s*[:：]?\s*v?\d[\d.]*/,
+    /\bbuild\s*#?\d{3,}/i, /(最后|上次)?(同步|更新)(状态|时间|于)\s*[:：]?[^\n]{0,24}/, /共\s*[\d,]{2,}\s*(条|个|项|处|人次)/, /数据说明|免责声明|\bdisclaimer\b/i, /\bClaude Code\b|\bCodex\b(?! workers)/];
+  const hits = []; for (const p of PAT) { const m = text.match(p); if (m) hits.push(m[0].trim().slice(0, 40)); }
+  if (hits.length) out.restraint = hits;
+  const fails = [];
+  if (look === 'report') {
+    if (out.h1 && (out.h1.chars > 28 || out.h1.words > 14)) fails.push(`headline is ${out.h1.chars ? out.h1.chars + ' characters (aim for 24, limit 28)' : out.h1.words + ' words (aim for 12, limit 14)'}: move detail to the lede`);
+    if (best < 0.12) fails.push(`no chart, map, figure or key number on the first screen (largest covers ${Math.round(best * 100)}%, need 12%)`);
+  } else if (look === 'showcase') {
+    if (hero < 0.5 && best < 0.5) fails.push(`first screen is not carried by a picture, scene or map (largest covers ${Math.round(Math.max(hero, best) * 100)}%, need 50%)`);
+  } else if (look === 'tool') {
+    if (!out.controls) fails.push('no working control on the first screen');
+  }
+  if (out.textSizes.length > 7) out.warn = `${out.textSizes.length} text sizes on the first screen (${out.textSizes.join(', ')}): use the scale`;
+  if (fails.length) out.fails = fails;
+  return out;
+}
+"""
+
 BAD_FONTS = ("simsun", "nsimsun", "宋体", "新宋体", "mingliu", "pmingliu", "simsun-extb", "simsun-extg")
 ICON_FONTS = ("segoe ui symbol", "segoe ui emoji", "segoe mdl2", "segoe fluent", "material", "font awesome", "apple color emoji")
 
 
-def rendered_fonts(page) -> dict:
+def rendered_fonts(page, look: str | None = None) -> dict:
     """Ask Chromium which platform fonts drew the text (CDP CSS.getPlatformFontsForNode). WebKit has no CDP: skipped."""
     try:
         cdp = page.context.new_cdp_session(page)
@@ -216,8 +283,10 @@ def rendered_fonts(page) -> dict:
         return {}
     cdp.send("DOM.enable"); cdp.send("CSS.enable")
     root = cdp.send("DOM.getDocument", {"depth": 0})["root"]["nodeId"]
-    sel = "h1,h2,h3,h4,h5,p,li,td,th,a,button,label,figcaption,small,span,div,text,tspan,dd,dt"
-    ids = cdp.send("DOM.querySelectorAll", {"nodeId": root, "selector": sel})["nodeIds"][:600]
+    # headings first, so a display face used only for titles is always sampled
+    heads = cdp.send("DOM.querySelectorAll", {"nodeId": root, "selector": "h1,h2,h3"})["nodeIds"][:120]
+    sel = "h4,h5,p,li,td,th,a,button,label,figcaption,small,span,div,text,tspan,dd,dt"
+    ids = heads + cdp.send("DOM.querySelectorAll", {"nodeId": root, "selector": sel})["nodeIds"][:900]
     glyphs: dict[str, int] = {}
     for nid in ids:
         try:
@@ -233,7 +302,8 @@ def rendered_fonts(page) -> dict:
     if bad:
         out["badFonts"] = bad  # SimSun etc.: a serif/CJK stack fell back to the Windows default
     base = {re.sub(r"\s+(Semibold|Semilight|ExtraLight|Light|Thin|ExtraBold|Bold|Black|Medium|Heavy|Regular)$", "", k, flags=re.I) for k in share}
-    if len(base) >= 3:  # one Latin face + one CJK face is normal; a third usually means mixed stacks
+    allowed = 3 if look == "showcase" else 2  # Latin + CJK system faces, plus one display face in the showcase look
+    if len(base) > allowed:  # more usually means mixed stacks
         out["mixedFonts"] = sorted(base)
     heavy = [k for k in share if re.search(r"Black|Heavy", k, re.I)]
     if heavy:
@@ -313,6 +383,10 @@ def main() -> None:
                     help="localStorage entry written before every load, e.g. a PIN page's own unlock value; repeatable")
     ap.add_argument("--login", action="store_true",
                     help="reuse the Falconshire login saved in ~/.claude/playwright-profile (password-protected live pages)")
+    ap.add_argument("--look", choices=["report", "showcase", "tool"],
+                    help="the page's look (SKILL.md): adds the first-screen floor for that look to the hard checks")
+    ap.add_argument("--log", metavar="DIR", help="folder for design-log.csv when the target is a URL (default: beside a local file)")
+    ap.add_argument("--verdict", help="the reviewer's verdict in one line; appended to design-log.csv beside the page")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -368,16 +442,20 @@ def main() -> None:
             tells = page.evaluate(AI_TELLS_JS)
             if tells:
                 res["aiTells"] = tells  # warnings only: not part of hardFail
+            floor = page.evaluate(FLOOR_JS, a.look) if a.look and not name.startswith("small") else None
+            if floor:
+                res["floor"] = floor
             if engine == "chromium":
-                res.update(rendered_fonts(page))
+                res.update(rendered_fonts(page, a.look))
             shot = out / f"{name}.png"
-            page.screenshot(path=str(shot), full_page=a.full)
+            # full pages on a 3x phone pass Chromium's 32,767 px limit: capture those in CSS pixels
+            page.screenshot(path=str(shot), full_page=a.full, **({"scale": "css"} if a.full and opts.get("device_scale_factor", 1) > 1 else {}))
             if not name.startswith("small"):
                 shots[name] = shot
             res.update(errors=errors[:5], failedRequests=failed[:5])
             res = {k: v for k, v in res.items() if v not in ([], 0, None)}
             res["hardFail"] = bool(res.get("overflowX", 0) > 0 or res.get("noViewportMeta") or errors or res.get("brokenImages")
-                                or res.get("badFonts"))
+                                or res.get("badFonts") or (floor or {}).get("fails"))
             hard |= res["hardFail"]
             same = next((k for k, v in report["views"].items() if v == res), None)
             report["views"][name] = f"same findings as {same}" if same else res
@@ -390,6 +468,23 @@ def main() -> None:
         contact_sheet(shots, out / "contact.png")
         report["contact"] = str(out / "contact.png")
     report["pass"] = not hard
+    log_dir = Path(a.log) if a.log else None
+    if not log_dir and src.is_file():
+        # the site folder: the nearest folder up from the page that holds SITE.json or .aws-static-site.json
+        log_dir = next((d for d in [src.parent, *src.parent.parents][:4]
+                        if (d / "SITE.json").exists() or (d / ".aws-static-site.json").exists()), src.parent)
+    if (a.look or a.verdict) and log_dir:
+        # One row per run beside the page, so the review record does not depend on anyone remembering to write it.
+        log = log_dir / "design-log.csv"
+        fails = [f for v in report["views"].values() if isinstance(v, dict) for f in (v.get("floor") or {}).get("fails", [])]
+        first = not log.exists()
+        with log.open("a", encoding="utf-8", newline="") as fh:
+            if first:
+                fh.write("date,page,look,checks,failed,verdict\n")
+            cell = lambda s: '"' + str(s).replace('"', "'") + '"'
+            fh.write(",".join([f"{datetime.datetime.now():%Y-%m-%d %H:%M}", src.name if src.is_file() else url, a.look or "", "pass" if not hard else "fail",
+                               cell("; ".join(dict.fromkeys(fails))), cell(a.verdict or "")]) + "\n")
+        report["log"] = str(log)
     print(json.dumps(report, ensure_ascii=False, indent=1))
     sys.exit(1 if hard else 0)
 

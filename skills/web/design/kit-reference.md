@@ -1,6 +1,25 @@
 # Falconshire kit v1 — component reference
 
-All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in page CSS instead of raw hex.
+All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in page CSS instead of raw hex. Start here; open `v1.css` only to debug one specific rule, and never copy it into a page.
+
+## Behaviour that surprises people (read before building)
+| Width or thing | What the kit does | What to do |
+|---|---|---|
+| Under 600px | Drawer becomes a bottom sheet (`max-height: 88vh`); `.k-map__hint` is hidden; `.k-table` gets `min-width: 620px` and scrolls | Phone hint: one line under the map instead. Tables with many columns: stack each row into a block on phones rather than scroll |
+| Under 720px | `.k-nav` and `.k-toc` are hidden; gutter 16px, body 16px (17px from 720px) | A page with 4+ sections adds a compact jump row (chips or a `<select>`) under the header on phones |
+| 900px and up (JS) | The drawer is a non-modal side panel, 480px wide, fixed at the right, z-index 100 | If the page already has a list on the right, open details inside that list's own panel instead (`maps.md`) |
+| `.k-hero h1` | `--k-fs-4xl`, 32–60px | Report pages set it to `--k-fs-3xl` so the verdict and the chart fit the first screen. Showcase titles may go larger (`showcase.md`) |
+| `:where(.k) :where(img, svg, video)` | `max-width: 100%; height: auto; display: block` | Inline SVG charts: give the SVG a `viewBox` and let it scale; set an explicit `width` only when you mean it |
+| `.k-btn` | Sets `display: inline-flex`, `min-height: 40px`; `.k-btn--icon` is 40×40 | Hide with `hidden` plus `.k-btn[hidden] { display: none }`. On phones raise icon buttons to 44px |
+| `.k-map__controls button` | 36×36, colours hard-coded for dark maps | Raise to 44px on phones; on a themed showcase map restyle them from the page tokens |
+| Leaflet or MapLibre inside `.k-map` | Their panes use z-indexes up to 1000, which rise above the kit drawer | Put `isolation: isolate` on the map container |
+| `.k-tag--warn`, `.k-tag--bad` | Ink on the soft tint is below 4.5:1 at 12px | Until the kit is fixed: `.k-tag--warn { color: #7a4f00 } .k-tag--bad { color: #a52626 }` |
+| `.k-callout` | A 4px accent stripe on the left | Fine to use; `shoot.py` does not count kit callouts as an AI tell |
+| Theme toggle | The skeleton's `☾` renders as a colour emoji on iOS | Use `☾&#xFE0E;` or a small SVG icon |
+| Dark mode | Tokens are redefined under `@media (prefers-color-scheme: dark) :root:where(:not([data-theme="light"]))` and `:root[data-theme="dark"]` | A single-theme page (editorial light, or a dark showcase) sets its tokens on `:root` and again under both dark selectors, or the kit's dark values win in dark mode |
+| `apply_kit.py` | Inlines `v1.css`, `v1.js`, skins and deck files | Run it on anything that leaves the build folder: published, sent as a file, or opened from another folder |
+
+Token values: type `--k-fs-xs 12 · sm 14 · md 16/17 · lg 18 · xl 21 · 2xl 26 · 3xl clamp(28px, 4.2vw, 40px) · 4xl clamp(32px, 6vw, 60px)`; space `--k-sp-1…8` = 4 8 12 16 24 32 48 72; radius `--k-r-sm md lg`.
 
 ## Tokens
 - Color: `--k-page --k-surface --k-surface-2 --k-ink --k-ink-2 --k-muted --k-line --k-line-strong --k-accent --k-accent-soft --k-good(-soft) --k-warn(-soft) --k-bad(-soft)`
@@ -17,7 +36,7 @@ All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in pag
 <header class="k-header"><div class="k-page k-header__in">
   <a class="k-brand" href="#top"><span class="k-brand__mark">杯</span><span class="k-brand__name">站名</span></a>
   <nav class="k-nav"><a href="#s1">章节</a></nav>
-  <button class="k-btn k-btn--icon" data-k-theme-toggle type="button">☾</button>
+  <button class="k-btn k-btn--icon" data-k-theme-toggle type="button" aria-label="切换深浅色">☾&#xFE0E;</button>
 </div></header>
 <main id="top">
   <section class="k-hero [k-hero--image]" [style="background-image:url(hero.webp)"]><div class="k-page">

@@ -431,7 +431,12 @@ def main() -> None:
             page.on("console", lambda m: m.type == "error" and errors.append("console: " + m.text[:160]))
             page.on("requestfailed", lambda r: failed.append(r.url[:120]))
             page.on("response", lambda r: r.status >= 400 and failed.append(f"{r.status} {r.url[:110]}"))
-            page.goto(url, wait_until="networkidle", timeout=45000)
+            try:
+                page.goto(url, wait_until="networkidle", timeout=45000)
+            except Exception as e:  # 3D worlds and live feeds never go idle: measure once loaded
+                if "Timeout" not in str(e):
+                    raise
+                report.setdefault("notes", []).append(f"{name}: network never went idle in 45 s; measured anyway")
             if "/_falcon-auth/" in page.url:
                 report["gated"] = True
                 hard = True

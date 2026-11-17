@@ -31,7 +31,7 @@ Give the reviewer:
 
 Ask exactly this, and nothing about points:
 1. For a showcase: of these three pages, which looks weakest and why? For a report: can you state the finding and its evidence from the first screen alone?
-2. Would the owner call this page 好看 for its purpose, or would he call it plain, empty, cluttered or ugly? Say which, and where.
+2. Would the owner call this page 好看 for its purpose, or would they call it plain, empty, cluttered or ugly? Say which, and where.
 3. The three worst things about how it looks, most important first, each with the fix.
 4. One word: ship, fix or rebuild.
 

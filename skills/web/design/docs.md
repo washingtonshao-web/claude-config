@@ -25,4 +25,4 @@
 - Figures: matplotlib per `charts.md` at dpi 200, full text width. Numbered caption "图 1 …" stating the conclusion, then the source line in 9pt grey.
 
 ## Check
-Convert to PDF and review the page images with `review.md` (checklist, then the verdict). The usual failures are widows, tables split across pages, figure/caption separation, and SimSun creeping in through the East Asian font setting.
+Convert to PDF and review the page images with the `review.md` scorecard. The usual failures are widows, tables split across pages, figure/caption separation, and SimSun creeping in through the East Asian font setting.

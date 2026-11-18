@@ -1,6 +1,6 @@
 """Fresh Falconshire login for AI browsers, on any PC that has the static-sites-prod SSH key.
 
-    python falcon_login.py                 # put a 30-day login into ~/.claude/playwright-profile
+    python falcon_login.py                 # put a one-year login into ~/.claude/playwright-profile
     python falcon_login.py --profile DIR   # another persistent browser profile (Codex, a second tool)
     python falcon_login.py --check URL     # open URL headless with a fresh login; reports gated or not
     python falcon_login.py --text URL      # print the page's visible text (reading a protected page)

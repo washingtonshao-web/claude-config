@@ -43,7 +43,7 @@ Sites
 - Slug = repo name, no claude-/codex- prefix; either AI may publish any site.
 - Commit before publishing. One-off pages live in <slug>/ of repo `pages`; after a Publisher-connector publish run `python E:\Claude\sites\pages_commit.py <slug> <file> --owner <claude|codex>`.
 Skills for both agents
-- Write a new or changed skill once, for Claude and Codex: it lives in ai-config `skills/shared/<name>/`, and steps that need one agent's tools go in `references/claude.md` or `references/codex.md`, which SKILL.md points to. A skill only one agent can use stays in `skills/claude/` or `skills/codex/` and is listed in `not_shared_skills` in `sync/config.json`; the daily sync reports skills that are neither.
+- Write a skill once in ai-config `skills/shared/<name>/`, with agent-specific steps in `references/claude.md` or `references/codex.md`. A single-agent skill goes in `skills/claude/` or `skills/codex/` and in `not_shared_skills` (sync/config.json).
 - Rarely used skills: ai-config `skills/on-demand/<name>/SKILL.md`; read it when I name one.
 - Never edit skills a vendor installer refreshes (HyperFrames and its workflows); put local overrides in this file instead.
 - HyperFrames music: make it with the google-gen skill (Flow Music) before HeyGen or stock music.

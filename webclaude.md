@@ -44,6 +44,7 @@ Sites
 - Commit before publishing. One-off pages live in <slug>/ of repo `pages`; after a Publisher-connector publish run `python E:\Claude\sites\pages_commit.py <slug> <file> --owner <claude|codex>`.
 Skills for both agents
 - Write a new or changed skill once, for Claude and Codex: it lives in ai-config `skills/shared/<name>/`, and steps that need one agent's tools go in `references/claude.md` or `references/codex.md`, which SKILL.md points to. A skill only one agent can use stays in `skills/claude/` or `skills/codex/` and is listed in `not_shared_skills` in `sync/config.json`; the daily sync reports skills that are neither.
+- Rarely used skills live in ai-config `skills/on-demand/<name>/` and are not installed, so they stay out of the skill list. When I name one or a task clearly needs it, pull ai-config and read that SKILL.md directly; paths in it are relative to its folder.
 - Never edit skills a vendor installer refreshes (HyperFrames and its workflows); put local overrides in this file instead.
 - HyperFrames music: make it with the google-gen skill (Flow Music) before HeyGen or stock music.
 - English narration or voice-over (films, HyperFrames, sites, slides, games): the gemini-voice skill (Gemini 3.8 Flash TTS through media-pipeline `mp.tts_gemini`; each project picks its own voices in voice_cast.json). Chinese narration stays on Doubao.

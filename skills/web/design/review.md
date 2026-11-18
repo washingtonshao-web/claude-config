@@ -22,7 +22,7 @@ python scripts/shoot.py <page.html | URL> --look report|showcase|tool [--full] [
 - **Checklist** (one line each, yes or the fix): nothing from the Restraint list; chart rules in `charts.md` met, sources present; images sharp, one style, right subject (`images.md`); nothing told apart by colour alone; on a revision, no link, field or heading lost.
 
 ## 3. The verdict (anything published, shared or delivered as finished)
-An independent model judges the look in plain words. In Claude that is GPT-6 Astra through the codex-gpt command, with the screenshots attached; if Astra is unavailable, a fresh Claude Fable 5.2 high-effort agent, labelled `Fable 复核（非 Astra）`. Private drafts, quick answers in chat, and runs where the brief rules out an outside reviewer: answer the same questions yourself and log the verdict as `self`.
+An independent model judges the look in plain words. In Claude that is GPT-6.2 Astra through the codex-gpt command, with the screenshots attached; if Astra is unavailable, a fresh Claude Fable 5.2 high-effort agent, labelled `Fable 复核（非 Astra）`. Private drafts, quick answers in chat, and runs where the brief rules out an outside reviewer: answer the same questions yourself and log the verdict as `self`.
 
 Give the reviewer:
 - the contact sheet, plus the desktop and iPhone views;

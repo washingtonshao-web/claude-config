@@ -8,14 +8,14 @@ All classes are prefixed `k-`. Tokens are CSS variables `--k-*`; use them in pag
 | Under 600px | Drawer becomes a bottom sheet (`max-height: 88vh`); `.k-map__hint` is hidden; `.k-table` gets `min-width: 620px` and scrolls | Phone hint: one line under the map instead. Tables with many columns: stack each row into a block on phones rather than scroll |
 | Under 720px | `.k-nav` and `.k-toc` are hidden; gutter 16px, body 16px (17px from 720px) | A page with 4+ sections adds a compact jump row (chips or a `<select>`) under the header on phones |
 | 900px and up (JS) | The drawer is a non-modal side panel, 480px wide, fixed at the right, z-index 100 | If the page already has a list on the right, open details inside that list's own panel instead (`maps.md`) |
-| `.k-hero h1` | `--k-fs-4xl`, 32–60px | Report pages set it to `--k-fs-3xl` so the verdict and the chart fit the first screen. Showcase titles may go larger (`showcase.md`) |
+| `.k-hero h1` | `--k-fs-4xl`, 32–60px; the editorial skin sets `--k-fs-3xl` | Report pages on another skin set `--k-fs-3xl` so the verdict and the chart fit the first screen. Showcase titles may go larger (`showcase.md`) |
 | `:where(.k) :where(img, svg, video)` | `max-width: 100%; height: auto; display: block` | Inline SVG charts: give the SVG a `viewBox` and let it scale; set an explicit `width` only when you mean it |
-| `.k-btn` | Sets `display: inline-flex`, `min-height: 40px`; `.k-btn--icon` is 40×40 | Hide with `hidden` plus `.k-btn[hidden] { display: none }`. On phones raise icon buttons to 44px |
-| `.k-map__controls button` | 36×36, colours hard-coded for dark maps | Raise to 44px on phones; on a themed showcase map restyle them from the page tokens |
-| Leaflet or MapLibre inside `.k-map` | Their panes use z-indexes up to 1000, which rise above the kit drawer | Put `isolation: isolate` on the map container |
-| `.k-tag--warn`, `.k-tag--bad` | Ink on the soft tint is below 4.5:1 at 12px | Until the kit is fixed: `.k-tag--warn { color: #7a4f00 } .k-tag--bad { color: #a52626 }` |
+| `.k-btn` | Sets `display: inline-flex`, `min-height: 40px`; `.k-btn--icon` is 40×40; both 44px under 720px | Hide with `hidden` plus `.k-btn[hidden] { display: none }` |
+| `.k-map__controls button` | 44×44, colours hard-coded for dark maps; `.k-map__zoom` has its own dark backing | On a themed showcase map restyle them from the page tokens |
+| Leaflet or MapLibre inside `.k-map` | `.k-map` sets `isolation: isolate`, so their panes (z-index up to 1000) stay below the kit drawer; kit controls, legend and hint sit at 1001 | A map container that is not `.k-map` needs `isolation: isolate` itself |
+| `.k-tag--good`, `--warn`, `--bad` | Text uses `--k-good-ink` / `--k-warn-ink` / `--k-bad-ink`, at least 5.6:1 on the soft tints | Use the `-ink` tokens for any text on a status tint; keep `--k-good` etc. for marks and charts |
 | `.k-callout` | A 4px accent stripe on the left | Fine to use; `shoot.py` does not count kit callouts as an AI tell |
-| Theme toggle | The skeleton's `☾` renders as a colour emoji on iOS | Use `☾&#xFE0E;` or a small SVG icon |
+| Theme toggle | `v1.js` draws a line-SVG sun or moon in every `data-k-theme-toggle` button | Keep `☾&#xFE0E;` in the markup as the no-JS fallback |
 | Dark mode | Tokens are redefined under `@media (prefers-color-scheme: dark) :root:where(:not([data-theme="light"]))` and `:root[data-theme="dark"]` | A single-theme page (editorial light, or a dark showcase) sets its tokens on `:root` and again under both dark selectors, or the kit's dark values win in dark mode |
 | `apply_kit.py` | Inlines `v1.css`, `v1.js`, skins and deck files | Run it on anything that leaves the build folder: published, sent as a file, or opened from another folder |
 

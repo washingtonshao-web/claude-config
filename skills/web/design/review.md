@@ -17,6 +17,7 @@ python scripts/shoot.py <page.html | URL> --look report|showcase|tool [--full] [
 - A protected live URL reports `"gated": true`: rerun with `--login`, or shoot the local build. A page with its own PIN: `--storage KEY=VALUE`.
 
 ## 2. What a script cannot see
+- Look at screenshots in a subagent; bring back only the findings.
 - **Open `contact.png` and confirm each view shows what its name says**: the real page, loaded, not a lock screen, a spinner or a blank frame. Then look at it as the reader would.
 - **Click test, on every page that has a control** (maps, catalogs, tools, decision pages, Artifacts with buttons). A static report whose only controls are links, a TOC and tooltips: check that the TOC and anchors jump without breaking Back, and that tooltips open on tap; nothing more. With Playwright at 1440×900 and 440×760: click three representative targets, one with a cold cache and two in quick succession. After each click `scrollY` is unchanged and something visible responds within 150 ms; screenshots at 50, 150 and 300 ms show no white frame; browser Back closes the panel or goes up a level and Forward works; at 200% zoom (720×450 at scale 2) controls are larger and not clipped. One line per result.
 - **Checklist** (one line each, yes or the fix): nothing from the Restraint list; chart rules in `charts.md` met, sources present; images sharp, one style, right subject (`images.md`); nothing told apart by colour alone; on a revision, no link, field or heading lost.

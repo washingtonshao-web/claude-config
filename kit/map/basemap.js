@@ -72,7 +72,7 @@
   }
 
   var CSS = ".k-basemap .maplibregl-ctrl-attrib{font:11px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei UI',sans-serif}" +
-    "@media (pointer:coarse){.k-basemap .maplibregl-ctrl-group button{width:44px;height:44px}}" +
+    ".k-basemap{isolation:isolate}.k-basemap .maplibregl-ctrl-group button{width:44px;height:44px}" +
     ".k-basemap-dark .maplibregl-ctrl-group{background:#17181b;box-shadow:0 0 0 1px #2a2c31}" +
     ".k-basemap-dark .maplibregl-ctrl-group button+button{border-top-color:#2a2c31}" +
     ".k-basemap-dark .maplibregl-ctrl-icon{filter:invert(1)}" +

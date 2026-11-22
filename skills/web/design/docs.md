@@ -6,6 +6,7 @@
 | A document to read or share, with no file format named | An HTML long-read on the kit's editorial look (the research-report archetype in `web.md`; side TOC from 5+ sections) with A4 print CSS (`@page { size: A4; margin: 18mm }`, navigation and TOC hidden in print), published per CLAUDE.md Websites. Attach the A4 PDF (headless Chrome print) when it goes by WeChat or email |
 | Others must edit it or track changes, or Word/.docx is named, supplied or a template given | The docx skill; this file sets the look |
 | PDF named | Print the HTML version to A4 PDF with headless Chrome; go through Word only when the document already exists in Word |
+| A journal manuscript (scholar skill) | The target journal's template and author guidelines (Word or LaTeX), not the house look; this file's structure rules do not apply |
 | Claude Docs, only when I name it | The Docs connector (load its guide first); Docs owns the styling, the structure rules below still apply |
 
 ## Structure (every route)

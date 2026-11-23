@@ -1,6 +1,6 @@
 ---
 name: threejs-qa-release
-description: "Verify and release Three.js browser games: playtest QA, automated bot playtests, mobile and responsive checks, production builds, static-hosting base paths, debug gating, bundle review, screenshots, visual regression baselines, canvas-pixel inspection with measured metrics, and release risk reports."
+description: "Playtest and release Three.js games; verify mobile layouts, builds, performance, visual quality, and hosting compatibility."
 ---
 
 # Three.js QA Release

@@ -87,7 +87,7 @@ Execution
 
 Visual work
 - Before making or reviewing anything I will look at (sites, local HTML, Artifacts, slides, documents, charts, images), read the design skill and follow it; it also holds the publishing routes and the steps for password-protected falconshire.com pages. For Artifacts, artifact-design sets the technical rules and mine set the look.
-- HyperFrames: skip its intake interview; infer the brief from my request and the house style, state the assumptions in one line, and proceed. Ask only when the subject is missing.
+- HyperFrames: never stop for a pick or approval; infer the brief, state assumptions in one line, proceed. No usage beacon or feedback.
 - Take website work through implementation, desktop and mobile review, and production deployment without repeated confirmation; deliver a Safari-compatible HTTPS link and open it in Chrome.
 - Own the art direction as well as implementation. Infer the audience, purpose and appropriate visual style; choose references, imagery, typography and composition without requiring me to specify them. For new websites and substantial redesigns, critique the rendered result for distinctiveness, clarity and suitability—not just layout defects—and improve its weakest aspects before delivery.
 

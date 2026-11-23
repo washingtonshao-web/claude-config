@@ -1,6 +1,6 @@
 ---
 name: threejs-image-generator
-description: "Generate and edit 2D image assets for Three.js games with Google's Gemini image API: concept sheets, image-to-3D inputs, texture and material references, sky and background plates, decals, logos, icons, GUI art, title and menu art, and marketing stills. Also use for direct image editing when the user supplies an image path."
+description: "Generate or edit Three.js game images using Gemini: concepts, textures, backgrounds, decals, icons, interface art, and marketing."
 ---
 
 # Three.js Image Generator

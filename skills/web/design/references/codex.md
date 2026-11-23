@@ -9,6 +9,6 @@ The rules in this skill are the same for Claude and Codex. Only these steps chan
 | dataviz skill (chart method) | Not in Codex. `charts.md` alone is enough: conclusion title, 1–2 annotated notes, bars from zero, one value axis, source line. |
 | Images through the codex-gpt skill (`images.md`) | Use Codex's own image generation with the same prompt template, saving into the project. |
 | Astra gives the verdict (`review.md` §3) | Codex is the GPT side, so the independent reviewer is Claude: run the independent-review skill (Claude Fable 5.2, high) with the screenshots, two shelf pages for a showcase, and the four questions. If Claude is unavailable, use a fresh Codex sub-agent and label it 同模型复核. |
-| design_guard hook | Claude-only reminder; Codex loads this skill from AGENTS.md instead. Nothing to run. |
+| design_guard hook | The sync installs the same reminder hook for Codex (`required_hooks` in ai-config `sync/config.json`). Nothing to run. |
 
 Paths: `shoot.py` and `tokens.py` run the same from `~/.codex/skills/design/scripts/`. Put screenshots and scratch files in `E:\AI\Codex\temp`.

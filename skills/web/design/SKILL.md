@@ -16,7 +16,7 @@ description: My visual design rules for anything I will look at - websites, maps
 | Any map (atlas, drill-down, route, bubbles) | `maps.md` |
 | Artifact, or a local single-file HTML page | `artifact.md`, `kit-reference.md` |
 | Any chart (HTML/SVG, matplotlib, pptx, docx) | `charts.md` (plus the dataviz skill for chart method) |
-| Diagrams | `diagrams.md` (+ diagram-design skill in Claude) |
+| Diagrams | `diagrams.md` (+ the diagram-design skill) |
 | Slides (HTML deck by default, or .pptx) | `slides.md` |
 | Document (HTML long-read, Word or PDF) | `docs.md` |
 | Hero, cover or illustration images | `images.md` |

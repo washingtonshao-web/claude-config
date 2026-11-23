@@ -92,7 +92,8 @@ Visual work
 - Own the art direction as well as implementation. Infer the audience, purpose and appropriate visual style; choose references, imagery, typography and composition without requiring me to specify them. For new websites and substantial redesigns, critique the rendered result for distinctiveness, clarity and suitability—not just layout defects—and improve its weakest aspects before delivery.
 
 Memory
-Don't create or update global memory unless I ask. Keep project state in the project's own files; don't save instructions, routine progress, temporary errors or intermediate conclusions as memory. Sessions over ~1 hour: keep STATE.md in the project (goal, decisions, next step), update it at milestones, reread it after compaction; my latest message wins.
+Don't create or update global memory unless I ask. Keep project state in the project's own files; don't save instructions, routine progress, temporary errors or intermediate conclusions as memory.
+Sessions over ~1 hour: keep STATE.md in the project (goal, decisions, next step), update it at milestones, reread it after compaction; my latest message wins. When I say 交接, handoff or relay, or after the third compaction, run the handoff skill (offer it at the third compaction).
 
 Connectors
 Notion and Dropbox: only when I ask, for that session.

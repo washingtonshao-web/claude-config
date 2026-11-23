@@ -14,7 +14,7 @@ For .pptx: the pptx skill's "safe font" list does not apply: headings are Micros
 - 16:9 and a white background. Every slide has a 4px falcon-copper `#b4531f` rule across the top, with a short copper tab at the left (mirrors the web chart frame).
 - Microsoft YaHei UI throughout (HTML: the kit's system stack, which is Segoe UI / PingFang SC / Microsoft YaHei UI); titles bold 28–32pt, body regular 16–20pt, source lines 10–11pt grey `#595959`.
 - Margins 0.6 inch; content left-aligned; nothing centered except a cover title.
-- Colors come from `python "C:\Users\Administrator\.claude\skills\design\scripts\tokens.py" --style editorial` (`series`, `tokens.k-ink`, `tokens.k-muted`, `tokens.k-brand`); HTML decks use the kit tokens.
+- Colors come from `python "$HOME/.claude/skills/design/scripts/tokens.py" --style editorial` (`series`, `tokens.k-ink`, `tokens.k-muted`, `tokens.k-brand`); HTML decks use the kit tokens.
 
 ## Content
 - The title is the conclusion as a full sentence ("中国出口额一年增长 49%"); the subtitle line gives measure, unit and period.

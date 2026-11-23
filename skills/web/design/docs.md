@@ -19,7 +19,7 @@
 - A4, margins 2.2 cm; Microsoft YaHei UI for Chinese and Latin text (Segoe UI acceptable for Latin); body 10.5–11pt, line spacing 1.5; headings bold. Never SimSun (Word's default East Asian font): set it explicitly in the styles.
 - Heading 1 16pt with a thin falcon-copper `#b4531f` rule under it; Heading 2 13pt; Heading 3 11pt bold. No more than 3 levels.
 - Header: document title in 9pt grey. Footer: page number and date.
-- Colors from `python "C:\Users\Administrator\.claude\skills\design\scripts\tokens.py" --style editorial`.
+- Colors from `python "$HOME/.claude/skills/design/scripts/tokens.py" --style editorial`.
 
 ## Tables and figures
 - Tables: header row bold with a 1pt ink rule under it, 0.5pt light rules between rows, no vertical lines, numbers right-aligned with thousands separators.

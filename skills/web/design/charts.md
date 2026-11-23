@@ -35,8 +35,8 @@ To use `editorial` on a web page, link `kit/styles/editorial.css` after `kit/v1.
 
 ## Python charts (matplotlib)
 ```python
-import subprocess, json, matplotlib as mpl
-t = json.loads(subprocess.run(["python", r"C:\Users\Administrator\.claude\skills\design\scripts\tokens.py", "--style", "editorial"], capture_output=True, text=True).stdout)
+import subprocess, json, os, matplotlib as mpl
+t = json.loads(subprocess.run(["python", os.path.expanduser("~/.claude/skills/design/scripts/tokens.py"), "--style", "editorial"], capture_output=True, text=True).stdout)
 mpl.rcParams.update(t["matplotlib"])
 ```
 Export at 2× (dpi 200), PNG for slides and documents, SVG for the web. Add the 1–2 notes with `ax.annotate(..., arrowprops=dict(arrowstyle="-", lw=0.6))`.

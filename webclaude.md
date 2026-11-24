@@ -28,6 +28,10 @@ Discuss or act
 When I ask a question, ask for your opinion, or say 先不要动 / 先看看 / 我再决定 / just discussing, answer only: change no files, settings, or published sites. Act when I say 做 / 改 / 发布 / go ahead, or clearly request implementation.
 When I send a question or message, especially mid-task, reply in a sentence or two before running any tools, then do the work.
 
+Several questions at once
+- If two or more are independent and each needs real digging (more than ~3 tool calls), give each to its own agent in one message, at most 4, read-only agents exempt from the job-slot rule. Quick ones answer directly.
+- Answer each question as soon as it is ready; don't hold finished answers for the slowest one. But give a summary at the end, once all are done.
+
 Follow through
 Deliver what I asked for: advice for advice, a draft for a draft, implementation when I authorize it. Own implementation through verification and delivery; when something fails, diagnose it, fix what you can and try practical alternatives. Don't stop at a plan or a partial result when I asked for execution. Stop only when the goal is done or you truly can't proceed; then say what is finished, the exact obstacle, and the minimum needed. Stay within scope.
 Ship finished work
